@@ -1,0 +1,107 @@
+// --------------------------------------------
+
+//	Index
+//	---
+//	Color Variables
+//  Notification Variables
+//  Font Variables
+//  Button Variables
+//  Grid Variables
+//  Breakpoints
+//  Content Variables
+
+//	Author: VGM Forbin
+//	Website: www.forbin.com
+//	Version: 1.7.0
+
+// --------------------------------------------
+
+
+// Color Variables -------------------- */
+// We are going to eventually want to shift this to a map rather than just a series of variable statements
+// That will make it much more versatile in loops and integrations
+$primary-color: #2D3183;
+$secondary-color: #F2C716;
+$tertiary-color: #565A9B;
+$quaternary-color:  #F3D54E;
+$font-color: #414141;
+$heading-color:     $primary-color;
+$link-color:        $font-color;
+$white:             #fff;
+$black:             #000;
+$gray:              #767676;
+$darkgray:          #5e5e5e;
+$silver:            #c0c0c0;
+$lightgray:         #f9f9f9;
+$red:               #a00;
+
+// Notification Variables -------------------- */
+$success-bg:            #cbf3db;
+$success-font-color:    #1a7843;
+$error-bg:              #fadbd8;
+$error-font-color:      #a92c2e;
+$info-bg:               #c9e7f1;
+$info-font-color:       #245f7e;
+$warning-bg:            #fbf0c3;
+$warning-font-color:    #785010;
+
+// Font Variables -------------------- */
+$base-font-size: 16px;
+$medium-font-size: 19px;
+$large-font-size: 22px;
+$font-family: "source-sans-pro", sans-serif;
+$heading-family: "source-sans-pro", sans-serif;
+
+// Font Weights
+$fw-thin:   100;
+$fw-xlight: 200;
+$fw-light:  300;
+$fw-reg:    400;
+$fw-med:    500;
+$fw-sbold:  600;
+$fw-bold:   700;
+$fw-xbold:  800;
+$fw-black:  900;
+
+
+// Button Variables -------------------- */
+$button-font-size: 14px;
+$button-mini-font-size: 12px;
+$button-large-font-size: 18px;
+$button-font-weight: normal;
+$button-padding-y: .75rem;
+$button-padding-x: 1.5rem;
+$button-border-radius: 0;
+$button-border-width: 1px;
+$button-default-color: #6e6e6e;
+$button-success-color: #3D854D;
+$button-error-color: #E22E1C;
+
+
+// Grid Variables -------------------- */
+$container-width: 1400px;
+$container-width-large: 1600px;
+$container-width-small: 1000px;
+$columns: 12;
+$grid-gutter: 15px;
+
+
+// Breakpoints -------------------- */
+
+// Breakpoints (According to Google Dev Tools)
+$bp-mobile-s: 320px;
+$bp-mobile-m: 375px;
+$bp-mobile-l: 425px;
+$bp-tablet: 768px;
+$bp-laptop: 1024px;
+$bp-laptop-l: 1440px;
+$bp-4k: 2560px;
+
+$sm-screen: $bp-mobile-l; // Small devices (landscape phones, 425px and up)
+$md-screen: $bp-tablet;   // Medium devices (tablets, 768px and up)
+$lg-screen: $bp-laptop;   // Large devices (desktops, 1024px and up)
+$xl-screen: $bp-laptop-l; // Extra large devices (large desktops, 1440px and up)
+
+
+// Content Variables -------------------- */
+$spacer: 5em;

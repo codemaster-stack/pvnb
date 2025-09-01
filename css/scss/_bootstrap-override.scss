@@ -1,0 +1,108 @@
+//  Bootstrap Override ----------------------------
+//  Styles that need to run BEFORE bootstrap is loaded to set bootstrap's variables to what we want them to be before they are run through and styles are created
+
+//  Index
+//  ---
+//  Theme Colors
+//  Grid Breakpoints
+//  Container Max Widths
+//  Link Styles
+//  Button Styles
+//  Margin and Padding Styles
+
+//	Author: VGM Forbin
+//	Website: www.forbin.com
+//	Version: FC_1.5.0
+
+// -----------------------------------
+
+
+$theme-colors: (
+    "primary":      $primary-color,
+    "secondary":    $secondary-color,
+    "tertiary":     $tertiary-color,
+    "quaternary":   $quaternary-color,
+    "white":        $white,
+    "black":        $black,
+    "gray":         $gray,
+    "darkgray":     $darkgray,
+    "silver":       $silver,
+    "lightgray":    $lightgray
+);
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: $sm-screen,
+    md: $md-screen,
+    lg: $lg-screen,
+    xl: $xl-screen
+);
+
+
+// Bootstrap requires that these values be in ascending order
+$container-max-widths: (
+    sm: $container-width - 3px,
+    md: $container-width - 2px,
+    lg: $container-width - 1px,
+    xl: $container-width
+);
+
+// Links
+$link-decoration:           underline;
+$link-hover-decoration:     none;
+
+// Buttons
+//
+// For each of Bootstrap's buttons, define text, background, and border color.
+
+$btn-padding-y:               $button-padding-y;
+$btn-padding-x:               $button-padding-x;
+$btn-font-family:             $font-family;
+$btn-font-size:               $button-font-size;
+$btn-line-height:             normal;
+
+$btn-padding-y-sm:            ( $button-padding-y * .75 );
+$btn-padding-x-sm:            ( $button-padding-x * .75 );
+$btn-font-size-sm:            $button-mini-font-size;
+$btn-line-height-sm:          normal;
+
+$btn-padding-y-lg:            ( $button-padding-y * 1.25 );
+$btn-padding-x-lg:            ( $button-padding-x * 1.25 );
+$btn-font-size-lg:            $button-large-font-size;
+$btn-line-height-lg:          normal;
+
+$btn-border-width:            $button-border-width;
+
+$btn-font-weight:             $button-font-weight;
+
+// Allows for customizing button radius independently from global border radius
+$btn-border-radius:           $button-border-radius;
+$btn-border-radius-lg:        $button-border-radius;
+$btn-border-radius-sm:        $button-border-radius;
+
+.btn, .button {
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        text-decoration: underline !important;
+    }
+}
+
+// This variable affects the value per number on the spacing classes such that mx-2 will be (2 * $spacer)
+$spacer: .5rem;
+
+// Generates the spacer map with 0 through X amount of values
+// This allows for more than the default mx-5 so you can use classes like mx-20
+// mx-0 through mx-10 go up .5rem at a time, mx-11 through mx-20 go up 1rem at a time with mx-11 starting at 6rem
+$spacers: ();
+@for $i from 0 through 10 {
+    $map: ();
+    $map: map-merge($map, ($i: ($spacer * $i)));
+    $spacers: map-merge($spacers, $map);
+}
+@for $i from 11 through 20 {
+    $map: ();
+    $map: map-merge($map, ($i: (($spacer * 2) * ($i - 5))));
+    $spacers: map-merge($spacers, $map);
+}

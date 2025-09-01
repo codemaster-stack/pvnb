@@ -1,0 +1,95 @@
+@use 'sass:math';
+//  Typography ----------------------------
+//  Index
+//  ---
+//  Font REM
+//  Font VW
+//  Fluid Typography
+//  Multi-line text truncation
+//	Author: VGM Forbin
+//	Website: www.forbin.com
+//	Version: FC_1.3.7
+// -----------------------------------
+// Font Sizing (REM) -------------------- */
+// example: p { @include font-size(12px); }
+@function calculateRem($size) {
+    $remSize: math.div($size, 16px);
+    @return $remSize * 1rem;
+}
+
+@mixin font-rem($size) {
+    font-size: $size;
+    font-size: calculateRem($size);
+}
+
+// Font Sizing (VW) -------------------- */
+// example: p { @include font-size(12px); }
+@function calculateVw($size) {
+    $vwSize: (1400 * 0.01) * 1px;
+    @return math.div($size, $vwSize) * 2vw;
+}
+
+@mixin font-vw($size) {
+    font-size: $size;
+    font-size: calculateVw($size);
+    @include medium {
+        font-size: math.div(calculateVw($size), 2);
+    }
+}
+
+// Remove the unit of a length
+// @param {Number} $number - Number to remove unit from
+// @return {Number} - Unitless number
+@function strip-unit($number) {
+    @if type-of($number)=='number' and not unitless($number) {
+        @return math.div($number, ($number * 0 + 1));
+    }
+    @return $number;
+}
+
+// Fluid Typography
+@function strip-unit($value) {
+    @return math.div($value, ($value * 0 + 1));
+}
+
+@function calculateRem($size) {
+    $remSize: math.div($size, 16px);
+    @return $remSize * 1rem;
+}
+
+@mixin fluid-type($min-font-size, $max-font-size, $min-vw: $sm-screen, $max-vw: $xl-screen) {
+    $u1: unit($min-vw);
+    $u2: unit($max-vw);
+    $u3: unit($min-font-size);
+    $u4: unit($max-font-size);
+    @if $u1==$u2 and $u1==$u3 and $u1==$u4 {
+        & {
+            font-size: $min-font-size;
+            font-size: calculateRem($min-font-size);
+            @media screen and (min-width: $min-vw) {
+                font-size: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+            }
+            @media screen and (min-width: $max-vw) {
+                font-size: $max-font-size;
+                font-size: calculateRem($max-font-size);
+            }
+        }
+    }
+}
+
+// Multi-line Text Truncation
+@mixin truncate( $font-size, $line-height, $lines-to-show) {
+    display: block;
+    display: -webkit-box;
+    max-width: 2000px; // A max-width is needed, the value just needs to be above the width of the text box, so I made it huge
+    max-height: ( $font-size * $line-height * $lines-to-show);
+    margin: 0 auto;
+    font-size: $font-size;
+    line-height: $line-height;
+    -webkit-line-clamp: $lines-to-show;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+;

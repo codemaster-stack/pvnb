@@ -1,0 +1,44 @@
+// --------------------------------------------
+	
+//	Index
+//	---
+//  Margin Auto Center
+//  Background Properties
+//  List Style None
+//  Overlay Settings
+
+// --------------------------------------------
+
+
+// Margin Auto Center
+%margin-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+// Background Properties
+%bg-properties {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+// List Style None
+%list-style-none {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+// Overlay Settings
+%mask {
+    content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
