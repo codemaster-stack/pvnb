@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banking Dashboard</title>
+    <title>Online Banking Dashboard - Pauls Valley National Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -12,117 +13,89 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
         }
 
-        .dashboard {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
+        /* Header */
+        .dashboard-header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
-            font-size: 24px;
+            display: flex;
+            align-items: center;
+            color: #007bff;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #2563eb;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 1rem;
+            background: #007bff;
+            padding: 8px;
+            border-radius: 4px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 2rem;
         }
 
-        .notification-icon {
-            position: relative;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            background: #f3f4f6;
+        .welcome-text {
+            font-weight: 500;
+            color: #333;
         }
 
-        .notification-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #ef4444;
+        .logout-btn {
+            background: #dc3545;
             color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 20px;
-        }
-
-        .accounts-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .toggle-balance {
-            background: none;
             border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
             cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            color: #6b7280;
-            transition: all 0.2s;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
 
-        .toggle-balance:hover {
-            background: #f3f4f6;
-            color: #374151;
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
         }
 
-        .account-cards {
+        /* Main Content */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
             display: grid;
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
+        /* Account Cards */
         .account-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #007bff, #0056b3);
             color: white;
-            padding: 20px;
+            padding: 2rem;
             border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,123,255,0.3);
             position: relative;
             overflow: hidden;
         }
@@ -134,886 +107,536 @@
             right: 0;
             width: 100px;
             height: 100px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             border-radius: 50%;
-            transform: translate(30%, -30%);
+            transform: translate(50%, -50%);
         }
 
         .account-type {
-            font-size: 14px;
+            font-size: 0.9rem;
             opacity: 0.9;
-            margin-bottom: 5px;
+            margin-bottom: 0.5rem;
         }
 
         .account-number {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-family: monospace;
         }
 
-        .account-balance {
-            font-size: 24px;
+        .balance {
+            font-size: 2.5rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 0.5rem;
         }
 
-        .balance-hidden {
-            font-size: 20px;
+        .balance-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
 
-        .credit-card {
-            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-        }
-
-        .credit-limit {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
+        /* Quick Actions */
         .quick-actions {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .actions-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
         }
 
         .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background: #f8fafc;
-            border: none;
-            border-radius: 12px;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             text-decoration: none;
-            color: #374151;
+            color: #333;
         }
 
         .action-btn:hover {
-            background: #e2e8f0;
-            transform: translateY(-2px);
+            border-color: #007bff;
+            background: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.2);
         }
 
         .action-icon {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 8px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
+            font-size: 2rem;
+            color: #007bff;
+            margin-bottom: 1rem;
         }
 
+        .action-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Recent Transactions */
         .transactions {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
 
         .transaction-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s ease;
+        }
+
+        .transaction-item:hover {
+            background: #f8f9fa;
         }
 
         .transaction-item:last-child {
             border-bottom: none;
         }
 
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         .transaction-icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
+            background: #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
+            color: #495057;
         }
 
-        .coffee { background: #fef3c7; color: #92400e; }
-        .income { background: #d1fae5; color: #065f46; }
-        .shopping { background: #fce7f3; color: #be185d; }
-        .transport { background: #dbeafe; color: #1d4ed8; }
-        .utilities { background: #f3e8ff; color: #7c3aed; }
-        .housing { background: #fee2e2; color: #dc2626; }
-
-        .transaction-details {
-            flex: 1;
+        .transaction-details h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
         }
 
-        .transaction-description {
-            font-weight: 500;
-            color: #1f2937;
-            margin-bottom: 2px;
-        }
-
-        .transaction-category {
-            font-size: 12px;
-            color: #6b7280;
+        .transaction-details p {
+            font-size: 0.85rem;
+            color: #666;
         }
 
         .transaction-amount {
             font-weight: 600;
+            font-size: 1rem;
         }
 
-        .transaction-amount.positive {
-            color: #059669;
+        .positive {
+            color: #28a745;
         }
 
-        .transaction-amount.negative {
-            color: #dc2626;
+        .negative {
+            color: #dc3545;
         }
 
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .goals-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .goal-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .goal-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .goal-info h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 4px;
-        }
-
-        .goal-progress {
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        .progress-bar {
-            width: 60px;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #10b981;
-            transition: width 0.3s ease;
-        }
-
-        .search-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 40px 12px 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-            background: white;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6b7280;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #6b7280;
-            padding: 4px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .form-input, .form-select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .form-input:focus, .form-select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:hover {
-            background: #2563eb;
-        }
-
-        .filter-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filter-tab {
-            padding: 8px 16px;
-            background: #f3f4f6;
-            border: none;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #6b7280;
-        }
-
-        .filter-tab.active {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .spending-chart {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .chart-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-        }
-
-        .donut-chart {
-            transform: rotate(-90deg);
-        }
-
-        .donut-segment {
-            fill: none;
-            stroke-width: 20;
-        }
-
-        .chart-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .total-spent {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1f2937;
-        }
-
-        .chart-legend {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 20px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .legend-text {
-            font-size: 14px;
-            color: #374151;
-        }
-
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .main-content {
+            .dashboard-header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .balance {
+                font-size: 2rem;
+            }
+
+            .account-card {
+                padding: 1.5rem;
+            }
+
+            .quick-actions,
+            .transactions {
+                padding: 1.5rem;
+            }
+
+            .transaction-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .transaction-amount {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .actions-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .quick-actions {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
+
+            .logo {
+                font-size: 1.2rem;
             }
-            
-            .action-btn {
-                padding: 15px 10px;
-                font-size: 12px;
+
+            .logo img {
+                height: 40px;
             }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #dc3545;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <header class="header">
-            <div class="logo">Pauls Valley National Bank</div>
-            <div class="user-info">
-                <div class="notification-icon" onclick="showNotifications()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                    <div class="notification-badge">3</div>
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMDA3YmZmIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMzAiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UGF1bHMgVmFsbGV5IE5hdGlvbmFsIEJhbms8L3RleHQ+PC9zdmc+" alt="PVNB">
+            Online Banking
+        </div>
+        <div class="user-info">
+            <span class="welcome-text">Welcome, <span id="userName">Loading...</span></span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <div class="dashboard-grid">
+            <div class="account-card">
+                <div class="account-type">Checking Account</div>
+                <div class="account-number" id="accountNumber">•••• •••• •••• ••••</div>
+                <div class="balance" id="accountBalance">$0.00</div>
+                <div class="balance-label">Available Balance</div>
+            </div>
+            
+            <div class="account-card" style="background: linear-gradient(135deg, #28a745, #1e7e34);">
+                <div class="account-type">Savings Account</div>
+                <div class="account-number">•••• •••• •••• 5678</div>
+                <div class="balance">$2,150.00</div>
+                <div class="balance-label">Available Balance</div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2 class="section-title">Quick Actions</h2>
+            <div class="actions-grid">
+                <div class="action-btn" onclick="showComingSoon('Transfer Money')">
+                    <div class="action-icon"><i class="fas fa-exchange-alt"></i></div>
+                    <div class="action-title">Transfer Money</div>
+                    <div class="action-desc">Between accounts or to others</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 32px; height: 32px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">J</div>
-                    <span style="font-weight: 500;">John Doe</span>
+                <div class="action-btn" onclick="showComingSoon('Pay Bills')">
+                    <div class="action-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <div class="action-title">Pay Bills</div>
+                    <div class="action-desc">Schedule and manage payments</div>
+                </div>
+                <div class="action-btn" onclick="showComingSoon('View Statements')">
+                    <div class="action-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="action-title">View Statements</div>
+                    <div class="action-desc">Download monthly statements</div>
+                </div>
+                <div class="action-btn" onclick="showComingSoon('Deposit Check')">
+                    <div class="action-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <div class="action-title">Mobile Deposit</div>
+                    <div class="action-desc">Deposit checks with your phone</div>
+                </div>
+                <div class="action-btn" onclick="showComingSoon('Card Management')">
+                    <div class="action-icon"><i class="fas fa-credit-card"></i></div>
+                    <div class="action-title">Manage Cards</div>
+                    <div class="action-desc">View and control your cards</div>
+                </div>
+                <div class="action-btn" onclick="showComingSoon('Contact Support')">
+                    <div class="action-icon"><i class="fas fa-headset"></i></div>
+                    <div class="action-title">Support</div>
+                    <div class="action-desc">Get help with your account</div>
                 </div>
             </div>
-        </header>
-
-        <div class="main-content">
-            <main class="accounts-section">
-                <div class="section-header">
-                    <h2 class="section-title">My Accounts</h2>
-                    <button class="toggle-balance" onclick="toggleBalance()">
-                        <svg id="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="account-cards">
-                    <div class="account-card">
-                        <div class="account-type">Checking Account</div>
-                        <div class="account-number">****1234</div>
-                        <div class="account-balance" data-balance="12456.78">$12,456.78</div>
-                    </div>
-
-                    <div class="account-card">
-                        <div class="account-type">Savings Account</div>
-                        <div class="account-number">****5678</div>
-                        <div class="account-balance" data-balance="25890.45">$25,890.45</div>
-                    </div>
-
-                    <div class="account-card credit-card">
-                        <div class="account-type">Credit Card</div>
-                        <div class="account-number">****9012</div>
-                        <div class="account-balance" data-balance="-1250.30">$1,250.30</div>
-                        <div class="credit-limit">Credit Limit: $5,000</div>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <h3 class="section-title">Quick Actions</h3>
-                </div>
-
-                <div class="quick-actions">
-                    <button class="action-btn" onclick="showModal('transfer')">
-                        <svg class="action-icon" viewBox="0 0 24 24">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7,10 12,15 17,10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        Transfer
-                    </button>
-                    <button class="action-btn" onclick="showModal('bills')">
-                        <svg class="action-icon" viewBox="0 0 24 24">
-                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                            <line x1="1" y1="10" x2="23" y2="10"></line>
-                        </svg>
-                        Pay Bills
-                    </button>
-                    <button class="action-btn" onclick="showModal('deposit')">
-                        <svg class="action-icon" viewBox="0 0 24 24">
-                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                            <line x1="12" y1="18" x2="12" y2="6"></line>
-                            <polyline points="8,10 12,6 16,10"></polyline>
-                        </svg>
-                        Deposit
-                    </button>
-                    <button class="action-btn" onclick="showModal('account')">
-                        <svg class="action-icon" viewBox="0 0 24 24">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Account
-                    </button>
-                </div>
-
-                <div class="section-header">
-                    <h3 class="section-title">Recent Transactions</h3>
-                </div>
-
-                <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Search transactions..." id="search-transactions">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="M21 21l-4.35-4.35"></path>
-                    </svg>
-                </div>
-
-                <div class="filter-tabs">
-                    <button class="filter-tab active" onclick="filterTransactions('all')">All</button>
-                    <button class="filter-tab" onclick="filterTransactions('income')">Income</button>
-                    <button class="filter-tab" onclick="filterTransactions('expenses')">Expenses</button>
-                    <button class="filter-tab" onclick="filterTransactions('food')">Food</button>
-                    <button class="filter-tab" onclick="filterTransactions('transport')">Transport</button>
-                </div>
-
-                <div class="transactions" id="transactions-list">
-                    <!-- Transactions will be populated by JavaScript -->
-                </div>
-            </main>
-
-            <aside class="sidebar">
-                <div class="goals-section">
-                    <h3 class="section-title">Savings Goals</h3>
-                    <div class="goal-item">
-                        <div class="goal-info">
-                            <h4>Emergency Fund</h4>
-                            <div class="goal-progress">$3,200 of $5,000</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 64%"></div>
-                        </div>
-                    </div>
-                    <div class="goal-item">
-                        <div class="goal-info">
-                            <h4>Vacation</h4>
-                            <div class="goal-progress">$800 of $2,500</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 32%"></div>
-                        </div>
-                    </div>
-                    <div class="goal-item">
-                        <div class="goal-info">
-                            <h4>New Car</h4>
-                            <div class="goal-progress">$1,200 of $15,000</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 8%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="spending-chart">
-                    <h3 class="section-title">This Month's Spending</h3>
-                    <div class="chart-container">
-                        <svg class="donut-chart" width="200" height="200">
-                            <circle cx="100" cy="100" r="80" class="donut-segment" stroke="#ef4444" stroke-dasharray="125.66 376.99"></circle>
-                            <circle cx="100" cy="100" r="80" class="donut-segment" stroke="#3b82f6" stroke-dasharray="94.25 376.99" stroke-dashoffset="-125.66"></circle>
-                            <circle cx="100" cy="100" r="80" class="donut-segment" stroke="#10b981" stroke-dasharray="62.83 376.99" stroke-dashoffset="-219.91"></circle>
-                            <circle cx="100" cy="100" r="80" class="donut-segment" stroke="#f59e0b" stroke-dasharray="94.25 376.99" stroke-dashoffset="-282.74"></circle>
-                        </svg>
-                        <div class="chart-center">
-                            <div class="total-spent">$2,847</div>
-                            <div style="font-size: 12px; color: #6b7280;">Total Spent</div>
-                        </div>
-                    </div>
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <div class="legend-color" style="background: #ef4444;"></div>
-                            <span class="legend-text">Housing (40%)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background: #3b82f6;"></div>
-                            <span class="legend-text">Transport (30%)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background: #10b981;"></div>
-                            <span class="legend-text">Food (20%)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background: #f59e0b;"></div>
-                            <span class="legend-text">Other (10%)</span>
-                        </div>
-                    </div>
-                </div>
-            </aside>
         </div>
-    </div>
 
-    <!-- Transfer Modal -->
-    <div id="transfer-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Transfer Money</h3>
-                <button class="close-btn" onclick="closeModal('transfer-modal')">&times;</button>
+        <div class="transactions">
+            <h2 class="section-title">Recent Transactions</h2>
+            <div id="transactionsList">
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Walmart Supercenter</h4>
+                            <p>Today, 2:30 PM</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">-$87.34</div>
+                </div>
+                
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-gas-pump"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Shell Gas Station</h4>
+                            <p>Yesterday, 8:15 AM</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">-$45.20</div>
+                </div>
+                
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Direct Deposit - Salary</h4>
+                            <p>Jan 15, 2025</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">+$2,450.00</div>
+                </div>
+                
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-coffee"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Starbucks</h4>
+                            <p>Jan 14, 2025</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">-$6.85</div>
+                </div>
+                
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Mortgage Payment</h4>
+                            <p>Jan 1, 2025</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount negative">-$1,200.00</div>
+                </div>
             </div>
-            <form id="transfer-form" onsubmit="processTransfer(event)">
-                <div class="form-group">
-                    <label class="form-label">From Account</label>
-                    <select class="form-select" required>
-                        <option value="">Select account</option>
-                        <option value="checking">Checking Account (****1234)</option>
-                        <option value="savings">Savings Account (****5678)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">To Account</label>
-                    <select class="form-select" required>
-                        <option value="">Select account</option>
-                        <option value="checking">Checking Account (****1234)</option>
-                        <option value="savings">Savings Account (****5678)</option>
-                        <option value="external">External Account</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Amount</label>
-                    <input type="number" class="form-input" placeholder="0.00" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Description (Optional)</label>
-                    <input type="text" class="form-input" placeholder="What's this for?">
-                </div>
-                <button type="submit" class="btn-primary">Transfer Money</button>
-            </form>
         </div>
-    </div>
+    </main>
 
-    <!-- Bills Modal -->
-    <div id="bills-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Pay Bills</h3>
-                <button class="close-btn" onclick="closeModal('bills-modal')">&times;</button>
-            </div>
-            <form id="bills-form" onsubmit="processBillPayment(event)">
-                <div class="form-group">
-                    <label class="form-label">Payee</label>
-                    <select class="form-select" required>
-                        <option value="">Select payee</option>
-                        <option value="electricity">Electric Company</option>
-                        <option value="internet">Internet Provider</option>
-                        <option value="rent">Landlord</option>
-                        <option value="credit-card">Credit Card</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Amount</label>
-                    <input type="number" class="form-input" placeholder="0.00" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Pay From</label>
-                    <select class="form-select" required>
-                        <option value="">Select account</option>
-                        <option value="checking">Checking Account (****1234)</option>
-                        <option value="savings">Savings Account (****5678)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Due Date</label>
-                    <input type="date" class="form-input" required>
-                </div>
-                <button type="submit" class="btn-primary">Schedule Payment</button>
-            </form>
-        </div>
-    </div>
+    <div id="notification" class="notification"></div>
 
     <script>
-        let showBalances = true;
-        let currentFilter = 'all';
-        let filteredTransactions = [];
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadUserProfile();
+        });
 
-        const transactions = [
-            { id: 1, description: 'Starbucks Coffee', amount: -4.75, date: '2025-09-02', category: 'Food & Drink', iconClass: 'coffee' },
-            { id: 2, description: 'Salary Deposit', amount: 3500.00, date: '2025-09-01', category: 'Income', iconClass: 'income' },
-            { id: 3, description: 'Amazon Purchase', amount: -89.99, date: '2025-08-31', category: 'Shopping', iconClass: 'shopping' },
-            { id: 4, description: 'Uber Ride', amount: -15.50, date: '2025-08-31', category: 'Transportation', iconClass: 'transport' },
-            { id: 5, description: 'Internet Bill', amount: -59.99, date: '2025-08-30', category: 'Utilities', iconClass: 'utilities' },
-            { id: 6, description: 'Rent Payment', amount: -1200.00, date: '2025-08-30', category: 'Housing', iconClass: 'housing' },
-            { id: 7, description: 'McDonald\'s', amount: -12.50, date: '2025-08-29', category: 'Food & Drink', iconClass: 'coffee' },
-            { id: 8, description: 'Gas Station', amount: -45.00, date: '2025-08-29', category: 'Transportation', iconClass: 'transport' },
-            { id: 9, description: 'Freelance Payment', amount: 850.00, date: '2025-08-28', category: 'Income', iconClass: 'income' },
-            { id: 10, description: 'Grocery Store', amount: -127.89, date: '2025-08-28', category: 'Food & Drink', iconClass: 'coffee' }
-        ];
+        // Load user profile data
+        async function loadUserProfile() {
+            try {
+                const response = await fetch('/api/user/profile', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
 
-        const iconSvgs = {
-            coffee: '<path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line>',
-            income: '<path d="M7 17L17 7"></path><path d="M7 7h10v10"></path>',
-            shopping: '<circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>',
-            transport: '<path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"></path><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"></path><path d="M5 17h-2v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6-6h15m-6 0v-5"></path>',
-            utilities: '<path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M8.5 16.5a6 6 0 0 1 7 0"></path><path d="M12 20h.01"></path>',
-            housing: '<path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-4"></path>'
+                if (response.ok) {
+                    const data = await response.json();
+                    const user = data.user;
+                    
+                    // Update UI with user data
+                    document.getElementById('userName').textContent = user.fullName || 'User';
+                    document.getElementById('accountNumber').textContent = formatAccountNumber(user.accountNumber || '1234567890');
+                    document.getElementById('accountBalance').textContent = formatCurrency(user.balance || 0);
+                } else if (response.status === 401 || response.status === 403) {
+                    // User is not authenticated, redirect to login
+                    window.location.href = '/';
+                } else {
+                    showNotification('Failed to load profile data', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showNotification('Network error loading profile', 'error');
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showNotification('Logged out successfully', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    // Even if logout fails on server, clear local session
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Redirect anyway for security
+                window.location.href = '/';
+            }
+        }
+
+        // Show coming soon notification
+        function showComingSoon(feature) {
+            showNotification(`${feature} feature coming soon!`, 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Format account number
+        function formatAccountNumber(accountNumber) {
+            if (!accountNumber) return '•••• •••• •••• ••••';
+            const str = accountNumber.toString();
+            return `•••• •••• •••• ${str.slice(-4)}`;
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+
+        // Prevent going back to login page after authentication
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
         };
 
-        function toggleBalance() {
-            showBalances = !showBalances;
-            const balanceElements = document.querySelectorAll('.account-balance');
-            const eyeIcon = document.getElementById('eye-icon');
-            
-            balanceElements.forEach(el => {
-                if (showBalances) {
-                    const balance = el.getAttribute('data-balance');
-                    el.textContent = `$${Math.abs(parseFloat(balance)).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-                    el.classList.remove('balance-hidden');
-                } else {
-                    el.textContent = '••••••';
-                    el.classList.add('balance-hidden');
-                }
-            });
+        // Auto-refresh user data every 5 minutes
+        setInterval(loadUserProfile, 5 * 60 * 1000);
 
-            if (showBalances) {
-                eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
-            } else {
-                eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
-            }
-        }
-
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric' 
-            });
-        }
-
-        function renderTransactions(transactionList = transactions) {
-            const container = document.getElementById('transactions-list');
-            if (transactionList.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #6b7280; padding: 40px;">No transactions found</div>';
-                return;
-            }
-            
-            container.innerHTML = transactionList.map(transaction => `
-                <div class="transaction-item">
-                    <div class="transaction-icon ${transaction.iconClass}">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            ${iconSvgs[transaction.iconClass]}
-                        </svg>
-                    </div>
-                    <div class="transaction-details">
-                        <div class="transaction-description">${transaction.description}</div>
-                        <div class="transaction-category">${transaction.category} • ${formatDate(transaction.date)}</div>
-                    </div>
-                    <div class="transaction-amount ${transaction.amount > 0 ? 'positive' : 'negative'}">
-                        ${transaction.amount > 0 ? '+' : ''}${Math.abs(transaction.amount).toFixed(2)}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterTransactions(filter) {
-            currentFilter = filter;
-            
-            // Update active tab
-            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            let filtered = transactions;
-            
-            switch(filter) {
-                case 'income':
-                    filtered = transactions.filter(t => t.amount > 0);
-                    break;
-                case 'expenses':
-                    filtered = transactions.filter(t => t.amount < 0);
-                    break;
-                case 'food':
-                    filtered = transactions.filter(t => t.category.toLowerCase().includes('food') || t.category.toLowerCase().includes('drink'));
-                    break;
-                case 'transport':
-                    filtered = transactions.filter(t => t.category.toLowerCase().includes('transport'));
-                    break;
-                default:
-                    filtered = transactions;
-            }
-            
-            filteredTransactions = filtered;
-            renderTransactions(filtered);
-        }
-
-        function searchTransactions() {
-            const searchTerm = document.getElementById('search-transactions').value.toLowerCase();
-            const baseTransactions = currentFilter === 'all' ? transactions : filteredTransactions;
-            
-            if (searchTerm === '') {
-                renderTransactions(baseTransactions);
-                return;
-            }
-            
-            const filtered = baseTransactions.filter(transaction => 
-                transaction.description.toLowerCase().includes(searchTerm) ||
-                transaction.category.toLowerCase().includes(searchTerm)
-            );
-            
-            renderTransactions(filtered);
-        }
-
-        function showModal(action) {
-            const modalId = action + '-modal';
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.style.display = 'block';
-            } else {
-                alert(`${action.charAt(0).toUpperCase() + action.slice(1)} feature coming soon!`);
-            }
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        function processTransfer(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            
-            // Add new transaction to simulate the transfer
-            const newTransaction = {
-                id: transactions.length + 1,
-                description: 'Internal Transfer',
-                amount: -parseFloat(event.target.querySelector('input[type="number"]').value),
-                date: new Date().toISOString().split('T')[0],
-                category: 'Transfer',
-                iconClass: 'income'
-            };
-            
-            transactions.unshift(newTransaction);
-            renderTransactions();
-            closeModal('transfer-modal');
-            event.target.reset();
-            
-            alert('Transfer completed successfully!');
-        }
-
-        function processBillPayment(event) {
-            event.preventDefault();
-            const amount = parseFloat(event.target.querySelector('input[type="number"]').value);
-            const payee = event.target.querySelector('select').value;
-            
-            // Add new transaction
-            const newTransaction = {
-                id: transactions.length + 1,
-                description: `${payee.charAt(0).toUpperCase() + payee.slice(1)} Bill Payment`,
-                amount: -amount,
-                date: new Date().toISOString().split('T')[0],
-                category: 'Bills & Utilities',
-                iconClass: 'utilities'
-            };
-            
-            transactions.unshift(newTransaction);
-            renderTransactions();
-            closeModal('bills-modal');
-            event.target.reset();
-            
-            alert('Bill payment scheduled successfully!');
-        }
-
-        function showNotifications() {
-            alert('You have 3 new notifications:\n• Payment reminder for credit card\n• Your salary has been deposited\n• Monthly statement is ready');
-        }
-
-        // Initialize the dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            renderTransactions();
-            
-            // Add search functionality
-            document.getElementById('search-transactions').addEventListener('input', searchTransactions);
-            
-            // Close modals when clicking outside
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
-                });
-            });
-            
-            // Set default date for bill payments to today
-            const today = new Date().toISOString().split('T')[0];
-            document.querySelector('#bills-form input[type="date"]').value = today;
+        // Handle window focus to refresh data
+        window.addEventListener('focus', () => {
+            loadUserProfile();
         });
+
+        // Add loading states for better UX
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = '<div class="loading"></div>';
+            }
+        }
+
+        function hideLoading(elementId, content) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = content;
+            }
+        }
     </script>
 </body>
 </html>
