@@ -21205,4 +21205,21 @@ ul li::marker {
     color: #eee
 }
 
+@media (max-width: 500px) {
+  .mod-marketing .slides > li {
+    min-height: 320px !important;
+    height: 320px !important;
+  }
+  .mod-marketing .marketing-background,
+  .mod-marketing .marketing-background img {
+    min-height: 320px !important;
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+  }
+}
+
 /*# sourceMappingURL=main.min.css.map */

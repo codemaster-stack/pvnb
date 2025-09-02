@@ -1,483 +1,1237 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" class="no-js text-normal">
-
+<html lang="en">
 <head>
-    <title>Banking &amp; Lending Services | Pauls Valley National Bank</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1">
-    <meta name="Keywords" content="--ENTER-KEYWORDS--">
-    <meta name="Description" content="Pauls Valley National Bank provides banking and lending services to personal and business banking customers throughout southern Oklahoma. ">
-    <meta property="og:title" content="Banking &amp; Lending Services">
-    <meta property="og:description" content="Pauls Valley National Bank provides banking and lending services to personal and business banking customers throughout southern Oklahoma. ">
-    <meta property="og:url" content="https://www.pvnb.com/">
-    <meta property="og:image" content="https://www.pvnb.com/images/logos/og-image.png">
-    <meta property="og:type" content="website">
-
-    <meta name="author" content="Pauls Valley National Bank">
-    <meta name="generator" content="Forbin PageBuilder 2.0">
-
-    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Pauls Valley National Bank" />
-    <link rel="manifest" href="/images/favicon/site.webmanifest" />
-
-    <link rel="stylesheet" href="https://use.typekit.net/jbb6sfe.css">
-
-
-    <link rel="dns-prefetch" href="//ajax.googleapis.com">
-    <link rel="dns-prefetch" href="//cdn.forbin.com">
-    <link rel="canonical" href="https://www.pvnb.com/" />
-    <link rel="stylesheet" href="/css/main.min.css?v=1742486674">
-    <link rel="stylesheet" href="/modules/content-blocks/content-blocks.css?v=1742486674">
-
-    <script>
-        dataLayer = [];
-    </script>
-    <!-- Google Tag Manager -->
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                '//www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-WH8CWDF8');
-    </script>
-    <!-- End Google Tag Manager -->
-
-    <!-- Mission Critical CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pauls Valley National Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Screenreader only text */
-
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
             padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-            &:focus {
-                width: auto;
-                height: auto;
-                left: 0;
-                top: 0;
-                clip: auto;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Utility Classes */
+        .visually-hidden {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .m-0 { margin: 0 !important; }
+        .mr-1 { margin-right: 0.25rem !important; }
+        .d-flex { display: flex !important; }
+        .flex-column { flex-direction: column !important; }
+        .flex-row { flex-direction: row !important; }
+        .align-items-center { align-items: center !important; }
+        .align-items-stretch { align-items: stretch !important; }
+        .justify-content-center { justify-content: center !important; }
+        .text-center { text-align: center !important; }
+
+        /* Responsive Display Classes */
+        @media (max-width: 991.98px) {
+            .d-lg-none {
+                display: none !important;
             }
         }
 
-        body:has(dialog.dialog-prevent-scroll[open]) {
+        /* Header Styles */
+        .primary-header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .nav-top-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-top-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .nav-top-link:hover {
+            color: #007bff;
+        }
+
+        .search-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .search-icon:hover {
+            color: #007bff;
+        }
+
+        .olb-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-nav-buttons {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .open-mobilemenu {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .fdic-logo {
+            width: 80px;
+            height: 40px;
+            background: #333;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Button Styles */
+        .button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .button-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .button-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .button-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .button-secondary:hover {
+            background: #545b62;
+        }
+
+        .button-olb {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+
+        /* Navigation Menu */
+        .nav-list {
+            background: #f8f9fa;
+            padding: 0 2rem;
+            display: flex;
+            gap: 0;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .nav-family {
+            position: relative;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #e9ecef;
+            border-bottom-color: #007bff;
+            color: #007bff;
+        }
+
+        /* Search Field */
+        .search-field-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.9);
+            padding: 2rem;
+            z-index: 1001;
+        }
+
+        .search-field-wrapper form {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        .searchField {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .close-search {
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+            cursor: pointer;
+        }
+
+        /* Hero Marketing Slides */
+        .mod-marketing {
+            position: relative;
             overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .flexslider {
+            position: relative;
+            height: min(75vh, 500px);
+        }
+
+        .slides {
+            position: relative;
+            height: 100%;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .slides li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slides li:first-child {
+            opacity: 1;
+        }
+
+        .mk-slide3 {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1920') center/cover;
+        }
+
+        .mk-slide4 {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920') center/cover;
+        }
+
+        .mk-slide5 {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920') center/cover;
+        }
+
+        .marketing-text {
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .marketing-title {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+        }
+
+        .marketing-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+            line-height: 1.4;
+        }
+
+        .marketing-url {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #007bff;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .marketing-url:hover {
+            background: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.4);
+        }
+
+        /* Slide Controls */
+        .mm-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .mm-direction-nav {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            margin: 0 1rem;
+            pointer-events: all;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .mm-direction-nav:hover {
+            opacity: 1;
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .mm-control-nav {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            pointer-events: all;
+        }
+
+        /* Main Content */
+        .content {
+            background: #fff;
+        }
+
+        .maincontent {
+            padding: 4rem 0;
+        }
+
+        /* Callouts Section */
+        .callouts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .callout {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .callout:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .callout-contents {
+            margin-bottom: 1.5rem;
+        }
+
+        .callout-image {
+            margin-bottom: 1rem;
+            height: 91px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .callout-image img {
+            width: 80px;
+            height: 80px;
+            background: #007bff;
+            border-radius: 50%;
+            padding: 20px;
+        }
+
+        .callout-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        /* Image Column Section */
+        .image-column-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .image-column-text h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .image-column-text hr {
+            border: none;
+            height: 3px;
+            background: #007bff;
+            width: 60px;
+            margin: 1rem 0 2rem 0;
+        }
+
+        .image-column-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .image-column-section .placeholder-img {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Big Image Section */
+        .big-image-section {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1920') center/cover;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .big-image-section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+        }
+
+        .big-image-section hr {
+            border: none;
+            height: 3px;
+            background: white;
+            width: 80px;
+            margin: 1rem auto 2rem;
+        }
+
+        .big-image-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+
+        /* Icon Callouts */
+        .icon-callouts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .border-callout {
+            text-align: center;
+            padding: 2rem 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .border-callout:hover {
+            border-color: #007bff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.2);
+        }
+
+        .border-callout img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            background: #007bff;
+            border-radius: 50%;
+            padding: 15px;
+        }
+
+        .border-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .border-callout span {
+            color: #007bff;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-contact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 0 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid #555;
+        }
+
+        .footernav-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo {
+            height: 60px;
+            width: auto;
+            margin-bottom: 1rem;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .routing {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ccc;
+        }
+
+        .footer-contact-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+
+        .footer-contact-link {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .footer-contact-link:hover {
+            color: white;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            color: #ccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #007bff;
+        }
+
+        .sec-footernav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footernav-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .footernav-column hr {
+            border: none;
+            height: 1px;
+            background: #555;
+            margin: 1rem 0;
+        }
+
+        .footernav-column span {
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            display: block;
+        }
+
+        .footernav-column span:hover {
+            color: white;
+        }
+
+        .sec-copyright {
+            background: #222;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .legal {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .logo-fdic,
+        .logo-equal-housing {
+            height: 40px;
+            width: 60px;
+            background: white;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .sec-copyright p {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .sec-copyright span {
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        /* Back to Top */
+        .site-options {
+            background: #111;
+        }
+
+        .back-to-top {
+            background: #007bff;
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .back-to-top:hover {
+            background: #0056b3;
+        }
+
+        /* Mobile Menu */
+        .mobilemenu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: #333;
+            z-index: 1002;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobilemenu.active {
+            right: 0;
+        }
+
+        .mobilemenu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #222;
+        }
+
+        .logo-mobilemenu img {
+            height: 40px;
+            background: white;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .close-mobilemenu {
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .mobilemenu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobilemenu li {
+            border-bottom: 1px solid #555;
+        }
+
+        .mobilemenu span {
+            display: block;
+            padding: 1rem;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .mobilemenu span:hover {
+            background: #555;
+        }
+
+        .li-search form {
+            padding: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .li-search input[type="search"] {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: #444;
+            color: white;
+        }
+
+        .overlay-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1001;
+            display: none;
+        }
+
+        .overlay-mask.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-top-bar {
+                padding: 1rem;
+            }
+            
+            .nav-list {
+                padding: 0 1rem;
+            }
+            
+            .image-column-section {
+                gap: 2rem;
+                padding: 3rem 1rem;
+            }
+            
+            .big-image-section {
+                padding: 4rem 1rem;
+                background-attachment: scroll;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-top-links {
+                display: none;
+            }
+            
+            .mobile-nav-buttons {
+                display: flex;
+            }
+            
+            .nav-list {
+                display: none;
+            }
+            
+            .flexslider {
+                height: 60vh;
+            }
+            
+            .marketing-text {
+                padding: 1rem;
+            }
+            
+            .image-column-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
+            
+            .callouts {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+            
+            .icon-callouts {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 2rem 1rem;
+            }
+            
+            .footer-contact {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .footer-contact-right {
+                align-items: center;
+            }
+            
+            .sec-footernav {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+            
+            .sec-copyright {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            
+            .legal {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-top-bar {
+                padding: 0.5rem;
+            }
+            
+            .logo img {
+                height: 40px;
+            }
+            
+            .flexslider {
+                height: 50vh;
+            }
+            
+            .marketing-title {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+            }
+            
+            .marketing-subtitle {
+                font-size: 1rem;
+            }
+            
+            .marketing-url {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .callout {
+                padding: 1.5rem;
+            }
+            
+            .callout-image img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .callout-title {
+                font-size: 1.25rem;
+            }
+            
+            .icon-callouts {
+                grid-template-columns: 1fr;
+            }
+            
+            .border-callout {
+                padding: 1.5rem 1rem;
+            }
+            
+            .big-image-section {
+                padding: 3rem 1rem;
+            }
+            
+            .image-column-text h3 {
+                font-size: 1.5rem;
+            }
+            
+            .mobilemenu {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+
+        /* Focus States for Accessibility */
+        button:focus,
+        .button:focus,
+        .nav-item:focus,
+        .nav-top-link:focus,
+        .footer-contact-link:focus,
+        .mobilemenu span:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+
+        /* Placeholder Icons */
+        .icon-placeholder {
+            width: 60px;
+            height: 60px;
+            background: #007bff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
         }
     </style>
 </head>
 
 <body class="homepage">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript aria-hidden="true"><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WH8CWDF8" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <script>
-        var bannerId = "8";
-    </script>
-
     <header class="primary-header">
-        <a href="#content-anchor" class="skip-to-content visually-hidden" title="Brings you down to the main page content">Skip to Content</a>
-
+        <span class="skip-to-content visually-hidden" title="Brings you down to the main page content">Skip to Content</span>
 
         <div class="search-field-wrapper hide">
-            <form name="Search" id="Search" action="/search" method="get" autocomplete="off">
+            <form name="Search" id="Search" autocomplete="off">
                 <input type="search" placeholder="Search Site" id="searchfield" class="searchField" name="q" aria-label="Site Search">
                 <input type="submit" value="Search" class="button button-secondary">
             </form>
-            <a href="#" class="close-search" title="Close search bar"><img src="/images/icons/icon-close-white.png" alt="Close Icon"></a>
+            <span class="close-search" title="Close search bar">
+                <i class="fas fa-times" style="color: white; font-size: 1.5rem;"></i>
+            </span>
         </div>
 
         <nav class="nav-top-section" aria-label="Main Navigation">
             <div class="nav-top-bar">
-                <a href="/" title="Pauls Valley National Bank" class="relative logo">
-            <img src="/images/logos/logo.webp" alt="logo">
-        </a>
+                <span title="Pauls Valley National Bank" class="relative logo">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMDA3YmZmIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMzAiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UGF1bHMgVmFsbGV5IE5hdGlvbmFsIEJhbms8L3RleHQ+PC9zdmc+" alt="Pauls Valley National Bank">
+                </span>
                 <div class="nav-top-links">
-                    <a class="search-icon nav-search" href="#" title="Opens search bar"><span class="fas fa-search"></span><span class="visually-hidden">Search</span></a>
-                    <a href="/locations" class="nav-top-link" title="Internal link in same tab to Locations & Hours">Locations & Hours</a>
-                    <a href="/contact-us" class="nav-top-link" title="Internal link in same tab to Contact Us">Contact Us</a>
+                    <span class="search-icon nav-search" title="Opens search bar"><span class="fas fa-search"></span><span class="visually-hidden">Search</span></span>
+                    <span class="nav-top-link" title="Locations & Hours">Locations & Hours</span>
+                    <span class="nav-top-link" title="Contact Us">Contact Us</span>
                 </div>
 
                 <div class="olb-wrapper">
                     <button class="button button-secondary button-olb">ONLINE BANKING</button>
-                    <dialog class="dialog-modal dialog-prevent-scroll">
-                        <div class="olb-top-bar">
-                            <p>Online Banking</p>
-                            <button class="close-button"><i class="fa-regular fa-circle-xmark"></i></button>
-                        </div>
-                        <div class="online-banking">
-                            <label for="cboAccountType">Account Type:</label>
-                            <select id="cboAccountType" name="cboAccountType" autocomplete="off">
-                <option value="Personal">Personal</option>
-                <option value="Business">Business</option>
-            </select>
-                            <div class="personal">
-                                <form class="personal ROLoginForm" method="post" id="pbi-form" autocomplete="off">
-                                    <label for="pbi-username">Username: <input name="username" id="pbi-username" type="text" autocomplete="off" /></label>
-                                    <label for="pbi-password">Password: <input name="password" id="pbi-password" type="password" autocomplete="off" /></label>
-                                    <input class="ROLoginSubmitButton button button-primary olb-submit" type="submit" value="Login" id="pbi-submit" disabled>
-                                </form>
-                                <div class="olb-links mt-2">
-                                    <div><a href="https://web4.secureinternetbank.com/pbi_pbi1151/Enroll/103101987/1" class="nodisclaimer" title="External link to enroll in online banking">Enroll</a></div>
-                                    <div><a href="https://web4.secureinternetbank.com/pbi_pbi1151/ForgotPassword/103101987/1" class="nodisclaimer" title="External link to reset online banking password">Forgot Password</a></div>
-                                </div>
-
-                            </div>
-                            <div class="business d-none">
-                                <form class="business BOLoginForm" method="post" id="ebc-form" autocomplete="off">
-                                    <label for="ebc-username">Username: <input name="username" id="ebc-username" type="text" autocomplete="off" /></label>
-                                    <label for="ebc-password">Password: <input name="password" id="ebc-password" type="password" autocomplete="off" /></label>
-                                    <input class="BOLoginSubmitButton button button-primary olb-submit" type="submit" value="Login" id="ebc-submit" disabled>
-                                </form>
-                                <div class="olb-links mt-2">
-                                    <div><a href="https://web4.secureinternetbank.com/EBC_EBC1151/ForgotPassword/103101987" class="nodisclaimer" title="External link to reset business online banking password">Forgot Password</a></div>
-                                </div>
-
-                            </div>
-                    </dialog>
-                    </div>
-
-                    <script type="text/javascript" src="https://web4.secureinternetbank.com/PBI_PBI1151/js/remoteLoginLoad"></script>
-                    <script type="text/javascript" src="https://web4.secureinternetbank.com/EBC_EBC1151/js/Remoteloginload"></script>
-
-                    <script src="/scripts/olb.js?v=1742486679"></script>
                     <div class="mobile-nav-buttons">
-                        <a href="tel:4052389321" class="m-0 d-lg-none" title="Opens default phone application">
-                <span class="fa-solid fa-phone mr-1"></span>
-                <span class="visually-hidden">Call: 405-238-9321</span>
-            </a>
-                        <a class="open-mobilemenu" href="#" title="Opens Site Navigation">
-                <span class="fa-solid fa-bars"></span>
-                <span class="visually-hidden">Menu</span>
-            </a>
+                        <span class="m-0 d-lg-none" title="Phone: 405-238-9321">
+                            <span class="fa-solid fa-phone mr-1"></span>
+                            <span class="visually-hidden">Call: 405-238-9321</span>
+                        </span>
+                        <span class="open-mobilemenu" title="Opens Site Navigation">
+                            <span class="fa-solid fa-bars"></span>
+                            <span class="visually-hidden">Menu</span>
+                        </span>
                     </div>
 
                     <div class="fdic-logo">
-                        <script src="https://cdn.vgmforbin.com/resources/js/financial/fdic-signage.min.js?type=text"></script>
+                        FDIC
                     </div>
                 </div>
+            </div>
         </nav>
 
         <div class="nav-list">
-            <div class='nav-family' data-depth='0' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Personal Banking page in same window' data-page-id='33' data-depth='0' data-nodisclaimer="true">Personal Banking</a>
-                <div class='nav-children' data-depth='0'>
-                    <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Deposit Products page in same window' data-page-id='34' data-depth='1' data-nodisclaimer="true">Deposit Products</a>
-                        <div class='nav-children' data-depth='1'>
-                            <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/deposit-products/checking' target='_self' title='Opens internal link to Checking page in same window' data-page-id='35' data-depth='2' data-nodisclaimer="true">Checking</a> </div>
-                            <div
-                                class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/deposit-products/savings' target='_self' title='Opens internal link to Savings page in same window' data-page-id='36' data-depth='2' data-nodisclaimer="true">Savings</a> </div>
-                        <div
-                            class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/deposit-products/savings#certificatesofdeposit' target='_self' title='Opens internal link to Certificates of Deposit page in same window' data-page-id='37' data-depth='2' data-nodisclaimer="true">Certificates of Deposit</a>                            </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/deposit-products/savings#ira' target='_self' title='Opens internal link to Individual Retirements Accounts page in same window' data-page-id='38' data-depth='2' data-nodisclaimer="true">Individual Retirements Accounts</a>                        </div>
-                </div>
+            <div class='nav-family' data-depth='0' data-has-children="true">
+                <span class='nav-item' data-page-id='33' data-depth='0' data-nodisclaimer="true">Personal Banking</span>
             </div>
-            <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Online Services page in same window' data-page-id='39' data-depth='1' data-nodisclaimer="true">Online Services</a>
-                <div class='nav-children' data-depth='1'>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/online-services/online-banking' target='_self' title='Opens internal link to Online Banking page in same window' data-page-id='40' data-depth='2' data-nodisclaimer="true">Online Banking</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/online-services/online-banking#mobile-banking' target='_self' title='Opens internal link to Mobile Banking page in same window' data-page-id='41' data-depth='2' data-nodisclaimer="true">Mobile Banking</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/online-services/online-banking#bill-pay' target='_self' title='Opens internal link to Bill Pay page in same window' data-page-id='42' data-depth='2' data-nodisclaimer="true">Bill Pay</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/online-services/online-banking#estatements' target='_self' title='Opens internal link to eStatements page in same window' data-page-id='43' data-depth='2' data-nodisclaimer="true">eStatements</a>                        </div>
-                </div>
+            <div class='nav-family' data-depth='0' data-has-children="true">
+                <span class='nav-item' data-page-id='54' data-depth='0' data-nodisclaimer="true">Business Banking</span>
             </div>
-            <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Other Services page in same window' data-page-id='44' data-depth='1' data-nodisclaimer="true">Other Services</a>
-                <div class='nav-children' data-depth='1'>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards' target='_self' title='Opens internal link to Debit Cards page in same window' data-page-id='45' data-depth='2' data-nodisclaimer="true">Debit Cards</a> </div>
-                    <div
-                        class='nav-family' data-depth='2'><a class='nav-item' href='https://www.whitcochecks.com/general_reorder.php' target='_blank' title='Opens external link to Reorder Checks page in new window' data-page-id='102' data-depth='2'>Reorder Checks</a> </div>
-                <div class='nav-family'
-                    data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards#coin-machine' target='_self' title='Opens internal link to Coin Machine page in same window' data-page-id='47' data-depth='2' data-nodisclaimer="true">Coin Machine</a>                    </div>
-                <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards#telephone-banking' target='_self' title='Opens internal link to Telephone Banking page in same window' data-page-id='48' data-depth='2' data-nodisclaimer="true">Telephone Banking</a>                    </div>
-                <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards#telephone-banking' target='_self' title='Opens internal link to Night Deposit page in same window' data-page-id='49' data-depth='2' data-nodisclaimer="true">Night Deposit</a>                    </div>
-                <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards#safe-deposit-banking' target='_self' title='Opens internal link to Safe Deposit Boxes page in same window' data-page-id='50' data-depth='2' data-nodisclaimer="true">Safe Deposit Boxes</a>                    </div>
-                <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards#notary' target='_self' title='Opens internal link to Notary page in same window' data-page-id='51' data-depth='2' data-nodisclaimer="true">Notary</a> </div>
-                <div class='nav-family'
-                    data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards#wire-transfers' target='_self' title='Opens internal link to Wire Transfers page in same window' data-page-id='52' data-depth='2' data-nodisclaimer="true">Wire Transfers</a>                    </div>
-                <div class='nav-family' data-depth='2'><a class='nav-item' href='/personal-banking/other-services/debit-cards#other-services' target='_self' title='Opens internal link to Other Services page in same window' data-page-id='53' data-depth='2' data-nodisclaimer="true">Other Services</a>                    </div>
+            <div class='nav-family' data-depth='0' data-has-children="true">
+                <span class='nav-item' data-page-id='73' data-depth='0' data-nodisclaimer="true">Lending</span>
             </div>
-        </div>
-        </div>
-        </div>
-        <div class='nav-family' data-depth='0' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Business Banking page in same window' data-page-id='54' data-depth='0' data-nodisclaimer="true">Business Banking</a>
-            <div class='nav-children' data-depth='0'>
-                <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Deposit Products page in same window' data-page-id='55' data-depth='1' data-nodisclaimer="true">Deposit Products</a>
-                    <div class='nav-children' data-depth='1'>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/deposit-products/checking' target='_self' title='Opens internal link to Checking page in same window' data-page-id='56' data-depth='2' data-nodisclaimer="true">Checking</a> </div>
-                        <div
-                            class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/deposit-products/savings' target='_self' title='Opens internal link to Savings page in same window' data-page-id='57' data-depth='2' data-nodisclaimer="true">Savings</a> </div>
-                    <div class='nav-family'
-                        data-depth='2'><a class='nav-item' href='/business-banking/deposit-products/savings#cds' target='_self' title='Opens internal link to Certificates of Deposit page in same window' data-page-id='58' data-depth='2' data-nodisclaimer="true">Certificates of Deposit</a>                        </div>
-                </div>
+            <div class='nav-family' data-depth='0' data-has-children="true">
+                <span class='nav-item' data-page-id='82' data-depth='0' data-nodisclaimer="true">About Us</span>
             </div>
-            <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Online Services page in same window' data-page-id='59' data-depth='1' data-nodisclaimer="true">Online Services</a>
-                <div class='nav-children' data-depth='1'>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/online-services/online-banking' target='_self' title='Opens internal link to Online Banking page in same window' data-page-id='60' data-depth='2' data-nodisclaimer="true">Online Banking</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/online-services/online-banking#estatements' target='_self' title='Opens internal link to eStatements page in same window' data-page-id='61' data-depth='2' data-nodisclaimer="true">eStatements</a>                        </div>
-                </div>
-            </div>
-            <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Other Services page in same window' data-page-id='62' data-depth='1' data-nodisclaimer="true">Other Services</a>
-                <div class='nav-children' data-depth='1'>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#merchant-capture' target='_self' title='Opens internal link to Merchant Capture page in same window' data-page-id='64' data-depth='2' data-nodisclaimer="true">Merchant Capture</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#debit-cards' target='_self' title='Opens internal link to Debit Cards page in same window' data-page-id='65' data-depth='2' data-nodisclaimer="true">Debit Cards</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='https://www.whitcochecks.com/general_reorder.php' target='_blank' title='Opens external link to Reorder Checks page in new window' data-page-id='101' data-depth='2'>Reorder Checks</a> </div>
-                    <div class='nav-family'
-                        data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#coin-machine' target='_self' title='Opens internal link to Coin Machine page in same window' data-page-id='67' data-depth='2' data-nodisclaimer="true">Coin Machine</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#telephone-banking' target='_self' title='Opens internal link to Telephone Banking page in same window' data-page-id='68' data-depth='2' data-nodisclaimer="true">Telephone Banking</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#night-deposit' target='_self' title='Opens internal link to Night Deposit page in same window' data-page-id='69' data-depth='2' data-nodisclaimer="true">Night Deposit</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#safe-deposit-boxes' target='_self' title='Opens internal link to Safe Deposit Boxes page in same window' data-page-id='70' data-depth='2' data-nodisclaimer="true">Safe Deposit Boxes</a>                        </div>
-                    <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#notary' target='_self' title='Opens internal link to Notary page in same window' data-page-id='71' data-depth='2' data-nodisclaimer="true">Notary</a> </div>
-                    <div
-                        class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services#wire-transfers' target='_self' title='Opens internal link to Wire Transfers page in same window' data-page-id='72' data-depth='2' data-nodisclaimer="true">Wire Transfers</a>                        </div>
-                <div class='nav-family' data-depth='2'><a class='nav-item' href='/business-banking/other-services/other-services' target='_self' title='Opens internal link to Other Services page in same window' data-page-id='63' data-depth='2' data-nodisclaimer="true">Other Services</a> </div>
-            </div>
-        </div>
-        </div>
-        </div>
-        <div class='nav-family' data-depth='0' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Lending page in same window' data-page-id='73' data-depth='0' data-nodisclaimer="true">Lending</a>
-            <div class='nav-children' data-depth='0'>
-                <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Personal page in same window' data-page-id='74' data-depth='1' data-nodisclaimer="true">Personal</a>
-                    <div class='nav-children' data-depth='1'>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/lending/personal/consumer-loans' target='_self' title='Opens internal link to Consumer Loans page in same window' data-page-id='75' data-depth='2' data-nodisclaimer="true">Consumer Loans</a> </div>
-                        <div
-                            class='nav-family' data-depth='2'><a class='nav-item' href='/lending/personal/consumer-loans#home-loans' target='_self' title='Opens internal link to Home Loans page in same window' data-page-id='76' data-depth='2' data-nodisclaimer="true">Home Loans</a> </div>
-                    <div
-                        class='nav-family' data-depth='2'><a class='nav-item' href='/lending/personal/consumer-loans#mortgage-loan-originators' target='_self' title='Opens internal link to Mortgage Loan Originators page in same window' data-page-id='77' data-depth='2' data-nodisclaimer="true">Mortgage Loan Originators</a>                        </div>
-            </div>
-        </div>
-        <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Business page in same window' data-page-id='78' data-depth='1' data-nodisclaimer="true">Business</a>
-            <div class='nav-children' data-depth='1'>
-                <div class='nav-family' data-depth='2'><a class='nav-item' href='/lending/business/commercial-loans' target='_self' title='Opens internal link to Commercial Loans page in same window' data-page-id='79' data-depth='2' data-nodisclaimer="true">Commercial Loans</a> </div>
-                <div
-                    class='nav-family' data-depth='2'><a class='nav-item' href='/lending/business/commercial-loans#construction-loans' target='_self' title='Opens internal link to Construction Loans page in same window' data-page-id='80' data-depth='2' data-nodisclaimer="true">Construction Loans</a>                    </div>
-            <div class='nav-family' data-depth='2'><a class='nav-item' href='/lending/business/commercial-loans#business-credit' target='_self' title='Opens internal link to Business Credit page in same window' data-page-id='81' data-depth='2' data-nodisclaimer="true">Business Credit</a> </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        <div class='nav-family' data-depth='0' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to About Us page in same window' data-page-id='82' data-depth='0' data-nodisclaimer="true">About Us</a>
-            <div class='nav-children' data-depth='0'>
-                <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Our Bank page in same window' data-page-id='83' data-depth='1' data-nodisclaimer="true">Our Bank</a>
-                    <div class='nav-children' data-depth='1'>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/about-us/our-bank/about-us' target='_self' title='Opens internal link to About Us page in same window' data-page-id='84' data-depth='2' data-nodisclaimer="true">About Us</a> </div>
-                        <div class='nav-family'
-                            data-depth='2'><a class='nav-item' href='/contact-us' target='_self' title='Opens internal link to Contact Us page in same window' data-page-id='103' data-depth='2' data-nodisclaimer="true">Contact Us</a> </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/locations' target='_self' title='Opens internal link to Locations & Hours page in same window' data-page-id='104' data-depth='2' data-nodisclaimer="true">Locations & Hours</a> </div>
-                        <div class='nav-family'
-                            data-depth='2'><a class='nav-item' href='/staff' target='_self' title='Opens internal link to Meet Our Team page in same window' data-page-id='119' data-depth='2' data-nodisclaimer="true">Meet Our Team</a> </div>
-                    </div>
-                </div>
-                <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Community Engagement page in same window' data-page-id='111' data-depth='1' data-nodisclaimer="true">Community Engagement</a>
-                    <div class='nav-children' data-depth='1'>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/about-us/community-engagement/community-engagement/upcoming-events-hours' target='_self' title='Opens internal link to Upcoming Events & Hours page in same window' data-page-id='115' data-depth='2' data-nodisclaimer="true">Upcoming Events & Hours</a>                            </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/about-us/community-engagement' target='_self' title='Opens internal link to Community Engagement page in same window' data-page-id='100' data-depth='2' data-nodisclaimer="true">Community Engagement</a>                            </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/about-us/community-engagement/bandanas-for-paws' target='_self' title='Opens internal link to Bandanas for Paws page in same window' data-page-id='116' data-depth='2' data-nodisclaimer="true">Bandanas for Paws</a>                            </div>
-                    </div>
-                </div>
-                <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Resource Center page in same window' data-page-id='87' data-depth='1' data-nodisclaimer="true">Resource Center</a>
-                    <div class='nav-children' data-depth='1'>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/calculators' target='_self' title='Opens internal link to Calculators page in same window' data-page-id='105' data-depth='2' data-nodisclaimer="true">Calculators</a> </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/about-us/resource-center/faqs' target='_self' title='Opens internal link to FAQs page in same window' data-page-id='89' data-depth='2' data-nodisclaimer="true">FAQs</a> </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/contact-us#report-lost-or-stolen-card' target='_self' title='Opens internal link to Report a Lost or Stolen Card page in same window' data-page-id='90' data-depth='2' data-nodisclaimer="true">Report a Lost or Stolen Card</a>                            </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/about-us/resource-center/switch-kit' target='_self' title='Opens internal link to Switch Kit page in same window' data-page-id='91' data-depth='2' data-nodisclaimer="true">Switch Kit</a> </div>
-                        <div class='nav-family'
-                            data-depth='2'><a class='nav-item' href='https://www.whitcochecks.com/general_reorder.php' target='_blank' title='Opens external link to Reorder Checks page in new window' data-page-id='92' data-depth='2'>Reorder Checks</a> </div>
-                    </div>
-                </div>
-                <div class='nav-family' data-depth='1' data-has-children="true"><a class='nav-item' href='#' target='_self' title='Opens internal link to Disclaimers & Disclosures page in same window' data-page-id='93' data-depth='1' data-nodisclaimer="true">Disclaimers & Disclosures</a>
-                    <div class='nav-children'
-                        data-depth='1'>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/privacy-policy' target='_self' title='Opens internal link to Privacy Policy page in same window' data-page-id='106' data-depth='2' data-nodisclaimer="true">Privacy Policy</a> </div>
-                        <div class='nav-family'
-                            data-depth='2'><a class='nav-item' href='/about-us/disclaimers-disclosures/mobile-privacy-policy' target='_self' title='Opens internal link to Mobile Privacy Policy page in same window' data-page-id='95' data-depth='2' data-nodisclaimer="true">Mobile Privacy Policy</a>                            </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/about-us/disclaimers-disclosures/important-information' target='_self' title='Opens internal link to Important Information page in same window' data-page-id='96' data-depth='2' data-nodisclaimer="true">Important Information</a>                            </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/terms-of-use' target='_self' title='Opens internal link to Terms of Use page in same window' data-page-id='107' data-depth='2' data-nodisclaimer="true">Terms of Use</a> </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/uploads/userfiles/files/documents/4_1_2024 deposit-insurance-at-a-glance-english.pdf' target='_blank' title='Opens internal link to Deposit Insurance page in new window' data-page-id='117' data-depth='2'
-                                data-nodisclaimer="true">Deposit Insurance</a> </div>
-                        <div class='nav-family' data-depth='2'><a class='nav-item' href='/lending/personal/consumer-loans#mortgage-loan-originators' target='_self' title='Opens internal link to Mortgage Loan Originators page in same window' data-page-id='99' data-depth='2' data-nodisclaimer="true">Mortgage Loan Originators</a>                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         </div>
     </header>
-    <style>
-        .mm-control-nav {
-            ol {
-                margin: 0;
-                padding: 0;
-                list-style: none;
-                display: flex;
-                gap: .5rem;
-                li {
-                    padding: 0;
-                    margin: 0;
-                    a {
-                        display: block;
-                        text-indent: -9999px;
-                        margin: 0;
-                        height: 8px;
-                        width: 24px;
-                        background-color: rgba(255, 255, 255, .5);
-                        border-radius: 4px;
-                        transition: 200ms ease-out;
-                        &.flex-active {
-                            background-color: white;
-                            width: 48px;
-                        }
-                    }
-                }
-            }
-            .flex-pauseplay {
-                line-height: 1;
-                a {
-                    color: white;
-                    text-decoration: none;
-                }
-            }
-        }
-    </style>
 
-    <section class="mod-marketing" style="background-color: white; position: relative;" aria-label="Marketing Message">
-        <div class="flexslider" style="position: relative;">
-            <ul class="slides" style="position: relative; list-style: none; display: flex; padding: 0; margin: 0; z-index: 0;">
-                <li class="mk-slide3" style="display: block; width: 100%; flex-shrink: 0; position: relative; padding: 0; min-height: min(75vh, 500px);">
-                    <div class="marketing-background" style="position: absolute; inset: 0;">
-                        <img srcset='/uploads/userfiles/files/modules/marketing/small/577205fc2d8f2ac004911ced8df1cae0.jpg?v=1742310432 480w, /uploads/userfiles/files/modules/marketing/medium/577205fc2d8f2ac004911ced8df1cae0.jpg?v=1742310430 960w, /uploads/userfiles/files/modules/marketing/large/577205fc2d8f2ac004911ced8df1cae0.jpg?v=1742310427 1920w'
-                            sizes="(max-width: 500px) 480px, (max-width: 960px) 960px, 1920px"
-                          width='1920px' height='1080px' alt='Bank teller handing money to client' style="height: 100%; width: 100%; object-fit: cover;" />
-                        <div class="marketing-bg-overlay" style="position: absolute; inset: 0; background-color: rgba(0,0,0,0.46);"></div>
-                    </div>
-
-                    <div class="container" style="height: 100%; position: relative; padding-inline: 30px;">
-                        <div style="display: flex; flex-wrap: wrap; padding: 5rem 0; align-items: flex-end; justify-content: center; gap: 2rem; height: 100%;">
-                            <div class="marketing-text" style="flex: 1 1 min(100%, 200px); text-shadow: 3px 3px 10px rgba(0,0,0,.5); color: white; text-align: center;">
-                                <h2 class="marketing-title" style="color: inherit; font-weight: bold; letter-spacing: 2px; margin-top: 0; margin-bottom: .25em;">Fast, Friendly, and FDIC Insured</h2>
-                                <p class="marketing-subtitle" id="mm-1" style="color: inherit; padding: 0; margin: 0 0 1.5rem; line-height: 1.25;">PVNB&nbsp;stands strong with&nbsp;120 years of service to&nbsp;our customers and the community&#39;s banking needs. PVNB is FDIC Endorsed and Insured.</p>
-
-                                <a data-nodislaimer="1" target="_blank" class="marketing-url btn btn-primary" style="color: inherit" href="/uploads/userfiles/files/documents/4_1_2024%20deposit-insurance-at-a-glance-english.pdf" title="Learn More about Fast, Friendly, and FDIC Insured"
-                                    aria-labelledby="mm-1">Learn More</a>
-                            </div>
-
+    <section class="mod-marketing" aria-label="Marketing Message">
+        <div class="flexslider">
+            <ul class="slides">
+                <li class="mk-slide3">
+                    <div class="container">
+                        <div class="marketing-text">
+                            <h2 class="marketing-title">Fast, Friendly, and FDIC Insured</h2>
+                            <p class="marketing-subtitle" id="mm-1">PVNB stands strong with 120 years of service to our customers and the community's banking needs. PVNB is FDIC Endorsed and Insured.</p>
+                            <span class="marketing-url btn btn-primary" title="Learn More about Fast, Friendly, and FDIC Insured" aria-labelledby="mm-1">Learn More</span>
                         </div>
                     </div>
                 </li>
-
-                <li class="mk-slide4" style="display: block; width: 100%; flex-shrink: 0; position: relative; padding: 0; min-height: 65vmin;">
-                    <div class="marketing-background" style="position: absolute; inset: 0;">
-                        <img srcset='/uploads/userfiles/files/modules/marketing/small/d737c58d31c90ca536466bfcb2b5cec1.jpg?v=1742310433 480w, /uploads/userfiles/files/modules/marketing/medium/d737c58d31c90ca536466bfcb2b5cec1.jpg?v=1742310430 960w, /uploads/userfiles/files/modules/marketing/large/d737c58d31c90ca536466bfcb2b5cec1.jpg?v=1742310427 1920w'
-                            sizes="(max-width: 500px) 480px, (max-width: 960px) 960px, 1920px"
-                             width='1920px' height='1080px' alt='Close up of hand using calculator' style="height: 100%; width: 100%; object-fit: cover;" />
-                        <div class="marketing-bg-overlay" style="position: absolute; inset: 0; background-color: rgba(0,0,0,0.46);"></div>
-                    </div>
-
-                    <div class="container" style="height: 100%; position: relative; padding-inline: 30px;">
-                        <div style="display: flex; flex-wrap: wrap; padding: 5rem 0; align-items: flex-end; justify-content: center; gap: 2rem; height: 100%;">
-                            <div class="marketing-text" style="flex: 1 1 min(100%, 200px); text-shadow: 3px 3px 10px rgba(0,0,0,.5); color: white; text-align: center;">
-                                <h2 class="marketing-title" style="color: inherit; font-weight: bold; letter-spacing: 2px; margin-top: 0; margin-bottom: .25em;">Your Local Banking Experts</h2>
-                                <p class="marketing-subtitle" id="mm-2" style="color: inherit; padding: 0; margin: 0 0 1.5rem; line-height: 1.25;">Pauls Valley National Bank offers expert advice and personalized service. We&#39;re committed to your financial success.</p>
-
-                                <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" style="color: inherit" href="/personal-banking/deposit-products/checking" title="Learn More about Your Local Banking Experts" aria-labelledby="mm-2">Learn More</a>
-                            </div>
-
+                <li class="mk-slide4">
+                    <div class="container">
+                        <div class="marketing-text">
+                            <h2 class="marketing-title">Your Local Banking Experts</h2>
+                            <p class="marketing-subtitle" id="mm-2">Pauls Valley National Bank offers expert advice and personalized service. We're committed to your financial success.</p>
+                            <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" href="/personal-banking/deposit-products/checking" title="Learn More about Your Local Banking Experts" aria-labelledby="mm-2">Learn More</a>
                         </div>
                     </div>
                 </li>
-
-                <li class="mk-slide5" style="display: block; width: 100%; flex-shrink: 0; position: relative; padding: 0; min-height: 65vmin;">
-                    <div class="marketing-background" style="position: absolute; inset: 0;">
-                        <img srcset='/uploads/userfiles/files/modules/marketing/small/0aca98c570cb062500b5924d8a006105.jpg?v=1742310432 480w, /uploads/userfiles/files/modules/marketing/medium/0aca98c570cb062500b5924d8a006105.jpg?v=1742310429 960w, /uploads/userfiles/files/modules/marketing/large/0aca98c570cb062500b5924d8a006105.jpg?v=1742310426 1920w'
-                            sizes="(max-width: 500px) 480px, (max-width: 960px) 960px, 1920px"
-                        width='1920px' height='1080px' alt='Business owners looking over finances' style="height: 100%; width: 100%; object-fit: cover;" />
-                        <div class="marketing-bg-overlay" style="position: absolute; inset: 0; background-color: rgba(0,0,0,0.46);"></div>
-                    </div>
-
-                    <div class="container" style="height: 100%; position: relative; padding-inline: 30px;">
-                        <div style="display: flex; flex-wrap: wrap; padding: 5rem 0; align-items: flex-end; justify-content: center; gap: 2rem; height: 100%;">
-                            <div class="marketing-text" style="flex: 1 1 min(100%, 200px); text-shadow: 3px 3px 10px rgba(0,0,0,.5); color: white; text-align: center;">
-                                <h2 class="marketing-title" style="color: inherit; font-weight: bold; letter-spacing: 2px; margin-top: 0; margin-bottom: .25em;">Your Success, Our Priority</h2>
-                                <p class="marketing-subtitle" id="mm-3" style="color: inherit; padding: 0; margin: 0 0 1.5rem; line-height: 1.25;">At Pauls Valley National Bank, your business success is our priority. Partner with us for customized banking solutions and exceptional service!</p>
-
-                                <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" style="color: inherit" href="/business-banking/deposit-products/checking" title="Learn More about Your Success, Our Priority" aria-labelledby="mm-3">Learn More</a>
-                            </div>
-
+                <li class="mk-slide5">
+                    <div class="container">
+                        <div class="marketing-text">
+                            <h2 class="marketing-title">Your Success, Our Priority</h2>
+                            <p class="marketing-subtitle" id="mm-3">At Pauls Valley National Bank, your business success is our priority. Partner with us for customized banking solutions and exceptional service!</p>
+                            <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" href="/business-banking/deposit-products/checking" title="Learn More about Your Success, Our Priority" aria-labelledby="mm-3">Learn More</a>
                         </div>
                     </div>
                 </li>
-
             </ul>
 
-            <div class="mm-controls" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; pointer-events: none;">
-                <button type="button" class="mm-direction-nav flex-prev" style="padding: 0; background: none; border: 0; margin: 0; pointer-events: all;" title="Previous">
-                <img src="/modules/marketing/images/flex-arrow-left.png" height="49px" width="17px" style="height: 50px; width: 30px; object-fit: contain;" alt="Previous" />
-            </button>
+            <div class="mm-controls">
+                <button type="button" class="mm-direction-nav flex-prev" title="Previous">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
 
-                <div class="mm-control-nav" style="display: flex; gap: 1rem; align-self: flex-end; align-items: center; padding: 1rem; pointer-events: all; position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);"></div>
+                <div class="mm-control-nav">
+                    <button class="control-dot active" data-slide="0"></button>
+                    <button class="control-dot" data-slide="1"></button>
+                    <button class="control-dot" data-slide="2"></button>
+                </div>
 
-                <button type="button" class="mm-direction-nav flex-next" style="padding: 0; background: none; border: 0; margin: 0; pointer-events: all;" title="Next">
-                <img src="/modules/marketing/images/flex-arrow-right.png" height="49px" width="17px" style="height: 50px; width: 30px; object-fit: contain;" alt="Next" />
-            </button>
+                <button type="button" class="mm-direction-nav flex-next" title="Next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </section>
+
     <main class="content">
         <div id="content-anchor" class="maincontent">
             <div class="">
                 <div class="callouts fadeInUp animated" data-animation="fadeInUp">
                     <div class="callout">
                         <div class="callout-contents">
-                            <div class="callout-image"><img alt="" src="/uploads/userfiles/files/images/icon-1.webp" style="width: 91px; height: 91px;" /></div>
+                            <div class="callout-image">
+                                <div class="icon-placeholder">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                            </div>
                             <h2 class="callout-title">Card Valet</h2>
-                        </div><a class="button button-primary" href="/personal-banking/online-services/online-banking#CardValet" target="_self" title="Internal link in same tab to the Online Banking page">Learn More</a></div>
+                        </div>
+                        <span class="button button-primary" title="Online Banking page">Learn More</span>
+                    </div>
                     <div class="callout">
                         <div class="callout-contents">
-                            <div class="callout-image"><img alt="" src="/uploads/userfiles/files/images/icon-2.webp" style="width: 90px; height: 91px;" /></div>
+                            <div class="callout-image">
+                                <div class="icon-placeholder">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                            </div>
                             <h2 class="callout-title">Call Us</h2>
-                        </div><a class="button button-primary" href="/contact-us" target="_self" title="Internal link in same tab to Contact Us page">Get in Touch</a></div>
+                        </div>
+                        <span class="button button-primary" title="Contact Us page">Get in Touch</span>
+                    </div>
                     <div class="callout">
                         <div class="callout-contents">
-                            <div class="callout-image"><img alt="" src="/uploads/userfiles/files/images/icon-3.webp" style="width: 91px; height: 91px;" /></div>
+                            <div class="callout-image">
+                                <div class="icon-placeholder">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                            </div>
                             <h2 class="callout-title">About Us</h2>
-                        </div><a class="button button-primary" href="/about-us/our-bank/about-us" target="_self" title="Internal link in same tab to About Us page">Our History</a></div>
+                        </div>
+                        <span class="button button-primary" title="About Us page">Our History</span>
+                    </div>
                 </div>
+
                 <div class="image-column-section">
                     <div class="image-column-text">
                         <h3>Banking Just Got Easier</h3>
                         <hr />
-                        <p>We have redesigned our website to make your experience easier on all of your devises. From accessing your accounts, to learning about which of our products will work best for you, our new web experience is the place to be.<br />
-                            <a
-                                class="button button-primary" href="/personal-banking/online-services/online-banking" target="_self" title="Internal link in same tab to online services page">Learn More</a>
+                        <p>We have redesigned our website to make your experience easier on all of your devices. From accessing your accounts, to learning about which of our products will work best for you, our new web experience is the place to be.<br><br>
+                            <span class="button button-primary" title="Online services page">Learn More</span>
                         </p>
-                    </div><img alt="CPAP Mask" src="/images/woman_phone.webp" /></div>
-                <div class="big-image-section js-break-out" data-scrollbarwidth="15" style="background-image: url(/images/meeting.webp); background-attachment: fixed;">
+                    </div>
+                    <div class="placeholder-img">
+                        <i class="fas fa-mobile-alt" style="font-size: 3rem; margin-right: 1rem;"></i>
+                        Mobile Banking
+                    </div>
+                </div>
+
+                <div class="big-image-section js-break-out" data-scrollbarwidth="15">
                     <h2>Lending Designed For Your Needs</h2>
                     <hr />
-                    <p>We offer a wide selection of template forms or we can create any form you wish for obtaining sensitive customer information over the Internet. We offer a variety of lending options to fit your needs.<br /><a class="button button-primary"
-                            href="/lending/personal/consumer-loans" title="Internal link in same tab to Consumer Loans page">Learn More</a></p>
+                    <p>We offer a wide selection of template forms or we can create any form you wish for obtaining sensitive customer information over the Internet. We offer a variety of lending options to fit your needs.<br><br>
+                        <span class="button button-primary" title="Consumer Loans page">Learn More</span>
+                    </p>
                 </div>
+
                 <div class="icon-callouts">
-                    <div class="border-callout"><img alt="" src="/images/icons/icon-1.webp" />
-                        <p class="border-header">Find Us</p><a href="/locations" title="Internal link in same tab to Locations page">Find Us</a></div>
-                    <div class="border-callout"><img alt="" src="/images/icons/icon-2.webp" />
-                        <p class="border-header">Call Us</p><a href="/contact-us" title="Internal link in same tab to Contact Us page">Call Us</a></div>
-                    <div class="border-callout"><img alt="" src="/images/icons/icon-3.webp" />
-                        <p class="border-header">Email Us</p><a href="/contact-us" title="Internal link in same tab to Contact Us page">Email Us</a></div>
-                    <div class="border-callout"><img alt="" src="/uploads/userfiles/files/images/icon-3.webp" />
-                        <p class="border-header">About Us</p><a href="/about-us/our-bank/about-us" title="Internal link in same tab to About Us page">About Us</a></div>
+                    <div class="border-callout">
+                        <div class="icon-placeholder">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <p class="border-header">Find Us</p>
+                        <span title="Locations page">Find Us</span>
+                    </div>
+                    <div class="border-callout">
+                        <div class="icon-placeholder">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <p class="border-header">Call Us</p>
+                        <span title="Contact Us page">Call Us</span>
+                    </div>
+                    <div class="border-callout">
+                        <div class="icon-placeholder">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <p class="border-header">Email Us</p>
+                        <span title="Contact Us page">Email Us</span>
+                    </div>
+                    <div class="border-callout">
+                        <div class="icon-placeholder">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <p class="border-header">About Us</p>
+                        <span title="About Us page">About Us</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -486,16 +1240,16 @@
     <footer class="footer">
         <div class="footer-contact">
             <div class="footernav-column">
-                <img src="/images/logos/logo-reversed.webp" alt="Pauls Valley National Bank logo" class="footer-logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiBmaWxsPSJ3aGl0ZSIvPgo8dGV4dCB4PSIxMDAiIHk9IjMwIiBmaWxsPSIjMDA3YmZmIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UGF1bHMgVmFsbGV5IE5hdGlvbmFsIEJhbms8L3RleHQ+PC9zdmc+" alt="Pauls Valley National Bank logo" class="footer-logo">
                 <p class="routing">Routing # 103101987</p>
             </div>
             <div class="footer-contact-right">
-                <a class="footer-contact-link" href="tel:4052389321" title="Opens default phone application">Phone: 405-238-9321</a>
-                <a class="footer-contact-link" href="/locations" title="Internal link in same tab to locations page">View Our Locations</a>
+                <span class="footer-contact-link" title="Phone: 405-238-9321">Phone: 405-238-9321</span>
+                <span class="footer-contact-link" title="View Our Locations">View Our Locations</span>
                 <div class="footer-socials">
-                    <a class="social-link" href="https://www.facebook.com/PVNational#" target="_blank" title="External link in new tab to Pauls Valley National Bank's Facebook page">
-            <span class="fa-brands fa-facebook fa-2x"></span>
-        </a>
+                    <span class="social-link" title="Pauls Valley National Bank's Facebook page">
+                        <span class="fa-brands fa-facebook fa-2x"></span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -503,361 +1257,675 @@
             <div class="footernav-column">
                 <p class="footernav-header">Get In Touch</p>
                 <hr>
-                <a href="/contact-us" title="Internal link in same tab to Contact Us page">Contact Us</a>
-                <a href="/locations" title="Internal link in same tab to Location & Hours page">Location & Hours</a>
-                <a href="/contact-us#report-lost-or-stolen-card" title="Internal link in same tab to Report Lost or Stolen Card page">Report Lost or Stolen Card</a>
+                <span title="Contact Us page">Contact Us</span>
+                <span title="Location & Hours page">Location & Hours</span>
+                <span title="Report Lost or Stolen Card page">Report Lost or Stolen Card</span>
             </div>
             <div class="footernav-column">
                 <p class="footernav-header">Disclosures</p>
                 <hr>
-                <a href="/privacy-policy" title="Internal link in same tab to Privacy Policy page">Privacy Policy</a>
-                <a href="/about-us/disclaimers-disclosures/mobile-privacy-policy" title="Internal link in same tab to Mobile Privacy Policy page">Mobile Privacy Policy</a>
-                <a href="/terms-of-use" title="Internal link in same tab to Terms of Use page">Terms of Use</a>
-                <a href="/uploads/userfiles/files/documents/4_1_2024%20deposit-insurance-at-a-glance-english.pdf" title="Internal link in new tab to Deposit Insurance pdf" target="_blank">Deposit Insurance</a>
+                <span title="Privacy Policy page">Privacy Policy</span>
+                <span title="Mobile Privacy Policy page">Mobile Privacy Policy</span>
+                <span title="Terms of Use page">Terms of Use</span>
+                <span title="Deposit Insurance pdf">Deposit Insurance</span>
             </div>
         </div>
-
-
-
 
         <div class="sec-copyright">
             <div class="legal">
-                <svg xmlns="http://www.w3.org/2000/svg" class="logo-fdic" viewBox="0 0 72.59 44.62">
-  <title>External link to FDIC website</title>
-  <path d="M26.58 22.73c-.36 0-.82.05-1.44.05V38c5 0 9-2 9-7.82 0-5-3.19-7.45-7.51-7.45m-9.31-6.48h9.92c9 0 14.66 5.5 14.66 14.09 0 9.51-6.33 14.14-16.4 14.14h-8.23zM72.59 24.47V17a15.43 15.43 0 0 0-6.32-1.28 14.55 14.55 0 0 0-14.91 14.56c0 8.28 6.53 14.34 14.76 14.34 2.93 0 4.93-.61 6.47-1.8v-7.45c-2.31 1.44-3.9 2.06-6.06 2.06a7.22 7.22 0 0 1-7.41-7.51 7.35 7.35 0 0 1 7.41-7.56c2.26 0 3.9.77 6.06 2.11M0 10.59v1.34h5.5v-1.34c-1.59-.05-1.85-.26-1.85-1.33V2.52l3.29 9.41h1.39l3.55-9.41V9.1c0 1.39 0 1.39-2 1.49v1.34h6.42v-1.34c-1.85 0-1.9-.2-1.9-1.18V2.83c0-1.08.15-1.44 1.9-1.44V0h-5.45L8.07 7.56 5.5 0H0v1.39c1.54 0 1.8 0 1.8 1.34v6.32c0 1.23 0 1.54-1.8 1.54M26.68 10.59v1.34h5.09v-1.34c-1.24-.05-1.24-.2-1.24-1.9V7.25c0-1.39.62-2.52 1.91-2.52 1 0 1.33.67 1.33 1.59v3c0 1-.05 1.23-1.28 1.23v1.34h4.57v-1.3c-1.08 0-1.18-.1-1.18-1.13V7.35c0-1.44.67-2.67 2-2.67 1 0 1.23.62 1.23 1.85v3.08c0 .88 0 1-1.23 1v1.34h5v-1.36c-1.55 0-1.65.05-1.65-.82V6.32c0-1.95-.46-3.08-2.47-3.08a3.75 3.75 0 0 0-2.93 1.49 2.62 2.62 0 0 0-2.47-1.54 3.48 3.48 0 0 0-2.88 1.64V3.44h-3.8v1.24c1.54 0 1.69.05 1.69 1.28v2.83c0 1.8 0 1.8-1.69 1.8M.25 16.25v28.23h7.76l.05-10.8h7.56v-6.53H8.11l-.05-4.37h8.13v-6.53H.25zM50.74 7.66c0-1.95-.72-2.93-1.75-2.93-1.33 0-1.9 1.08-1.9 3.08 0 1.75.67 2.94 1.85 2.94 1 0 1.8-.93 1.8-3.09M43.54 0h3.6v4.37a3.62 3.62 0 0 1 2.57-1.13c2.06 0 3.45 1.85 3.45 4.42 0 2.78-1.39 4.58-3.76 4.58a3.24 3.24 0 0 1-2.62-1.18l-.72 1H45V2.78c0-1.39-.1-1.54-1.44-1.54zM64.11 10.59v1.34h5.55v-1.34c-1.54 0-1.7.05-1.7-1.18V7.56c0-1.7.57-3.24 2.11-3.24a1.38 1.38 0 0 1 .51.1 1.33 1.33 0 0 0-.87 1.18 1.13 1.13 0 0 0 1.18 1.14 1.4 1.4 0 0 0 1.39-1.55 1.89 1.89 0 0 0-2-1.95 3.15 3.15 0 0 0-2.42 1.39V3.44h-3.8v1.24c1.33 0 1.69 0 1.69 1.13v3.5c0 1.18 0 1.28-1.69 1.28M58.86 4.57c-1 0-1.64.72-1.64 2h3.24c0-1.34-.52-2-1.6-2m-1.75 3.35c0 1.65.78 2.78 2.16 2.78s1.8-.72 2-1.85h1.54a3.52 3.52 0 0 1-3.75 3.34 4 4 0 0 1-4.32-4.37c0-2.62 1.64-4.58 4.11-4.58s4 1.85 4 4.68zM21.48 4.57c-1 0-1.64.72-1.64 2H23c0-1.39-.52-2-1.55-2m-1.76 3.35c0 1.65.82 2.78 2.21 2.78a1.9 1.9 0 0 0 2-1.85h1.49a3.47 3.47 0 0 1-3.7 3.34 4.07 4.07 0 0 1-4.37-4.37c0-2.62 1.7-4.58 4.17-4.58s3.9 1.85 3.9 4.68zM42.67 44.48h7.76V16.25h-7.76v28.23z"/>
-</svg> <svg xmlns="http://www.w3.org/2000/svg" class="logo-equal-housing" viewBox="0 0 166.1 170">
-  <title>External link to equal housing lender website</title>
-  <path d="M84 0L0 47.8v17.3h12.9v59.4H153V65.1h13.1V48.3L84 0zm52.9 109.3h-107V49.7L84 18l52.9 31.7v59.6z"/>
-  <path d="M55.2 72.4V57.7h56v14.7h-56zM55.2 79.6h56v14.7h-56V79.6zM95.5 151.3h-9.8V170h9.6c7.7 0 12.2-1.7 12.2-9-.1-7.6-5-9.7-12-9.7zM95 166h-4.2v-10.6h4.7c3.3 0 6.3 1.9 6.3 5.7 0 4.2-2.8 4.9-6.8 4.9zM152.6 162.2c3.5-.5 5.1-1.9 5.1-5 0-4.3-2.1-5.9-7.3-5.9H137V170h5.1v-7.8h4.9l5.4 7.8h5.6l-5.4-7.8zm-3-4h-7.5v-2.8h7.7c2.1 0 3 .2 3 1.4.1 1.4-.6 1.4-3.2 1.4zM57.5 151.3V170h4.9v-11.3l9.8 11.3h5.9v-18.7h-4.9v11.6l-9.9-11.6h-5.8zM9.2 151.3V170h18.5v-4l-13.3-.2v-14.5H9.2zM33 170h18v-4H38.4v-4h10.5v-3.8H38.4v-2.9H51v-4H33V170zM113.2 151.3V170l17.8-.2V166h-12.6v-4h10.7v-3.8h-10.7v-2.9H131v-4h-17.8zM54.6 129.9h-4l-4.7 16.8h3.4l1-3.8h4.2l1 3.8h3.6l-4.5-16.8zm-3.5 10.2l1.4-6.6 1.6 6.6h-3zM30.1 144.4c.7-1.4.9-2.4.9-4.5v-3.5c0-4-.9-6.9-5.6-6.9-4.2 0-5.6 2.4-5.6 6.6v4.5c0 5.7 3.3 5.9 12.9 5.9l.2-1.2-2.8-.9zm-2.6-3.8c0 3.1-.2 3.8-2.1 3.8-1.6 0-2.1-.9-2.1-4v-4c0-3.1.2-4 2.3-4 1.6 0 1.9.5 1.9 3.8v4.4zM115.3 142.2c0 2.6 1.6 4.7 5.4 4.7 3 0 5.8-2.1 5.8-4.7 0-4-7.5-5.9-7.5-8.5 0-.9.9-1.4 1.9-1.4 1.4 0 2.1.9 2.8 2.4l2.3-.9c-.2-2.4-1.9-4.3-5.4-4.3-2.8 0-5.1 1.4-5.1 4.3 0 4.7 7.5 5.9 7.5 9 0 1.2-.7 1.7-2.1 1.7-1.4 0-2.3-.9-2.8-2.6l-2.8.3zM95.5 129.4c-3.5 0-5.6 1.9-5.6 6.4v5.4c0 4 1.2 5.7 5.6 5.7 4.4 0 5.6-1.9 5.6-6.4v-5.2c.1-4.2-1.1-5.9-5.6-5.9zm2.1 11.2c0 2.8-.7 3.8-2.1 3.8-1.9 0-2.1-1.2-2.1-3.6v-5.2c0-2.1.2-3.5 2.1-3.5s2.1 1.7 2.1 3.5v5zM146.6 140.6c0 5 1.4 6.4 6.1 6.4 3.6 0 4.7-1.7 4.7-3.6V138h-4.9v2.6h1.6v1.9c0 1.4-.5 2.1-1.6 2.1-2.3 0-2.6-1.7-2.6-4v-3.8c0-2.8.2-4.7 2.6-4.7 1.6 0 2.6 1.2 2.8 2.8l2.3-.9c-.2-2.8-2.1-4.5-5.4-4.5-4.7 0-5.6 2.6-5.6 6.2v4.9zM102.6 129.9v9.7c0 5.7 1 7.5 5.9 7.5 3.7 0 5.1-2.1 5.1-7v-10.2h-3.3v9.7c0 3.8-.2 4.7-2.1 4.7-1.9 0-2.1-1.4-2.1-5v-9.5h-3.5v.1zM133.9 129.9v16.8h2.8v-11.3l4 11.3h4.2v-16.8h-2.8v10.4l-3.8-10.4h-4.4zM34.4 129.9v10.2c0 4.7.5 6.9 5.1 6.9 5.4 0 5.6-2.6 5.6-7.3V130h-3.3v9.9c0 3.3-.5 4.3-2.1 4.3-1.9 0-2.1-.9-2.1-4.7V130h-3.2v-.1zM77 129.9v16.8h3.2v-7.6h4v7.6h3.3v-16.8h-3.3v6.4h-4v-6.4H77zM9 129.9v16.8h8.4v-2.6h-5.1v-4.7H17V137h-4.7v-4.5h5.1v-2.6H9zM60.7 129.9v16.8h7.8v-2.6h-5v-14.2h-2.8zM128.2 129.9v16.8h3.1v-16.8h-3.1z"/>
-</svg> </div>
+                <div class="logo-fdic">FDIC</div>
+                <div class="logo-equal-housing">Equal Housing</div>
+            </div>
             <div class="d-flex flex-column align-items-center justify-content-center text-center">
                 <p>
-                    <a href="/privacy-policy" title="Internal link to view our Privacy Policy in the same window">Privacy Policy</a> |
-                    <a href="/terms-of-use" title="Internal link to view our Terms of Use in the same window">Terms of Use</a> |
-                    <a href="/web-accessibility-guidelines" title="Internal link to view our Web Accessibility Guidelines in the same window">Web Accessibility Guidelines</a>
+                    <span title="Privacy Policy">Privacy Policy</span> |
+                    <span title="Terms of Use">Terms of Use</span> |
+                    <span title="Web Accessibility Guidelines">Web Accessibility Guidelines</span>
                 </p>
-                </p>
-                <p class="m-0">&#169; 2025 Pauls Valley National Bank. All rights reserved. Financial website created and powered by <a href="https://www.forbinfi.com" target="_blank" title="External link opens forbinfi in a new window">forbinfi</a></p>
+                <p class="m-0">© 2025 Pauls Valley National Bank. All rights reserved. Financial website created and powered by <span title="forbinfi">forbinfi</span></p>
             </div>
         </div>
         <div class="site-options d-flex flex-row align-items-stretch">
-            <p class="back-to-top d-flex flex-row align-items-center justify-content-center m-0"><span class="fa-solid fa-arrow-up"></span></p>
+            <button class="back-to-top d-flex flex-row align-items-center justify-content-center m-0">
+                <span class="fa-solid fa-arrow-up"></span>
+            </button>
         </div>
     </footer>
 
     <nav class="mobilemenu sliding-menu" aria-label="Mobile Navigation">
         <div class="mobilemenu-header">
-            <a href="/" class="logo-mobilemenu" title="Pauls Valley National Bank"><img title="Go to the Home Page" src="/images/logos/logo-reversed.webp" alt="Pauls Valley National Bank"></a>
-            <a href="#" class="close-mobilemenu active" title="Closes Site Navigation"><span>Close</span></a>
+            <span class="logo-mobilemenu" title="Pauls Valley National Bank">
+                <img title="Go to the Home Page" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiBmaWxsPSJ3aGl0ZSIvPgo8dGV4dCB4PSIxMDAiIHk9IjMwIiBmaWxsPSIjMDA3YmZmIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UGF1bHMgVmFsbGV5IE5hdGlvbmFsIEJhbms8L3RleHQ+PC9zdmc+" alt="Pauls Valley National Bank">
+            </span>
+            <span class="close-mobilemenu active" title="Closes Site Navigation">
+                <i class="fas fa-times"></i>
+            </span>
         </div>
 
         <ul>
             <li class="li-search">
-                <form name="Search" id="mobileSearch" action="/search" method="get" autocomplete="off">
+                <form name="Search" id="mobileSearch" autocomplete="off">
                     <input type="search" id="mobileSearchfield" class="searchField" name="q" aria-label="Site Search" placeholder="Search">
                     <input type="submit" class="searchSubmit hide" value="Search">
                 </form>
             </li>
 
-            <li data-navPgId="33" class="menuItem33"><a href="#" class="mobileNav33" target="_self" title="">Personal Banking</a>
-                <ul id="mobileSubMenu33" class="submenu right list-style-none">
-                    <li id="mobileNavSubItem34" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav34" target="_self" title="Mobile - Personal Banking - Deposit Products">Deposit Products</a>
-                        <ul id="mobileSubMenu34" class="submenu right list-style-none">
-                            <li id="mobileNavSubItem35" class="menuSubItem"><a href="/personal-banking/deposit-products/checking" data-nodisclaimer="true" class="mobileSubNav35" target="_self" title="Mobile - Personal Banking - Deposit Products - Checking">Checking</a></li>
-                            <li id="mobileNavSubItem36" class="menuSubItem"><a href="/personal-banking/deposit-products/savings" data-nodisclaimer="true" class="mobileSubNav36" target="_self" title="Mobile - Personal Banking - Deposit Products - Savings">Savings</a></li>
-                            <li id="mobileNavSubItem37" class="menuSubItem"><a href="/personal-banking/deposit-products/savings#certificatesofdeposit" data-nodisclaimer="true" class="mobileSubNav37" target="_self" title="Mobile - Personal Banking - Deposit Products - Certificates of Deposit">Certificates of Deposit</a></li>
-                            <li id="mobileNavSubItem38" class="menuSubItem"><a href="/personal-banking/deposit-products/savings#ira" data-nodisclaimer="true" class="mobileSubNav38" target="_self" title="Mobile - Personal Banking - Deposit Products - Individual Retirements Accounts">Individual Retirements Accounts</a></li>
-                            <li class="back-level"><a href="#" class="backup">Back</a></li>
-                        </ul>
-                    </li>
-                    <li id="mobileNavSubItem39" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav39" target="_self" title="Mobile - Personal Banking - Online Services">Online Services</a>
-                        <ul id="mobileSubMenu39" class="submenu right list-style-none">
-                            <li id="mobileNavSubItem40" class="menuSubItem"><a href="/personal-banking/online-services/online-banking" data-nodisclaimer="true" class="mobileSubNav40" target="_self" title="Mobile - Personal Banking - Online Services - Online Banking">Online Banking</a></li>
-                            <li id="mobileNavSubItem41" class="menuSubItem"><a href="/personal-banking/online-services/online-banking#mobile-banking" data-nodisclaimer="true" class="mobileSubNav41" target="_self" title="Mobile - Personal Banking - Online Services - Mobile Banking">Mobile Banking</a></li>
-                            <li id="mobileNavSubItem42" class="menuSubItem"><a href="/personal-banking/online-services/online-banking#bill-pay" data-nodisclaimer="true" class="mobileSubNav42" target="_self" title="Mobile - Personal Banking - Online Services - Bill Pay">Bill Pay</a></li>
-                            <li id="mobileNavSubItem43" class="menuSubItem"><a href="/personal-banking/online-services/online-banking#estatements" data-nodisclaimer="true" class="mobileSubNav43" target="_self" title="Mobile - Personal Banking - Online Services - eStatements">eStatements</a></li>
-                            <li class="back-level"><a href="#" class="backup">Back</a></li>
-                        </ul>
-                    </li>
-                    <li id="mobileNavSubItem44" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav44" target="_self" title="Mobile - Personal Banking - Other Services">Other Services</a>
-                        <ul id="mobileSubMenu44" class="submenu right list-style-none">
-                            <li id="mobileNavSubItem45" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards" data-nodisclaimer="true" class="mobileSubNav45" target="_self" title="Mobile - Personal Banking - Other Services - Debit Cards">Debit Cards</a></li>
-                            <li id="mobileNavSubItem102" class="menuSubItem"><a href="https://www.whitcochecks.com/general_reorder.php" class="mobileSubNav102" target="_blank" title="Mobile - Personal Banking - Other Services - Reorder Checks">Reorder Checks</a></li>
-                            <li id="mobileNavSubItem47" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards#coin-machine" data-nodisclaimer="true" class="mobileSubNav47" target="_self" title="Mobile - Personal Banking - Other Services - Coin Machine">Coin Machine</a></li>
-                            <li id="mobileNavSubItem48" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards#telephone-banking" data-nodisclaimer="true" class="mobileSubNav48" target="_self" title="Mobile - Personal Banking - Other Services - Telephone Banking">Telephone Banking</a></li>
-                            <li id="mobileNavSubItem49" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards#telephone-banking" data-nodisclaimer="true" class="mobileSubNav49" target="_self" title="Mobile - Personal Banking - Other Services - Night Deposit">Night Deposit</a></li>
-                            <li id="mobileNavSubItem50" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards#safe-deposit-banking" data-nodisclaimer="true" class="mobileSubNav50" target="_self" title="Mobile - Personal Banking - Other Services - Safe Deposit Boxes">Safe Deposit Boxes</a></li>
-                            <li id="mobileNavSubItem51" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards#notary" data-nodisclaimer="true" class="mobileSubNav51" target="_self" title="Mobile - Personal Banking - Other Services - Notary">Notary</a></li>
-                            <li id="mobileNavSubItem52" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards#wire-transfers" data-nodisclaimer="true" class="mobileSubNav52" target="_self" title="Mobile - Personal Banking - Other Services - Wire Transfers">Wire Transfers</a></li>
-                            <li id="mobileNavSubItem53" class="menuSubItem"><a href="/personal-banking/other-services/debit-cards#other-services" data-nodisclaimer="true" class="mobileSubNav53" target="_self" title="Mobile - Personal Banking - Other Services - Other Services">Other Services</a></li>
-                            <li class="back-level"><a href="#" class="backup">Back</a></li>
-                        </ul>
-                    </li>
-                    <li class="back-level"><a href="#" class="backup">Back</a></li>
-                </ul>
-                <li data-navPgId="54" class="menuItem54"><a href="#" class="mobileNav54" target="_self" title="">Business Banking</a>
-                    <ul id="mobileSubMenu54" class="submenu right list-style-none">
-                        <li id="mobileNavSubItem55" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav55" target="_self" title="Mobile - Business Banking - Deposit Products">Deposit Products</a>
-                            <ul id="mobileSubMenu55" class="submenu right list-style-none">
-                                <li id="mobileNavSubItem56" class="menuSubItem"><a href="/business-banking/deposit-products/checking" data-nodisclaimer="true" class="mobileSubNav56" target="_self" title="Mobile - Business Banking - Deposit Products - Checking">Checking</a></li>
-                                <li id="mobileNavSubItem57" class="menuSubItem"><a href="/business-banking/deposit-products/savings" data-nodisclaimer="true" class="mobileSubNav57" target="_self" title="Mobile - Business Banking - Deposit Products - Savings">Savings</a></li>
-                                <li id="mobileNavSubItem58" class="menuSubItem"><a href="/business-banking/deposit-products/savings#cds" data-nodisclaimer="true" class="mobileSubNav58" target="_self" title="Mobile - Business Banking - Deposit Products - Certificates of Deposit">Certificates of Deposit</a></li>
-                                <li class="back-level"><a href="#" class="backup">Back</a></li>
-                            </ul>
-                        </li>
-                        <li id="mobileNavSubItem59" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav59" target="_self" title="Mobile - Business Banking - Online Services">Online Services</a>
-                            <ul id="mobileSubMenu59" class="submenu right list-style-none">
-                                <li id="mobileNavSubItem60" class="menuSubItem"><a href="/business-banking/online-services/online-banking" data-nodisclaimer="true" class="mobileSubNav60" target="_self" title="Mobile - Business Banking - Online Services - Online Banking">Online Banking</a></li>
-                                <li id="mobileNavSubItem61" class="menuSubItem"><a href="/business-banking/online-services/online-banking#estatements" data-nodisclaimer="true" class="mobileSubNav61" target="_self" title="Mobile - Business Banking - Online Services - eStatements">eStatements</a></li>
-                                <li class="back-level"><a href="#" class="backup">Back</a></li>
-                            </ul>
-                        </li>
-                        <li id="mobileNavSubItem62" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav62" target="_self" title="Mobile - Business Banking - Other Services">Other Services</a>
-                            <ul id="mobileSubMenu62" class="submenu right list-style-none">
-                                <li id="mobileNavSubItem64" class="menuSubItem"><a href="/business-banking/other-services/other-services#merchant-capture" data-nodisclaimer="true" class="mobileSubNav64" target="_self" title="Mobile - Business Banking - Other Services - Merchant Capture">Merchant Capture</a></li>
-                                <li id="mobileNavSubItem65" class="menuSubItem"><a href="/business-banking/other-services/other-services#debit-cards" data-nodisclaimer="true" class="mobileSubNav65" target="_self" title="Mobile - Business Banking - Other Services - Debit Cards">Debit Cards</a></li>
-                                <li id="mobileNavSubItem101" class="menuSubItem"><a href="https://www.whitcochecks.com/general_reorder.php" class="mobileSubNav101" target="_blank" title="Mobile - Business Banking - Other Services - Reorder Checks">Reorder Checks</a></li>
-                                <li id="mobileNavSubItem67" class="menuSubItem"><a href="/business-banking/other-services/other-services#coin-machine" data-nodisclaimer="true" class="mobileSubNav67" target="_self" title="Mobile - Business Banking - Other Services - Coin Machine">Coin Machine</a></li>
-                                <li id="mobileNavSubItem68" class="menuSubItem"><a href="/business-banking/other-services/other-services#telephone-banking" data-nodisclaimer="true" class="mobileSubNav68" target="_self" title="Mobile - Business Banking - Other Services - Telephone Banking">Telephone Banking</a></li>
-                                <li id="mobileNavSubItem69" class="menuSubItem"><a href="/business-banking/other-services/other-services#night-deposit" data-nodisclaimer="true" class="mobileSubNav69" target="_self" title="Mobile - Business Banking - Other Services - Night Deposit">Night Deposit</a></li>
-                                <li id="mobileNavSubItem70" class="menuSubItem"><a href="/business-banking/other-services/other-services#safe-deposit-boxes" data-nodisclaimer="true" class="mobileSubNav70" target="_self" title="Mobile - Business Banking - Other Services - Safe Deposit Boxes">Safe Deposit Boxes</a></li>
-                                <li id="mobileNavSubItem71" class="menuSubItem"><a href="/business-banking/other-services/other-services#notary" data-nodisclaimer="true" class="mobileSubNav71" target="_self" title="Mobile - Business Banking - Other Services - Notary">Notary</a></li>
-                                <li id="mobileNavSubItem72" class="menuSubItem"><a href="/business-banking/other-services/other-services#wire-transfers" data-nodisclaimer="true" class="mobileSubNav72" target="_self" title="Mobile - Business Banking - Other Services - Wire Transfers">Wire Transfers</a></li>
-                                <li id="mobileNavSubItem63" class="menuSubItem"><a href="/business-banking/other-services/other-services" data-nodisclaimer="true" class="mobileSubNav63" target="_self" title="Mobile - Business Banking - Other Services - Other Services">Other Services</a></li>
-                                <li class="back-level"><a href="#" class="backup">Back</a></li>
-                            </ul>
-                        </li>
-                        <li class="back-level"><a href="#" class="backup">Back</a></li>
-                    </ul>
-                    <li data-navPgId="73" class="menuItem73"><a href="#" class="mobileNav73" target="_self" title="">Lending</a>
-                        <ul id="mobileSubMenu73" class="submenu right list-style-none">
-                            <li id="mobileNavSubItem74" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav74" target="_self" title="Mobile - Lending - Personal">Personal</a>
-                                <ul id="mobileSubMenu74" class="submenu right list-style-none">
-                                    <li id="mobileNavSubItem75" class="menuSubItem"><a href="/lending/personal/consumer-loans" data-nodisclaimer="true" class="mobileSubNav75" target="_self" title="Mobile - Lending - Personal - Consumer Loans">Consumer Loans</a></li>
-                                    <li id="mobileNavSubItem76" class="menuSubItem"><a href="/lending/personal/consumer-loans#home-loans" data-nodisclaimer="true" class="mobileSubNav76" target="_self" title="Mobile - Lending - Personal - Home Loans">Home Loans</a></li>
-                                    <li id="mobileNavSubItem77" class="menuSubItem"><a href="/lending/personal/consumer-loans#mortgage-loan-originators" data-nodisclaimer="true" class="mobileSubNav77" target="_self" title="Mobile - Lending - Personal - Mortgage Loan Originators">Mortgage Loan Originators</a></li>
-                                    <li class="back-level"><a href="#" class="backup">Back</a></li>
-                                </ul>
-                            </li>
-                            <li id="mobileNavSubItem78" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav78" target="_self" title="Mobile - Lending - Business">Business</a>
-                                <ul id="mobileSubMenu78" class="submenu right list-style-none">
-                                    <li id="mobileNavSubItem79" class="menuSubItem"><a href="/lending/business/commercial-loans" data-nodisclaimer="true" class="mobileSubNav79" target="_self" title="Mobile - Lending - Business - Commercial Loans">Commercial Loans</a></li>
-                                    <li id="mobileNavSubItem80" class="menuSubItem"><a href="/lending/business/commercial-loans#construction-loans" data-nodisclaimer="true" class="mobileSubNav80" target="_self" title="Mobile - Lending - Business - Construction Loans">Construction Loans</a></li>
-                                    <li id="mobileNavSubItem81" class="menuSubItem"><a href="/lending/business/commercial-loans#business-credit" data-nodisclaimer="true" class="mobileSubNav81" target="_self" title="Mobile - Lending - Business - Business Credit">Business Credit</a></li>
-                                    <li class="back-level"><a href="#" class="backup">Back</a></li>
-                                </ul>
-                            </li>
-                            <li class="back-level"><a href="#" class="backup">Back</a></li>
-                        </ul>
-                        <li data-navPgId="82" class="menuItem82"><a href="#" class="mobileNav82" target="_self" title="">About Us</a>
-                            <ul id="mobileSubMenu82" class="submenu right list-style-none">
-                                <li id="mobileNavSubItem83" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav83" target="_self" title="Mobile - About Us - Our Bank">Our Bank</a>
-                                    <ul id="mobileSubMenu83" class="submenu right list-style-none">
-                                        <li id="mobileNavSubItem84" class="menuSubItem"><a href="/about-us/our-bank/about-us" data-nodisclaimer="true" class="mobileSubNav84" target="_self" title="Mobile - About Us - Our Bank - About Us">About Us</a></li>
-                                        <li id="mobileNavSubItem103" class="menuSubItem"><a href="/contact-us" data-nodisclaimer="true" class="mobileSubNav103" target="_self" title="Mobile - About Us - Our Bank - Contact Us">Contact Us</a></li>
-                                        <li id="mobileNavSubItem104" class="menuSubItem"><a href="/locations" data-nodisclaimer="true" class="mobileSubNav104" target="_self" title="Mobile - About Us - Our Bank - Locations & Hours">Locations & Hours</a></li>
-                                        <li id="mobileNavSubItem119" class="menuSubItem"><a href="/staff" data-nodisclaimer="true" class="mobileSubNav119" target="_self" title="Mobile - About Us - Our Bank - Meet Our Team">Meet Our Team</a></li>
-                                        <li class="back-level"><a href="#" class="backup">Back</a></li>
-                                    </ul>
-                                </li>
-                                <li id="mobileNavSubItem111" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav111" target="_self" title="Mobile - About Us - Community Engagement">Community Engagement</a>
-                                    <ul id="mobileSubMenu111" class="submenu right list-style-none">
-                                        <li id="mobileNavSubItem115" class="menuSubItem"><a href="/about-us/community-engagement/community-engagement/upcoming-events-hours" data-nodisclaimer="true" class="mobileSubNav115" target="_self" title="Mobile - About Us - Community Engagement - Upcoming Events & Hours">Upcoming Events & Hours</a></li>
-                                        <li id="mobileNavSubItem100" class="menuSubItem"><a href="/about-us/community-engagement" data-nodisclaimer="true" class="mobileSubNav100" target="_self" title="Mobile - About Us - Community Engagement - Community Engagement">Community Engagement</a></li>
-                                        <li id="mobileNavSubItem116" class="menuSubItem"><a href="/about-us/community-engagement/bandanas-for-paws" data-nodisclaimer="true" class="mobileSubNav116" target="_self" title="Mobile - About Us - Community Engagement - Bandanas for Paws">Bandanas for Paws</a></li>
-                                        <li class="back-level"><a href="#" class="backup">Back</a></li>
-                                    </ul>
-                                </li>
-                                <li id="mobileNavSubItem87" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav87" target="_self" title="Mobile - About Us - Resource Center">Resource Center</a>
-                                    <ul id="mobileSubMenu87" class="submenu right list-style-none">
-                                        <li id="mobileNavSubItem105" class="menuSubItem"><a href="/calculators" data-nodisclaimer="true" class="mobileSubNav105" target="_self" title="Mobile - About Us - Resource Center - Calculators">Calculators</a></li>
-                                        <li id="mobileNavSubItem89" class="menuSubItem"><a href="/about-us/resource-center/faqs" data-nodisclaimer="true" class="mobileSubNav89" target="_self" title="Mobile - About Us - Resource Center - FAQs">FAQs</a></li>
-                                        <li id="mobileNavSubItem90" class="menuSubItem"><a href="/contact-us#report-lost-or-stolen-card" data-nodisclaimer="true" class="mobileSubNav90" target="_self" title="Mobile - About Us - Resource Center - Report a Lost or Stolen Card">Report a Lost or Stolen Card</a></li>
-                                        <li id="mobileNavSubItem91" class="menuSubItem"><a href="/about-us/resource-center/switch-kit" data-nodisclaimer="true" class="mobileSubNav91" target="_self" title="Mobile - About Us - Resource Center - Switch Kit">Switch Kit</a></li>
-                                        <li id="mobileNavSubItem92" class="menuSubItem"><a href="https://www.whitcochecks.com/general_reorder.php" class="mobileSubNav92" target="_blank" title="Mobile - About Us - Resource Center - Reorder Checks">Reorder Checks</a></li>
-                                        <li class="back-level"><a href="#" class="backup">Back</a></li>
-                                    </ul>
-                                </li>
-                                <li id="mobileNavSubItem93" class="menuSubItem"><a href="#" data-nodisclaimer="true" class="mobileSubNav93" target="_self" title="Mobile - About Us - Disclaimers & Disclosures">Disclaimers & Disclosures</a>
-                                    <ul id="mobileSubMenu93" class="submenu right list-style-none">
-                                        <li id="mobileNavSubItem106" class="menuSubItem"><a href="/privacy-policy" data-nodisclaimer="true" class="mobileSubNav106" target="_self" title="Mobile - About Us - Disclaimers & Disclosures - Privacy Policy">Privacy Policy</a></li>
-                                        <li id="mobileNavSubItem95" class="menuSubItem"><a href="/about-us/disclaimers-disclosures/mobile-privacy-policy" data-nodisclaimer="true" class="mobileSubNav95" target="_self" title="Mobile - About Us - Disclaimers & Disclosures - Mobile Privacy Policy">Mobile Privacy Policy</a></li>
-                                        <li id="mobileNavSubItem96" class="menuSubItem"><a href="/about-us/disclaimers-disclosures/important-information" data-nodisclaimer="true" class="mobileSubNav96" target="_self" title="Mobile - About Us - Disclaimers & Disclosures - Important Information">Important Information</a></li>
-                                        <li id="mobileNavSubItem107" class="menuSubItem"><a href="/terms-of-use" data-nodisclaimer="true" class="mobileSubNav107" target="_self" title="Mobile - About Us - Disclaimers & Disclosures - Terms of Use">Terms of Use</a></li>
-                                        <li id="mobileNavSubItem117" class="menuSubItem"><a href="/uploads/userfiles/files/documents/4_1_2024 deposit-insurance-at-a-glance-english.pdf" data-nodisclaimer="true" class="mobileSubNav117" target="_blank" title="Mobile - About Us - Disclaimers & Disclosures - Deposit Insurance">Deposit Insurance</a></li>
-                                        <li id="mobileNavSubItem99" class="menuSubItem"><a href="/lending/personal/consumer-loans#mortgage-loan-originators" data-nodisclaimer="true" class="mobileSubNav99" target="_self" title="Mobile - About Us - Disclaimers & Disclosures - Mortgage Loan Originators">Mortgage Loan Originators</a></li>
-                                        <li class="back-level"><a href="#" class="backup">Back</a></li>
-                                    </ul>
-                                </li>
-                                <li class="back-level"><a href="#" class="backup">Back</a></li>
-                            </ul>
-                            <li><a href="/locations" title="Internal link in same tab to Locations & Hours">Locations & Hours</a></li>
-                            <li><a href="/contact-us" title="Internal link in same tab to Contact Us">Contact Us</a></li>
+            <li data-navPgId="33" class="menuItem33">
+                <span class="mobileNav33" title="">Personal Banking</span>
+            </li>
+            <li data-navPgId="54" class="menuItem54">
+                <span class="mobileNav54" title="">Business Banking</span>
+            </li>
+            <li data-navPgId="73" class="menuItem73">
+                <span class="mobileNav73" title="">Lending</span>
+            </li>
+            <li data-navPgId="82" class="menuItem82">
+                <span class="mobileNav82" title="">About Us</span>
+            </li>
+            <li><span title="Locations & Hours">Locations & Hours</span></li>
+            <li><span title="Contact Us">Contact Us</span></li>
         </ul>
     </nav>
 
     <div class="overlay-mask"></div>
-    <dialog id="disclaimer-dialog" class="dialog-prevent-scroll" style="
-        border: 0;
-        outline: 0;
-        box-shadow: 0 0 10px rgba(0,0,0,.2);
-        text-align: center;
-        border-radius: .5rem;
-        position: fixed;
-        padding: 0;
-        max-width: min(80ch, 100% - 2rem);
-    ">
-        <div style="padding: 2rem;">
-            <h5 style="margin-bottom: 2rem;">
-                You are now leaving Pauls Valley National Bank </h5>
 
-            <div class="external-content--link" style="display: none">
-                <p>You are leaving our website. We are not endorsing or guaranteeing the products, information or recommendations provided by the organizations linked to our website. We are not liable for any failure of products or services advertised on
-                    those sites. We are not responsible for the validity, collection, use or security of information by organizations that may be linked to our website. We encourage you to read the privacy policies of websites reached through the use
-                    of links from our website.</p>
-            </div>
-            <div class="external-content--mail" style="display: none">
-                <p>You are leaving our website. We are not endorsing or guaranteeing the products, information or recommendations provided by the organizations linked to our website. We are not liable for any failure of products or services advertised on
-                    those sites. We are not responsible for the validity, collection, use or security of information by organizations that may be linked to our website. We encourage you to read the privacy policies of websites reached through the use
-                    of links from our website.</p>
-            </div>
-            <div class="external-content--social" style="display: none">
-                <p>You are leaving our website. We are not endorsing or guaranteeing the products, information or recommendations provided by the organizations linked to our website. We are not liable for any failure of products or services advertised on
-                    those sites. We are not responsible for the validity, collection, use or security of information by organizations that may be linked to our website. We encourage you to read the privacy policies of websites reached through the use
-                    of links from our website.</p>
-            </div>
-
-            <form method="dialog" style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-                <button style="
-                    position: absolute;
-                    top: 1rem;
-                    right: 1rem;
-                    padding: 0;
-                    background: transparent;
-                    border: 0;
-                    outline: 0;
-                    line-height: 1;
-                ">
-                <span class="fas fa-times"></span>
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-form-container">
+            <button class="close-login" id="closeLogin">
+                <i class="fas fa-times"></i>
             </button>
-
-                <button class="btn btn-outline-danger m-0" title="Cancel leaving to external link">Cancel</button>
-
-                <a href="#" class="btn btn-primary m-0 disclaimer-continue" title="Opens external link">Continue</a>
+            <div class="login-header">
+                <h2>Online Banking</h2>
+                <p>Access your account securely</p>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
             </form>
+            <div class="form-footer">
+                <button class="signup-btn" id="showSignup">Sign Up</button>
+                <button class="forgot-btn" id="showForgot">Forgot Password?</button>
+            </div>
         </div>
-    </dialog>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="signup-modal" id="signupModal">
+        <div class="signup-form-container">
+            <button class="close-login" id="closeSignup">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="login-header">
+                <h2>Create Account</h2>
+                <p>Join Pauls Valley National Bank</p>
+            </div>
+            <form class="signup-form" id="signupForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit" class="login-btn">Create Account</button>
+            </form>
+            <div class="form-footer">
+                <button class="signup-btn" id="backToLogin">Back to Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="forgot-modal" id="forgotModal">
+        <div class="forgot-form-container">
+            <button class="close-login" id="closeForgot">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="login-header">
+                <h2>Reset Password</h2>
+                <p>Enter your email to reset your password</p>
+            </div>
+            <form class="forgot-form" id="forgotForm">
+                <div class="form-group">
+                    <label for="forgotEmail">Email Address</label>
+                    <input type="email" id="forgotEmail" name="email" required>
+                </div>
+                <button type="submit" class="login-btn">Send Reset Link</button>
+            </form>
+            <div class="form-footer">
+                <button class="signup-btn" id="backToLoginFromForgot">Back to Login</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        (() => {
-            const externalLinks = document.querySelectorAll('a:where([href*="http://"], [href*="https://"], [href*="mailto:"]):not([data-nodisclaimer="true"], .nodisclaimer)')
+        // Mobile menu functionality
+        const openMenu = document.querySelector('.open-mobilemenu');
+        const closeMenu = document.querySelector('.close-mobilemenu');
+        const mobileMenu = document.querySelector('.mobilemenu');
+        const overlay = document.querySelector('.overlay-mask');
 
-            if (externalLinks.length) {
-                const dialog = document.querySelector('dialog#disclaimer-dialog')
-                const confirmButton = dialog.querySelector('a.disclaimer-continue')
-                const showSelectedContentSection = (link) => {
-                    const contentSections = dialog.querySelectorAll('[class^="external-content--"]')
-                    contentSections.forEach(section => section.style.display = 'none')
-
-                    const linkType = ([{
-                            suffix: 'social',
-                            selector: ':where(.social-link)'
-                        },
-                        {
-                            suffix: 'link',
-                            selector: ':where([href*="http://"], [href*="https://"])'
-                        },
-                        {
-                            suffix: 'mail',
-                            selector: ':where([href*="mailto:"])'
-                        }
-                    ]).find(({
-                        selector
-                    }) => link.matches(selector))
-
-                    if (linkType) {
-                        const selectedContentSection = document.querySelector(`.external-content--${linkType.suffix}`)
-
-                        if (selectedContentSection) {
-                            selectedContentSection.style.display = 'block'
-                        }
-                    }
-                }
-
-                externalLinks.forEach(link => link.addEventListener('click', event => {
-                    event.preventDefault()
-                    confirmButton.href = link.href
-                    confirmButton.target = link.target
-                    confirmButton.title = (link.target == '_blank' ? 'Opens external link in a new tab' : 'Opens external link in the same tab')
-                    dialog.showModal()
-                    showSelectedContentSection(link)
-                }))
-
-                confirmButton.addEventListener('click', event => {
-                    dialog.close()
-                })
-
-                dialog.addEventListener('click', event => {
-                    if (event.target === event.currentTarget) {
-                        event.stopPropagation();
-                        dialog.close();
-                    }
-                })
-            }
-        })()
-    </script>
-
-    <noscript id="deferred-styles">
-    
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.min.css">
-</noscript>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha384-Dziy8F2VlJQLMShA6FHWNul/veM9bCkRUaLqr199K94ntO5QUrLJBEbYegdSkkqX" crossorigin="anonymous"></script>
-    <script async src="/scripts/stacktable.min.js?v=1742486674"></script>
-    <script async src="https://cdn.vgmforbin.com/resources/font-awesome/6.4.2/js/all.min.js"></script>
-
-    <script>
-        var siteType = "BANK";
-    </script>
-    <script async src="/scripts/global.js?v=1742486674"></script>
-    <script src="https://cdn.forbin.com/resources/js/flexslider/2.6.4/flexslider.min.js"></script>
-    <script src="/modules/site-banner/js/site-banner.js?v=1742486674"></script>
-    <script src="/scripts/skip-to-content.js?v=1742486674"></script>
-    <script src="/scripts/search.js?v=1742486674"></script>
-    <script src="/modules/marketing/js/marketing.js?v=1742486674"></script>
-    <script src="/scripts/mobilemenu.js?v=1742486674"></script>
-    <script src="/scripts/overlay.js?v=1742486674"></script>
-    <script src="/scripts/disclaimer.js?v=1742486674"></script>
-    <script>
-        var loadDeferredStyles = function() {
-            var addStylesNode = document.getElementById("deferred-styles");
-            var replacement = document.createElement("div");
-            replacement.innerHTML = addStylesNode.textContent;
-            document.body.appendChild(replacement)
-            addStylesNode.parentElement.removeChild(addStylesNode);
-        };
-        var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-            webkitRequestAnimationFrame || msRequestAnimationFrame;
-        if (raf) raf(function() {
-            window.setTimeout(loadDeferredStyles, 0);
+        openMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
-        else window.addEventListener('load', loadDeferredStyles);
-    </script>
-    <script>
-        (function() {
-            var s = document.createElement('script');
-            var h = document.querySelector('head') || document.body;
-            s.src = 'https://acsbapp.com/apps/app/dist/js/app.js';
-            s.async = true;
-            s.onload = function() {
-                acsbJS.init();
-            };
-            h.appendChild(s);
-        })();
-    </script>
-</body>
 
+        closeMenu.addEventListener('click', closeMenuFunc);
+        overlay.addEventListener('click', closeMenuFunc);
+
+        function closeMenuFunc() {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Search functionality
+        const searchIcon = document.querySelector('.search-icon');
+        const searchWrapper = document.querySelector('.search-field-wrapper');
+        const closeSearch = document.querySelector('.close-search');
+
+        searchIcon.addEventListener('click', () => {
+            searchWrapper.classList.remove('hide');
+            document.querySelector('#searchfield').focus();
+        });
+
+        closeSearch.addEventListener('click', () => {
+            searchWrapper.classList.add('hide');
+        });
+
+        // Login Modal functionality
+        const onlineBankingBtn = document.querySelector('.button-olb');
+        const loginModal = document.getElementById('loginModal');
+        const signupModal = document.getElementById('signupModal');
+        const forgotModal = document.getElementById('forgotModal');
+        const closeLogin = document.getElementById('closeLogin');
+        const closeSignup = document.getElementById('closeSignup');
+        const closeForgot = document.getElementById('closeForgot');
+        const showSignup = document.getElementById('showSignup');
+        const showForgot = document.getElementById('showForgot');
+        const backToLogin = document.getElementById('backToLogin');
+        const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
+
+        // Open login modal
+        onlineBankingBtn.addEventListener('click', () => {
+            loginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('email').focus();
+        });
+
+        // Close modals
+        function closeAllModals() {
+            loginModal.classList.remove('active');
+            signupModal.classList.remove('active');
+            forgotModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        closeLogin.addEventListener('click', closeAllModals);
+        closeSignup.addEventListener('click', closeAllModals);
+        closeForgot.addEventListener('click', closeAllModals);
+
+        // Close modal when clicking outside
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) closeAllModals();
+        });
+        signupModal.addEventListener('click', (e) => {
+            if (e.target === signupModal) closeAllModals();
+        });
+        forgotModal.addEventListener('click', (e) => {
+            if (e.target === forgotModal) closeAllModals();
+        });
+
+        // Switch between modals
+        showSignup.addEventListener('click', () => {
+            loginModal.classList.remove('active');
+            signupModal.classList.add('active');
+            document.getElementById('fullName').focus();
+        });
+
+        showForgot.addEventListener('click', () => {
+            loginModal.classList.remove('active');
+            forgotModal.classList.add('active');
+            document.getElementById('forgotEmail').focus();
+        });
+
+        backToLogin.addEventListener('click', () => {
+            signupModal.classList.remove('active');
+            loginModal.classList.add('active');
+            document.getElementById('email').focus();
+        });
+
+        backToLoginFromForgot.addEventListener('click', () => {
+            forgotModal.classList.remove('active');
+            loginModal.classList.add('active');
+            document.getElementById('email').focus();
+        });
+
+        // Handle form submissions
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simulate login process
+            if (email && password) {
+                alert('Login successful! (This is a demo)');
+                closeAllModals();
+            } else {
+                alert('Please fill in all fields');
+            }
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!fullName || !email || !phone || !password || !confirmPassword) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            // Simulate signup process
+            alert('Account created successfully! (This is a demo)');
+            closeAllModals();
+        });
+
+        document.getElementById('forgotForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+            
+            if (email) {
+                alert('Password reset link sent to your email! (This is a demo)');
+                closeAllModals();
+            } else {
+                alert('Please enter your email address');
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAllModals();
+            }
+        });
+
+        // Slider functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slides li');
+        const controlDots = document.querySelectorAll('.control-dot');
+        const prevBtn = document.querySelector('.flex-prev');
+        const nextBtn = document.querySelector('.flex-next');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.style.opacity = i === index ? '1' : '0';
+            });
+            controlDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        controlDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+
+        // Auto-advance slides
+        setInterval(nextSlide, 5000);
+
+        // Back to top functionality
+        const backToTop = document.querySelector('.back-to-top');
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Show/hide back to top button
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.style.opacity = '1';
+            } else {
+                backToTop.style.opacity = '0.7';
+            }
+        });
+    </script>
+
+    <style>
+        /* Additional styles for control dots */
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid white;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-dot.active {
+            background: white;
+        }
+
+        .control-dot:hover {
+            transform: scale(1.2);
+        }
+
+        /* Improved icon placeholder styles */
+        .icon-placeholder {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        }
+
+        /* Enhanced hover effects */
+        .callout:hover .icon-placeholder {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+
+        .border-callout:hover .icon-placeholder {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Smooth transitions for all interactive elements */
+        .icon-placeholder {
+            transition: all 0.3s ease;
+        }
+
+        /* Login Modal Styles */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .login-modal.active {
+            display: flex;
+        }
+
+        .login-form-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            color: #007bff;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .close-login {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-login:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .signup-btn, .forgot-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+        }
+
+        .signup-btn:hover, .forgot-btn:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .signup-btn {
+            font-weight: 600;
+        }
+
+        .forgot-btn {
+            font-weight: 400;
+        }
+
+        /* Signup Modal Styles */
+        .signup-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2001;
+        }
+
+        .signup-modal.active {
+            display: flex;
+        }
+
+        .signup-form-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            animation: slideInDown 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Forgot Password Modal Styles */
+        .forgot-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2001;
+        }
+
+        .forgot-modal.active {
+            display: flex;
+        }
+
+        .forgot-form-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        /* Additional responsive fixes */
+        @media (max-width: 768px) {
+            .mm-direction-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .control-dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            .login-form-container,
+            .signup-form-container,
+            .forgot-form-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .form-footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</body>
 </html>
