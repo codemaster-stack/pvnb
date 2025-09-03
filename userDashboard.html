@@ -377,9 +377,43 @@
         .notification.error {
             background: #dc3545;
         }
+
+        .main-nav {
+    background: #007bff;
+    padding: 0.5rem 2rem;
+    text-align: center;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.main-nav ul li a:hover {
+    color: #ffc107;
+}
+
     </style>
 </head>
 <body>
+    <nav class="main-nav">
+    <ul>
+        <li><a href="/personal">Personal Banking</a></li>
+        <li><a href="/business">Business Banking</a></li>
+        <li><a href="/lending">Lending</a></li>
+        <li><a href="/about">About Us</a></li>
+    </ul>
+</nav>
+
     <header class="dashboard-header">
         <div class="logo">
             <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMDA3YmZmIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMzAiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UGF1bHMgVmFsbGV5IE5hdGlvbmFsIEJhbms8L3RleHQ+PC9zdmc+" alt="PVNB">
@@ -637,6 +671,53 @@
                 element.textContent = content;
             }
         }
+
+
+        async function loadUserTransactions() {
+    try {
+        const response = await fetch('/api/transactions', {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const transactionsList = document.getElementById('transactionsList');
+            transactionsList.innerHTML = ''; // clear old items
+
+            data.transactions.forEach(txn => {
+                const div = document.createElement('div');
+                div.className = 'transaction-item';
+                div.innerHTML = `
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>${txn.description}</h4>
+                            <p>${new Date(txn.date).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount ${txn.amount.includes('-') ? 'negative' : 'positive'}">${txn.amount}</div>
+                `;
+                transactionsList.appendChild(div);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading transactions:', error);
+    }
+}
+
+// Call it after user profile is loaded
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadUserProfile();
+    await loadUserTransactions();
+});
+
     </script>
+
+
+
+
 </body>
 </html>
