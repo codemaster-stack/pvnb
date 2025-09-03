@@ -1552,50 +1552,49 @@
 });
 
 
-        document.getElementById('signupForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('signupEmail').value;
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (!fullName || !email || !phone || !password || !confirmPassword) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
-            
-            // Simulate signup process
-            try {
-    const res = await fetch("https://pvnbank.onrender.com/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            name: fullName,
-            email,
-            password,
-        }),
-    });
+      document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('signupEmail').value;
+    const phone = document.getElementById('phone').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
 
-    const data = await res.json();
-
-    if (res.ok) {
-        alert("✅ Account created successfully!");
-        closeAllModals();
-    } else {
-        alert("❌ " + data.message);
+    if (!fullName || !email || !phone || !password || !confirmPassword) {
+        alert("Please fill in all fields");
+        return;
     }
-} catch (err) {
-    alert("⚠️ Error connecting to server");
-    console.error(err);
-}
 
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    try {
+        const res = await fetch("https://pvnbank.onrender.com/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: fullName,
+                email,
+                password,
+            }),
         });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("✅ Account created successfully!");
+            closeAllModals();
+        } else {
+            alert("❌ " + data.message);
+        }
+    } catch (err) {
+        alert("⚠️ Error connecting to server");
+        console.error(err);
+    }
+});
+
 
         document.getElementById('forgotForm').addEventListener('submit', (e) => {
             e.preventDefault();
