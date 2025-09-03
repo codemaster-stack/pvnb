@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Signup | PVNBank</title>
+  <link rel="stylesheet" href="styles.css"> <!-- reuse your css -->
+</head>
+<body class="homepage">
+
+  <div class="signup-form-container">
+    <h2>Create Admin Account</h2>
+    <form id="adminSignupForm">
+      <div class="form-group">
+        <label for="adminName">Full Name</label>
+        <input type="text" id="adminName" name="fullName" required>
+      </div>
+      <div class="form-group">
+        <label for="adminEmail">Email</label>
+        <input type="email" id="adminEmail" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="adminPassword">Password</label>
+        <input type="password" id="adminPassword" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="adminConfirmPassword">Confirm Password</label>
+        <input type="password" id="adminConfirmPassword" name="confirmPassword" required>
+      </div>
+      <button type="submit" class="login-btn">Create Admin</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("adminSignupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fullName = document.getElementById("adminName").value;
+      const email = document.getElementById("adminEmail").value;
+      const password = document.getElementById("adminPassword").value;
+      const confirmPassword = document.getElementById("adminConfirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("❌ Passwords do not match");
+        return;
+      }
+
+      try {
+        const res = await fetch("https://pvnbank.onrender.com/api/auth/admin/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fullName, email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert("✅ Admin account created successfully!");
+          // Optional: redirect to admin login/dashboard
+          window.location.href = "admin.html";
+        } else {
+          alert("❌ " + data.message);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("⚠️ Error connecting to server");
+      }
+    });
+  </script>
+</body>
+</html>

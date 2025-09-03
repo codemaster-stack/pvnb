@@ -1539,10 +1539,21 @@
         const data = await res.json();
 
         if (res.ok) {
-            alert("✅ Login successful!");
-            console.log("User:", data);
-            closeAllModals();
-        } else {
+    alert("✅ Login successful!");
+    console.log("User:", data);
+    closeAllModals();
+
+    // Save token in localStorage (optional)
+    localStorage.setItem("token", data.token);
+
+    // Redirect by role
+    if (data.role && data.role.toLowerCase() === "admin") {
+        window.location.href = "admin.html";
+    } else {
+        window.location.href = "userDashboard.html";
+    }
+} else {
+
             alert("❌ " + data.message);
         }
     } catch (err) {
@@ -1586,9 +1597,15 @@
         const data = await res.json();
 
         if (res.ok) {
-            alert("✅ Account created successfully!");
-            closeAllModals();
-        } else {
+    alert("✅ Account created successfully!");
+    closeAllModals();
+
+    // open login modal immediately
+    loginModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('email').focus();
+} else {
+
             alert("❌ " + data.message);
         }
     } catch (err) {
