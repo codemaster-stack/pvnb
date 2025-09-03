@@ -1524,19 +1524,33 @@
         });
 
         // Handle form submissions
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Simulate login process
-            if (email && password) {
-                alert('Login successful! (This is a demo)');
-                closeAllModals();
-            } else {
-                alert('Please fill in all fields');
-            }
+       document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const res = await fetch("https://pvnbank.onrender.com/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
         });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("✅ Login successful!");
+            console.log("User:", data);
+            closeAllModals();
+        } else {
+            alert("❌ " + data.message);
+        }
+    } catch (err) {
+        alert("⚠️ Error connecting to server");
+        console.error(err);
+    }
+});
+
 
         document.getElementById('signupForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -1557,8 +1571,30 @@
             }
             
             // Simulate signup process
-            alert('Account created successfully! (This is a demo)');
-            closeAllModals();
+            try {
+    const res = await fetch("https://pvnbank.onrender.com/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: fullName,
+            email,
+            password,
+        }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        alert("✅ Account created successfully!");
+        closeAllModals();
+    } else {
+        alert("❌ " + data.message);
+    }
+} catch (err) {
+    alert("⚠️ Error connecting to server");
+    console.error(err);
+}
+
         });
 
         document.getElementById('forgotForm').addEventListener('submit', (e) => {
