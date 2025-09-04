@@ -606,7 +606,7 @@ async function loadUserProfile() {
             return;
         }
 
-        const response = await fetch('https://pvnbank.onrender.com/api/user/profile', {
+        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/profile', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
