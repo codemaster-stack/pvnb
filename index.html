@@ -1052,7 +1052,7 @@
                 </span>
                 <div class="nav-top-links">
                     <span class="search-icon nav-search" title="Opens search bar"><span class="fas fa-search"></span><span class="visually-hidden">Search</span></span>
-                    <span class="nav-top-link" title="tions & Hours">tions & Hours</span>
+                    <span class="nav-top-link" title="Locations & Hours">Locations & Hours</span>
                     <span class="nav-top-link" title="Contact Us">Contact Us</span>
                 </div>
 
@@ -1107,9 +1107,9 @@
                 <li class="mk-slide4">
                     <div class="container">
                         <div class="marketing-text">
-                            <h2 class="marketing-title">Your l Banking Experts</h2>
+                            <h2 class="marketing-title">Your Local Banking Experts</h2>
                             <p class="marketing-subtitle" id="mm-2">Pauls Valley National Bank offers expert advice and personalized service. We're committed to your financial success.</p>
-                            <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" href="/personal-banking/deposit-products/checking" title="Learn More about Your l Banking Experts" aria-labelledby="mm-2">Learn More</a>
+                            <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" href="/personal-banking/deposit-products/checking" title="Learn More about Your Local Banking Experts" aria-labelledby="mm-2">Learn More</a>
                         </div>
                     </div>
                 </li>
@@ -1209,7 +1209,7 @@
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
                         <p class="border-header">Find Us</p>
-                        <span title="tions page">Find Us</span>
+                        <span title="Locations page">Find Us</span>
                     </div>
                     <div class="border-callout">
                         <div class="icon-placeholder">
@@ -1245,7 +1245,7 @@
             </div>
             <div class="footer-contact-right">
                 <span class="footer-contact-link" title="Phone: +1 (779) 276-2007">Phone: +1 (779) 276-2007</span>
-                <span class="footer-contact-link" title="View Our tions">View Our tions</span>
+                <span class="footer-contact-link" title="View Our Locations">View Our Locations</span>
                 <div class="footer-socials">
                     <span class="social-link" title="Pauls Valley National Bank's Facebook page">
                         <span class="fa-brands fa-facebook fa-2x"></span>
@@ -1258,7 +1258,7 @@
                 <p class="footernav-header">Get In Touch</p>
                 <hr>
                 <span title="Contact Us page">Contact Us</span>
-                <span title="tion & Hours page">tion & Hours</span>
+                <span title="Location & Hours page">Location & Hours</span>
                 <span title="Report Lost or Stolen Card page">Report Lost or Stolen Card</span>
             </div>
             <div class="footernav-column">
@@ -1322,7 +1322,7 @@
             <li data-navPgId="82" class="menuItem82">
                 <span class="mobileNav82" title="">About Us</span>
             </li>
-            <li><span title="tions & Hours">tions & Hours</span></li>
+            <li><span title="Locations & Hours">Locations & Hours</span></li>
             <li><span title="Contact Us">Contact Us</span></li>
         </ul>
     </nav>
@@ -1420,111 +1420,112 @@
     </div>
 
     <script>
-        // Mobile menu functionality
-        const openMenu = document.querySelector('.open-mobilemenu');
-        const closeMenu = document.querySelector('.close-mobilemenu');
-        const mobileMenu = document.querySelector('.mobilemenu');
-        const overlay = document.querySelector('.overlay-mask');
+        
+      // Mobile menu functionality
+const openMenu = document.querySelector('.open-mobilemenu');
+const closeMenu = document.querySelector('.close-mobilemenu');
+const mobileMenu = document.querySelector('.mobilemenu');
+const overlay = document.querySelector('.overlay-mask');
 
-        openMenu.addEventListener('click', () => {
-            mobileMenu.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
+openMenu.addEventListener('click', () => {
+    mobileMenu.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+});
 
-        closeMenu.addEventListener('click', closeMenuFunc);
-        overlay.addEventListener('click', closeMenuFunc);
+closeMenu.addEventListener('click', closeMenuFunc);
+overlay.addEventListener('click', closeMenuFunc);
 
-        function closeMenuFunc() {
-            mobileMenu.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+function closeMenuFunc() {
+    mobileMenu.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
 
-        // Search functionality
-        const searchIcon = document.querySelector('.search-icon');
-        const searchWrapper = document.querySelector('.search-field-wrapper');
-        const closeSearch = document.querySelector('.close-search');
+// Search functionality
+const searchIcon = document.querySelector('.search-icon');
+const searchWrapper = document.querySelector('.search-field-wrapper');
+const closeSearch = document.querySelector('.close-search');
 
-        searchIcon.addEventListener('click', () => {
-            searchWrapper.classList.remove('hide');
-            document.querySelector('#searchfield').focus();
-        });
+searchIcon.addEventListener('click', () => {
+    searchWrapper.classList.remove('hide');
+    document.querySelector('#searchfield').focus();
+});
 
-        closeSearch.addEventListener('click', () => {
-            searchWrapper.classList.add('hide');
-        });
+closeSearch.addEventListener('click', () => {
+    searchWrapper.classList.add('hide');
+});
 
-        // Login Modal functionality
-        const onlineBankingBtn = document.querySelector('.button-olb');
-        const loginModal = document.getElementById('loginModal');
-        const signupModal = document.getElementById('signupModal');
-        const forgotModal = document.getElementById('forgotModal');
-        const closeLogin = document.getElementById('closeLogin');
-        const closeSignup = document.getElementById('closeSignup');
-        const closeForgot = document.getElementById('closeForgot');
-        const showSignup = document.getElementById('showSignup');
-        const showForgot = document.getElementById('showForgot');
-        const backToLogin = document.getElementById('backToLogin');
-        const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
+// Login Modal functionality
+const onlineBankingBtn = document.querySelector('.button-olb');
+const loginModal = document.getElementById('loginModal');
+const signupModal = document.getElementById('signupModal');
+const forgotModal = document.getElementById('forgotModal');
+const closeLogin = document.getElementById('closeLogin');
+const closeSignup = document.getElementById('closeSignup');
+const closeForgot = document.getElementById('closeForgot');
+const showSignup = document.getElementById('showSignup');
+const showForgot = document.getElementById('showForgot');
+const backToLogin = document.getElementById('backToLogin');
+const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
 
-        // Open login modal
-        onlineBankingBtn.addEventListener('click', () => {
-            loginModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.getElementById('email').focus();
-        });
+// Open login modal
+onlineBankingBtn.addEventListener('click', () => {
+    loginModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('email').focus();
+});
 
-        // Close modals
-        function closeAllModals() {
-            loginModal.classList.remove('active');
-            signupModal.classList.remove('active');
-            forgotModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+// Close modals
+function closeAllModals() {
+    loginModal.classList.remove('active');
+    signupModal.classList.remove('active');
+    forgotModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
 
-        closeLogin.addEventListener('click', closeAllModals);
-        closeSignup.addEventListener('click', closeAllModals);
-        closeForgot.addEventListener('click', closeAllModals);
+closeLogin.addEventListener('click', closeAllModals);
+closeSignup.addEventListener('click', closeAllModals);
+closeForgot.addEventListener('click', closeAllModals);
 
-        // Close modal when clicking outside
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) closeAllModals();
-        });
-        signupModal.addEventListener('click', (e) => {
-            if (e.target === signupModal) closeAllModals();
-        });
-        forgotModal.addEventListener('click', (e) => {
-            if (e.target === forgotModal) closeAllModals();
-        });
+// Close modal when clicking outside
+loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) closeAllModals();
+});
+signupModal.addEventListener('click', (e) => {
+    if (e.target === signupModal) closeAllModals();
+});
+forgotModal.addEventListener('click', (e) => {
+    if (e.target === forgotModal) closeAllModals();
+});
 
-        // Switch between modals
-        showSignup.addEventListener('click', () => {
-            loginModal.classList.remove('active');
-            signupModal.classList.add('active');
-            document.getElementById('fullName').focus();
-        });
+// Switch between modals
+showSignup.addEventListener('click', () => {
+    loginModal.classList.remove('active');
+    signupModal.classList.add('active');
+    document.getElementById('fullName').focus();
+});
 
-        showForgot.addEventListener('click', () => {
-            loginModal.classList.remove('active');
-            forgotModal.classList.add('active');
-            document.getElementById('forgotEmail').focus();
-        });
+showForgot.addEventListener('click', () => {
+    loginModal.classList.remove('active');
+    forgotModal.classList.add('active');
+    document.getElementById('forgotEmail').focus();
+});
 
-        backToLogin.addEventListener('click', () => {
-            signupModal.classList.remove('active');
-            loginModal.classList.add('active');
-            document.getElementById('email').focus();
-        });
+backToLogin.addEventListener('click', () => {
+    signupModal.classList.remove('active');
+    loginModal.classList.add('active');
+    document.getElementById('email').focus();
+});
 
-        backToLoginFromForgot.addEventListener('click', () => {
-            forgotModal.classList.remove('active');
-            loginModal.classList.add('active');
-            document.getElementById('email').focus();
-        });
+backToLoginFromForgot.addEventListener('click', () => {
+    forgotModal.classList.remove('active');
+    loginModal.classList.add('active');
+    document.getElementById('email').focus();
+});
 
-        // Handle form submissions
-       document.getElementById('loginForm').addEventListener('submit', async (e) => {
+// Handle form submissions - FIXED LOGIN FORM
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -1539,31 +1540,30 @@
         const data = await res.json();
 
         if (res.ok) {
-    alert("✅ Login successful!");
-    console.log("User:", data);
-    closeAllModals();
+            alert("Login successful!");
+            console.log("User:", data);
+            closeAllModals();
 
-    // Save token in  (optional)
-    setItem("authToken", data.authToken);
+            // FIXED: Correct localStorage syntax and use data.token
+            localStorage.setItem("authToken", data.token);
 
-    // Redirect by role
-    if (data.role && data.role.toLowerCase() === "admin") {
-        window.tion.href = "admin.html";
-    } else {
-        window.tion.href = "userDashboard.html";
-    }
-} else {
-
-            alert("❌ " + data.message);
+            // FIXED: Correct window.location.href syntax
+            if (data.role && data.role.toLowerCase() === "admin") {
+                window.location.href = "admin.html";
+            } else {
+                window.location.href = "userDashboard.html";
+            }
+        } else {
+            alert("Login failed: " + data.message);
         }
     } catch (err) {
-        alert("⚠️ Error connecting to server");
+        alert("Error connecting to server");
         console.error(err);
     }
 });
 
-
-      document.getElementById('signupForm').addEventListener('submit', async (e) => {
+// Signup form
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const fullName = document.getElementById('fullName').value;
     const email = document.getElementById('signupEmail').value;
@@ -1583,110 +1583,108 @@
 
     try {
         const res = await fetch("https://pvnbank.onrender.com/api/auth/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-        fullName,   // ✅ correct key
-        email,
-        phone,      // ✅ include phone
-        password,
-    }),
-});
-
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                fullName,
+                email,
+                phone,
+                password,
+            }),
+        });
 
         const data = await res.json();
 
         if (res.ok) {
-    alert("✅ Account created successfully!");
-    closeAllModals();
+            alert("Account created successfully!");
+            closeAllModals();
 
-    // open login modal immediately
-    loginModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    document.getElementById('email').focus();
-} else {
-
-            alert("❌ " + data.message);
+            // Open login modal immediately
+            loginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('email').focus();
+        } else {
+            alert("Registration failed: " + data.message);
         }
     } catch (err) {
-        alert("⚠️ Error connecting to server");
+        alert("Error connecting to server");
         console.error(err);
     }
 });
 
+// Forgot password form
+document.getElementById('forgotForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('forgotEmail').value;
+    
+    if (email) {
+        alert('Password reset link sent to your email! (This is a demo)');
+        closeAllModals();
+    } else {
+        alert('Please enter your email address');
+    }
+});
 
-        document.getElementById('forgotForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('forgotEmail').value;
-            
-            if (email) {
-                alert('Password reset link sent to your email! (This is a demo)');
-                closeAllModals();
-            } else {
-                alert('Please enter your email address');
-            }
-        });
+// Close modals with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeAllModals();
+    }
+});
 
-        // Close modals with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeAllModals();
-            }
-        });
+// Slider functionality
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slides li');
+const controlDots = document.querySelectorAll('.control-dot');
+const prevBtn = document.querySelector('.flex-prev');
+const nextBtn = document.querySelector('.flex-next');
 
-        // Slider functionality
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slides li');
-        const controlDots = document.querySelectorAll('.control-dot');
-        const prevBtn = document.querySelector('.flex-prev');
-        const nextBtn = document.querySelector('.flex-next');
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        slide.style.opacity = i === index ? '1' : '0';
+    });
+    controlDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+}
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.style.opacity = i === index ? '1' : '0';
-            });
-            controlDots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-        }
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+}
 
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }
+function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+}
 
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
-        }
+nextBtn.addEventListener('click', nextSlide);
+prevBtn.addEventListener('click', prevSlide);
 
-        nextBtn.addEventListener('click', nextSlide);
-        prevBtn.addEventListener('click', prevSlide);
+controlDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+        currentSlide = index;
+        showSlide(currentSlide);
+    });
+});
 
-        controlDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentSlide = index;
-                showSlide(currentSlide);
-            });
-        });
+// Auto-advance slides
+setInterval(nextSlide, 5000);
 
-        // Auto-advance slides
-        setInterval(nextSlide, 5000);
+// Back to top functionality
+const backToTop = document.querySelector('.back-to-top');
+backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
-        // Back to top functionality
-        const backToTop = document.querySelector('.back-to-top');
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Show/hide back to top button
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.style.opacity = '1';
-            } else {
-                backToTop.style.opacity = '0.7';
-            }
-        });
+// Show/hide back to top button
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTop.style.opacity = '1';
+    } else {
+        backToTop.style.opacity = '0.7';
+    }
+});
     </script>
 
     <style>
