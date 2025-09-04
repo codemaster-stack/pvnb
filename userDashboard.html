@@ -555,6 +555,7 @@
     <script>
        
        // Load user data on page load
+// Load user data on page load
 document.addEventListener('DOMContentLoaded', async () => {
     await loadUserProfile();
 });
@@ -726,7 +727,7 @@ function formatTransactionDate(date) {
 // Logout function (updated endpoint)
 async function logout() {
     try {
-        const response = await fetch('/api/auth/logout', {
+        const response = await fetch('https://pvnbank.onrender.com/api/auth/logout', {
             method: 'POST',
             credentials: 'include'
         });
@@ -817,7 +818,6 @@ function hideLoading(elementId, content) {
         element.textContent = content;
     }
 }
-
     </script>
 
 
