@@ -556,11 +556,22 @@
        
        // Load user data on page load
 // Load user data on page load
+// 
+
+
+
+
+
+
+
+// Load user data on page load
 document.addEventListener('DOMContentLoaded', async () => {
     await loadUserProfile();
+    // Remove loadUserTransactions() call if you don't have transaction endpoint
+    // await loadUserTransactions(); 
 });
 
-// Get time-based greeting
+// Get time-based greeting with user's name
 function getTimeBasedGreeting(fullName) {
     const hour = new Date().getHours();
     let greeting;
@@ -568,45 +579,69 @@ function getTimeBasedGreeting(fullName) {
     if (hour < 12) {
         greeting = "Good morning";
     } else if (hour < 17) {
-        greeting = "Good afternoon";
+        greeting = "Good afternoon";  
     } else {
         greeting = "Good evening";
     }
     
-    return `${greeting}, ${fullName}`;
+    // Extract first name from full name
+    const firstName = fullName.split(' ')[0];
+    return `${greeting}, ${firstName}`;
 }
 
-// Load user profile data
+// FIXED: Load user profile data with proper error handling
 async function loadUserProfile() {
     try {
         // Show loading state
         document.getElementById('userName').textContent = 'Loading...';
         
-        const response = await fetch('/api/user/dashboard/profile', {
-            method: 'GET',
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const user = data.user;
-            
-            // Update UI with user data and time-based greeting
-            document.getElementById('userName').textContent = getTimeBasedGreeting(user.fullName);
-            document.getElementById('accountNumber').textContent = formatAccountNumber(user.accountNumber);
-            document.getElementById('accountBalance').textContent = formatCurrency(user.balance);
-            
-            // Show success notification
-            showNotification('Profile loaded successfully', 'success');
-            
-        } else if (response.status === 401 || response.status === 403) {
-            // User is not authenticated, redirect to login
+        // Get token from localStorage (matching your login code)
+        const token = localStorage.getItem('authToken');
+        
+        if (!token) {
             showNotification('Please log in to continue', 'error');
             setTimeout(() => {
                 window.location.href = '/';
             }, 2000);
+            return;
+        }
+
+        const response = await fetch('https://pvnbank.onrender.com/api/user/profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const user = data.user || data; // Handle different response formats
+            
+            // FIXED: Update UI with user data and time-based greeting
+            document.getElementById('userName').textContent = getTimeBasedGreeting(user.fullName);
+            
+            // Update account info if available
+            if (user.accountNumber) {
+                document.getElementById('accountNumber').textContent = formatAccountNumber(user.accountNumber);
+            }
+            if (user.balance !== undefined) {
+                document.getElementById('accountBalance').textContent = formatCurrency(user.balance);
+            }
+            
+            // Show success notification
+            showNotification('Welcome back!', 'success');
+            
+        } else if (response.status === 401 || response.status === 403) {
+            // User is not authenticated, redirect to login
+            localStorage.removeItem('authToken'); // Clear invalid token
+            showNotification('Session expired. Please log in again', 'error');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
         } else {
-            showNotification('Failed to load profile data', 'error');
+            const errorData = await response.json();
+            showNotification('Failed to load profile: ' + (errorData.message || 'Unknown error'), 'error');
         }
     } catch (error) {
         console.error('Error loading profile:', error);
@@ -615,12 +650,19 @@ async function loadUserProfile() {
     }
 }
 
-// Load user transactions (updated endpoint)
+// OPTIONAL: Load user transactions (only if you have this endpoint)
 async function loadUserTransactions() {
     try {
-        const response = await fetch('/api/transactions', {
+        const token = localStorage.getItem('authToken');
+        
+        if (!token) return;
+
+        const response = await fetch('https://pvnbank.onrender.com/api/user/transactions', {
             method: 'GET',
-            credentials: 'include'
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         });
 
         if (response.ok) {
@@ -650,13 +692,13 @@ async function loadUserTransactions() {
                             </div>
                         </div>
                         <div class="transaction-amount ${isPositive ? 'positive' : 'negative'}">
-                            ${formatCurrency(Math.abs(txn.amount))}
+                            ${isPositive ? '+' : '-'}${formatCurrency(Math.abs(txn.amount))}
                         </div>
                     `;
                     transactionsList.appendChild(div);
                 });
             } else {
-                // Show no transactions message
+                // Show no transactions message (no error popup)
                 transactionsList.innerHTML = `
                     <div class="transaction-item">
                         <div class="transaction-info">
@@ -672,11 +714,27 @@ async function loadUserTransactions() {
                 `;
             }
         } else {
-            showNotification('Failed to load transactions', 'error');
+            // FIXED: Don't show error popup for missing transaction endpoint
+            console.log('Transactions endpoint not available');
+            const transactionsList = document.getElementById('transactionsList');
+            transactionsList.innerHTML = `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>Transactions coming soon</h4>
+                            <p>Transaction history will be available soon</p>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
     } catch (error) {
         console.error('Error loading transactions:', error);
-        showNotification('Network error loading transactions', 'error');
+        // FIXED: Don't show error popup, just log it
+        console.log('Transactions feature not ready yet');
     }
 }
 
@@ -724,23 +782,29 @@ function formatTransactionDate(date) {
     }
 }
 
-// Logout function (updated endpoint)
+// FIXED: Logout function using localStorage (matching your login)
 async function logout() {
     try {
-        const token = getItem('authToken');
+        const token = localStorage.getItem('authToken');
         
         if (token) {
-            const response = await fetch('https://pvnbank.onrender.com/api/auth/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+            // Try to call logout endpoint
+            try {
+                const response = await fetch('https://pvnbank.onrender.com/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (logoutError) {
+                console.log('Logout endpoint error:', logoutError);
+                // Continue with local logout even if server logout fails
+            }
         }
         
-        // Clear token regardless of server response
-        removeItem('authToken');
+        // Clear token and redirect
+        localStorage.removeItem('authToken');
         showNotification('Logged out successfully', 'success');
         
         setTimeout(() => {
@@ -750,15 +814,16 @@ async function logout() {
     } catch (error) {
         console.error('Logout error:', error);
         // Clear token and redirect anyway for security
-        removeItem('authToken');
+        localStorage.removeItem('authToken');
         window.location.href = '/';
     }
 }
 
-// Call both functions when page loads
+// MODIFIED: Only call loadUserProfile on page load
 document.addEventListener('DOMContentLoaded', async () => {
     await loadUserProfile();
-    await loadUserTransactions();
+    // Only call loadUserTransactions if you have the endpoint
+    // await loadUserTransactions();
 });
 
 // Show coming soon notification
@@ -799,32 +864,15 @@ window.onpopstate = function () {
     history.go(1);
 };
 
-// Auto-refresh user data every 5 minutes
+// OPTIONAL: Auto-refresh user data every 5 minutes (only profile, not transactions)
 setInterval(async () => {
     await loadUserProfile();
-    await loadUserTransactions();
 }, 5 * 60 * 1000);
 
 // Handle window focus to refresh data
 window.addEventListener('focus', async () => {
     await loadUserProfile();
-    await loadUserTransactions();
 });
-
-// Add loading states for better UX
-function showLoading(elementId) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.innerHTML = '<div class="loading"></div>';
-    }
-}
-
-function hideLoading(elementId, content) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = content;
-    }
-}
     </script>
 
 
