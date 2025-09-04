@@ -553,126 +553,69 @@
     <div id="notification" class="notification"></div>
 
     <script>
-        // Load user data on page load
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadUserProfile();
+       
+       // Load user data on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadUserProfile();
+});
+
+// Get time-based greeting
+function getTimeBasedGreeting(fullName) {
+    const hour = new Date().getHours();
+    let greeting;
+    
+    if (hour < 12) {
+        greeting = "Good morning";
+    } else if (hour < 17) {
+        greeting = "Good afternoon";
+    } else {
+        greeting = "Good evening";
+    }
+    
+    return `${greeting}, ${fullName}`;
+}
+
+// Load user profile data
+async function loadUserProfile() {
+    try {
+        // Show loading state
+        document.getElementById('userName').textContent = 'Loading...';
+        
+        const response = await fetch('/api/user/dashboard/profile', {
+            method: 'GET',
+            credentials: 'include'
         });
 
-        // Load user profile data
-        async function loadUserProfile() {
-            try {
-                const response = await fetch('/api/user/profile', {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    const user = data.user;
-                    
-                    // Update UI with user data
-                    document.getElementById('userName').textContent = user.fullName || 'User';
-                    document.getElementById('accountNumber').textContent = formatAccountNumber(user.accountNumber || '1234567890');
-                    document.getElementById('accountBalance').textContent = formatCurrency(user.balance || 0);
-                } else if (response.status === 401 || response.status === 403) {
-                    // User is not authenticated, redirect to login
-                    window.location.href = '/';
-                } else {
-                    showNotification('Failed to load profile data', 'error');
-                }
-            } catch (error) {
-                console.error('Error loading profile:', error);
-                showNotification('Network error loading profile', 'error');
-            }
-        }
-
-        // Logout function
-        async function logout() {
-            try {
-                const response = await fetch('/api/logout', {
-                    method: 'POST',
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    showNotification('Logged out successfully', 'success');
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 1000);
-                } else {
-                    // Even if logout fails on server, clear local session
-                    window.location.href = '/';
-                }
-            } catch (error) {
-                console.error('Logout error:', error);
-                // Redirect anyway for security
-                window.location.href = '/';
-            }
-        }
-
-        // Show coming soon notification
-        function showComingSoon(feature) {
-            showNotification(`${feature} feature coming soon!`, 'info');
-        }
-
-        // Show notification
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
-
+        if (response.ok) {
+            const data = await response.json();
+            const user = data.user;
+            
+            // Update UI with user data and time-based greeting
+            document.getElementById('userName').textContent = getTimeBasedGreeting(user.fullName);
+            document.getElementById('accountNumber').textContent = formatAccountNumber(user.accountNumber);
+            document.getElementById('accountBalance').textContent = formatCurrency(user.balance);
+            
+            // Show success notification
+            showNotification('Profile loaded successfully', 'success');
+            
+        } else if (response.status === 401 || response.status === 403) {
+            // User is not authenticated, redirect to login
+            showNotification('Please log in to continue', 'error');
             setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+                window.location.href = '/';
+            }, 2000);
+        } else {
+            showNotification('Failed to load profile data', 'error');
         }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+        showNotification('Network error loading profile', 'error');
+        document.getElementById('userName').textContent = 'Error loading user';
+    }
+}
 
-        // Format account number
-        function formatAccountNumber(accountNumber) {
-            if (!accountNumber) return '•••• •••• •••• ••••';
-            const str = accountNumber.toString();
-            return `•••• •••• •••• ${str.slice(-4)}`;
-        }
-
-        // Format currency
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(amount);
-        }
-
-        // Prevent going back to login page after authentication
-        history.pushState(null, null, location.href);
-        window.onpopstate = function () {
-            history.go(1);
-        };
-
-        // Auto-refresh user data every 5 minutes
-        setInterval(loadUserProfile, 5 * 60 * 1000);
-
-        // Handle window focus to refresh data
-        window.addEventListener('focus', () => {
-            loadUserProfile();
-        });
-
-        // Add loading states for better UX
-        function showLoading(elementId) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.innerHTML = '<div class="loading"></div>';
-            }
-        }
-
-        function hideLoading(elementId, content) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.textContent = content;
-            }
-        }
-
-
-        async function loadUserTransactions() {
+// Load user transactions (updated endpoint)
+async function loadUserTransactions() {
     try {
         const response = await fetch('/api/transactions', {
             method: 'GET',
@@ -682,36 +625,198 @@
         if (response.ok) {
             const data = await response.json();
             const transactionsList = document.getElementById('transactionsList');
-            transactionsList.innerHTML = ''; // clear old items
+            
+            // Check if we have transactions
+            if (data.transactions && data.transactions.length > 0) {
+                transactionsList.innerHTML = ''; // clear existing items
 
-            data.transactions.forEach(txn => {
-                const div = document.createElement('div');
-                div.className = 'transaction-item';
-                div.innerHTML = `
-                    <div class="transaction-info">
-                        <div class="transaction-icon">
-                            <i class="fas fa-exchange-alt"></i>
+                data.transactions.forEach(txn => {
+                    const div = document.createElement('div');
+                    div.className = 'transaction-item';
+                    
+                    // Determine transaction type and icon
+                    const isPositive = txn.amount > 0;
+                    const icon = getTransactionIcon(txn.type || txn.description);
+                    
+                    div.innerHTML = `
+                        <div class="transaction-info">
+                            <div class="transaction-icon">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <h4>${txn.description}</h4>
+                                <p>${formatTransactionDate(txn.date)}</p>
+                            </div>
                         </div>
-                        <div class="transaction-details">
-                            <h4>${txn.description}</h4>
-                            <p>${new Date(txn.date).toLocaleString()}</p>
+                        <div class="transaction-amount ${isPositive ? 'positive' : 'negative'}">
+                            ${formatCurrency(Math.abs(txn.amount))}
+                        </div>
+                    `;
+                    transactionsList.appendChild(div);
+                });
+            } else {
+                // Show no transactions message
+                transactionsList.innerHTML = `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <h4>No recent transactions</h4>
+                                <p>Your transactions will appear here</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="transaction-amount ${txn.amount.includes('-') ? 'negative' : 'positive'}">${txn.amount}</div>
                 `;
-                transactionsList.appendChild(div);
-            });
+            }
+        } else {
+            showNotification('Failed to load transactions', 'error');
         }
     } catch (error) {
         console.error('Error loading transactions:', error);
+        showNotification('Network error loading transactions', 'error');
     }
 }
 
-// Call it after user profile is loaded
+// Get appropriate icon for transaction type
+function getTransactionIcon(description) {
+    if (!description) return 'fa-exchange-alt';
+    
+    const desc = description.toLowerCase();
+    if (desc.includes('deposit') || desc.includes('salary') || desc.includes('income')) {
+        return 'fa-money-bill-wave';
+    } else if (desc.includes('withdrawal') || desc.includes('atm')) {
+        return 'fa-credit-card';
+    } else if (desc.includes('transfer')) {
+        return 'fa-exchange-alt';
+    } else if (desc.includes('payment') || desc.includes('bill')) {
+        return 'fa-file-invoice-dollar';
+    } else if (desc.includes('gas') || desc.includes('fuel')) {
+        return 'fa-gas-pump';
+    } else if (desc.includes('grocery') || desc.includes('store') || desc.includes('walmart')) {
+        return 'fa-store';
+    } else if (desc.includes('coffee') || desc.includes('restaurant') || desc.includes('food')) {
+        return 'fa-coffee';
+    } else {
+        return 'fa-exchange-alt';
+    }
+}
+
+// Format transaction date
+function formatTransactionDate(date) {
+    const txnDate = new Date(date);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (txnDate.toDateString() === today.toDateString()) {
+        return `Today, ${txnDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+    } else if (txnDate.toDateString() === yesterday.toDateString()) {
+        return `Yesterday, ${txnDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+    } else {
+        return txnDate.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+        });
+    }
+}
+
+// Logout function (updated endpoint)
+async function logout() {
+    try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            showNotification('Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        } else {
+            // Even if logout fails on server, clear local session
+            window.location.href = '/';
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+        // Redirect anyway for security
+        window.location.href = '/';
+    }
+}
+
+// Call both functions when page loads
 document.addEventListener('DOMContentLoaded', async () => {
     await loadUserProfile();
     await loadUserTransactions();
 });
+
+// Show coming soon notification
+function showComingSoon(feature) {
+    showNotification(`${feature} feature coming soon!`, 'info');
+}
+
+// Show notification with different types
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.classList.add('show');
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// Format account number
+function formatAccountNumber(accountNumber) {
+    if (!accountNumber) return '•••• •••• •••• ••••';
+    const str = accountNumber.toString();
+    return `•••• •••• •••• ${str.slice(-4)}`;
+}
+
+// Format currency
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(amount);
+}
+
+// Prevent going back to login page after authentication
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+    history.go(1);
+};
+
+// Auto-refresh user data every 5 minutes
+setInterval(async () => {
+    await loadUserProfile();
+    await loadUserTransactions();
+}, 5 * 60 * 1000);
+
+// Handle window focus to refresh data
+window.addEventListener('focus', async () => {
+    await loadUserProfile();
+    await loadUserTransactions();
+});
+
+// Add loading states for better UX
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = '<div class="loading"></div>';
+    }
+}
+
+function hideLoading(elementId, content) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.textContent = content;
+    }
+}
 
     </script>
 
