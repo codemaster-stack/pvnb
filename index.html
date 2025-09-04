@@ -1543,8 +1543,8 @@
     console.log("User:", data);
     closeAllModals();
 
-    // Save n in  (optional)
-   localStorage.setItem("authn", data.n);
+    // Save token in  (optional)
+    setItem("authToken", data.authToken);
 
     // Redirect by role
     if (data.role && data.role.toLowerCase() === "admin") {
