@@ -1961,14 +1961,41 @@ document.getElementById('transferForm').addEventListener('submit', function(e) {
 });
 
 // Contact Modal Functions
+// function showContactModal() {
+//     document.getElementById('contactModal').style.display = 'block';
+//     document.body.style.overflow = 'hidden';
+// }
+
+// function closeContactModal() {
+//     document.getElementById('contactModal').style.display = 'none';
+//     document.body.style.overflow = 'auto';
+// }
+
+
+// Contact Modal Functions
 function showContactModal() {
-    document.getElementById('contactModal').style.display = 'block';
+    initializeChatSystem();
+    document.getElementById('chatModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
+    
+    // Start a new chat session
+    startChatSession();
 }
 
 function closeContactModal() {
-    document.getElementById('contactModal').style.display = 'none';
+    document.getElementById('chatModal').style.display = 'none';
     document.body.style.overflow = 'auto';
+    
+    // Stop polling for messages
+    if (chatPollingInterval) {
+        clearInterval(chatPollingInterval);
+        chatPollingInterval = null;
+    }
+    
+    // End chat session
+    if (currentChatSession) {
+        endChatSession();
+    }
 }
 
 // Mail Form Functions
