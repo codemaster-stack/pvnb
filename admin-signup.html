@@ -271,6 +271,7 @@
         const data = await res.json();
         if (res.ok) {
           alert("✅ Login successful!");
+          localStorage.setItem('adminToken', data.token);
           window.location.href = "admin-dashboard.html"; // redirect
         } else {
           alert("❌ " + data.message);
