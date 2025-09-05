@@ -2039,7 +2039,7 @@ document.getElementById('mailForm').addEventListener('submit', async function(e)
     const token = localStorage.getItem('authToken');
     
     try {
-        const response = await fetch('https://pvnbank.onrender.com/api/user/contact', {
+        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/contact', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -2137,7 +2137,7 @@ async function startChatSession() {
             return;
         }
 
-        const response = await fetch('https://pvnbank.onrender.com/api/user/start', {
+        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/start', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -2190,7 +2190,7 @@ async function endChatSession() {
     
     try {
         const token = localStorage.getItem('authToken');
-        await fetch(`https://pvnbank.onrender.com/api/user/end/${currentChatSession}`, {
+        await fetch(`https://pvnbank.onrender.com/api/user/dashboard/end/${currentChatSession}`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -2210,7 +2210,7 @@ async function loadChatHistory() {
     
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`https://pvnbank.onrender.com/api/user/messages/${currentChatSession}`, {
+        const response = await fetch(`https://pvnbank.onrender.com/api/user/dashboard/messages/${currentChatSession}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -2262,7 +2262,7 @@ async function pollForNewMessages() {
     
     try {
         const token = localStorage.getItem('authToken');
-        let url = `https://pvnbank.onrender.com/api/user/messages/${currentChatSession}/new`;
+        let url = `https://pvnbank.onrender.com/api/user/dashboard/messages/${currentChatSession}/new`;
         if (lastMessageId) {
             url += `?after=${lastMessageId}`;
         }
@@ -2363,7 +2363,7 @@ async function sendChatMessage() {
     // Send message to backend
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch('https://pvnbank.onrender.com/api/user/message', {
+        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/message', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
