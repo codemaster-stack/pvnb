@@ -787,21 +787,21 @@
     <nav class="main-nav">
         <!-- Hamburger Menu (Mobile Only) -->
         <div class="hamburger-menu">
-            <button class="hamburger-btn" onclick="toggleHamburgerMenu()">
-                <i class="fas fa-bars" id="hamburgerIcon"></i>
-            </button>
-            <div class="hamburger-menu-content" id="hamburgerMenuContent">
-                <a href="#" onclick="showPersonalLoan(); closeHamburgerMenu();">
-                    <i class="fas fa-user"></i>Personal Loans
-                </a>
-                <a href="#" onclick="showBusinessLoan(); closeHamburgerMenu();">
-                    <i class="fas fa-building"></i>Business Loans
-                </a>
-                <a href="#" onclick="showAboutModal(); closeHamburgerMenu();">
-                    <i class="fas fa-info-circle"></i>About Us
-                </a>
-            </div>
-        </div>
+    <button class="hamburger-btn" onclick="toggleHamburgerMenu()">
+        <i class="fas fa-bars" id="hamburgerIcon"></i>
+    </button>
+    <div class="hamburger-menu-content" id="hamburgerMenuContent">
+        <a href="#" onclick="event.preventDefault(); showPersonalLoan();">
+            <i class="fas fa-user"></i>Personal Loans
+        </a>
+        <a href="#" onclick="event.preventDefault(); showBusinessLoan();">
+            <i class="fas fa-building"></i>Business Loans
+        </a>
+        <a href="#" onclick="event.preventDefault(); showAboutModal();">
+            <i class="fas fa-info-circle"></i>About Us
+        </a>
+    </div>
+</div>
 
         <!-- Desktop Menu -->
         <ul>

@@ -1441,7 +1441,7 @@
                         <div class="marketing-text">
                             <h2 class="marketing-title">Fast, Friendly, and FDIC Insured</h2>
                             <p class="marketing-subtitle" id="mm-1">PVNB stands strong with 120 years of service to our customers and the community's banking needs. PVNB is FDIC Endorsed and Insured.</p>
-                            <span class="marketing-url btn btn-primary" title="Learn More about Fast, Friendly, and FDIC Insured" aria-labelledby="mm-1">Learn More</span>
+                            <span class="marketing-url btn btn-primary" title="Learn More about Fast, Friendly, and FDIC Insured" aria-labelledby="mm-1" onclick="showPersonalLoan()" style="cursor: pointer;">Learn More</span>
                         </div>
                     </div>
                 </li>
@@ -1450,7 +1450,7 @@
                         <div class="marketing-text">
                             <h2 class="marketing-title">Your Local Banking Experts</h2>
                             <p class="marketing-subtitle" id="mm-2">Pauls Valley National Bank offers expert advice and personalized service. We're committed to your financial success.</p>
-                            <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" href="/personal-banking/deposit-products/checking" title="Learn More about Your Local Banking Experts" aria-labelledby="mm-2">Learn More</a>
+                            <span class="marketing-url btn btn-primary" title="Learn More about Your Local Banking Experts" aria-labelledby="mm-2" onclick="showPersonalLoan()" style="cursor: pointer;">Learn More</span>
                         </div>
                     </div>
                 </li>
@@ -1459,7 +1459,7 @@
                         <div class="marketing-text">
                             <h2 class="marketing-title">Your Success, Our Priority</h2>
                             <p class="marketing-subtitle" id="mm-3">At Pauls Valley National Bank, your business success is our priority. Partner with us for customized banking solutions and exceptional service!</p>
-                            <a data-nodislaimer="1" target="_self" class="marketing-url btn btn-primary" href="/business-banking/deposit-products/checking" title="Learn More about Your Success, Our Priority" aria-labelledby="mm-3">Learn More</a>
+                           <span class="marketing-url btn btn-primary" title="Learn More about Your Success, Our Priority" aria-labelledby="mm-3" onclick="showPersonalLoan()" style="cursor: pointer;">Learn More</span>
                         </div>
                     </div>
                 </li>
@@ -1527,7 +1527,7 @@
                         <h3>Banking Just Got Easier</h3>
                         <hr />
                         <p>We have redesigned our website to make your experience easier on all of your devices. From accessing your accounts, to learning about which of our products will work best for you, our new web experience is the place to be.<br><br>
-                            <span class="button button-primary" title="Online services page">Learn More</span>
+                            <span class="button button-primary" title="Online services page" onclick="showPersonalLoan()" style="cursor: pointer;">Learn More</span>
                         </p>
                     </div>
                     <div class="placeholder-img">
@@ -2540,6 +2540,54 @@ window.addEventListener('click', function(event) {
         }
     });
 });
+
+
+
+
+
+
+function showPersonalLoan() {
+    // Close mobile menu first
+    document.querySelector('.mobilemenu').classList.remove('active'); // or whatever class opens it
+    document.querySelector('.overlay-mask').classList.remove('active');
+    
+    // Then show the modal
+    document.getElementById('loanModal').style.display = 'block';
+    // ... rest of your modal code
+}
+
+
+function showBusinessLoan() {
+    // Close mobile menu first
+    document.querySelector('.mobilemenu').classList.remove('active');
+    document.querySelector('.overlay-mask').classList.remove('active');
+    
+    // Show business loan modal
+    document.getElementById('loanModal').style.display = 'block';
+    document.getElementById('loanModalTitle').innerHTML = '<i class="fas fa-building"></i> Business Loan Services';
+    document.getElementById('personalLoanSection').style.display = 'none';
+    document.getElementById('businessLoanSection').style.display = 'block';
+}
+
+function showAboutModal() {
+    // Close mobile menu first
+    document.querySelector('.mobilemenu').classList.remove('active');
+    document.querySelector('.overlay-mask').classList.remove('active');
+    
+    // Show about modal
+    document.getElementById('aboutModal').style.display = 'block';
+}
+
+
+function showContactModal() {
+    // Close mobile menu first
+    document.querySelector('.mobilemenu').classList.remove('active');
+    document.querySelector('.overlay-mask').classList.remove('active');
+    
+    // Show contact modal
+    document.getElementById('contactModal').style.display = 'block';
+}
+
     </script>
 
 
