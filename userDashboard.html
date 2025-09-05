@@ -1104,6 +1104,10 @@
         color: #aaa;
     }
 }
+
+
+
+
     </style>
 
 </head>
@@ -1385,38 +1389,33 @@
         </div>
     </div>
 
-    <!-- Chat Modal -->
-    <div id="chatModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-comments"></i> Live Chat Support</h2>
-                <button class="close" onclick="closeChatModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="chat-container">
-                    <div id="chatMessages" class="chat-messages">
-                        <div class="message agent-message">
-                            <div class="message-avatar">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="message-content">
-                                <div class="message-header">Customer Support</div>
-                                <div class="message-text">Hello! I'm here to help you with your transfer request. How can I assist you today?</div>
-                                <div class="message-time">Just now</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chat-input-container">
-                        <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
-                        <button class="chat-send-btn" onclick="sendChatMessage()">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
+   
+    <!-- Contact Modal -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-headset"></i> Contact Customer Care</h2>
+            <button class="close" onclick="closeContactModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="text-align: center; margin-bottom: 20px; color: #666;">
+                Please select how you would like to contact our support team:
+            </p>
+            <div class="contact-options">
+                <div class="contact-option" onclick="showMailForm()">
+                    <i class="fas fa-envelope"></i>
+                    <h4>Email Support</h4>
+                    <p>Send us a detailed message</p>
+                </div>
+                <div class="contact-option" onclick="showOnlineChat()">
+                    <i class="fas fa-comments"></i>
+                    <h4>Live Chat</h4>
+                    <p>Chat with our support team</p>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
 
 
     <!-- About Us Modal -->
@@ -1727,9 +1726,16 @@ async function loadUserProfile() {
 async function loadUserTransactions() {
     try {
         const token = localStorage.getItem('authToken');
-        if (!token) return;
+        if (!token) {
+         console.log('No auth token found'); 
+        return;
+    }
 
-        const response = await fetch('https://pvnbank.onrender.com/api/transactions', {
+       const transactionsList = document.getElementById('transactionsList');
+        transactionsList.innerHTML = '<div class="loading-transactions">Loading transactions...</div>';
+
+
+        const response = await fetch('https://pvnbank.onrender.com/api/transaction/transactions', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -1741,12 +1747,27 @@ async function loadUserTransactions() {
             const data = await response.json();
             displayTransactions(data.transactions || []);
         } else {
-            console.error('Failed to load transactions');
+            console.error('Failed to load transactions, status:', response.status);
             // Keep showing static transactions if API fails
+             transactionsList.innerHTML = `
+                <div class="transaction-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Unable to load recent transactions</p>
+                    <button onclick="loadUserTransactions()" class="retry-btn">Try Again</button>
+                </div>
+            `;
         }
     } catch (error) {
         console.error('Error loading transactions:', error);
         // Keep showing static transactions if API fails
+        const transactionsList = document.getElementById('transactionsList');
+        transactionsList.innerHTML = `
+            <div class="transaction-error">
+                <i class="fas fa-wifi"></i>
+                <p>Connection error loading transactions</p>
+                <button onclick="loadUserTransactions()" class="retry-btn">Retry</button>
+            </div>
+        `;
     }
 }
 
@@ -2107,8 +2128,11 @@ function closeChatModal() {
 // Start a new chat session
 async function startChatSession() {
     try {
+       updateChatStatus('Connecting...', 'connecting');
+        
         const token = localStorage.getItem('authToken');
         if (!token) {
+            updateChatStatus('Authentication required', 'error');
             showNotification('Please log in to start a chat session', 'error');
             return;
         }
@@ -2125,6 +2149,7 @@ async function startChatSession() {
             const data = await response.json();
             currentChatSession = data.sessionId;
             
+            updateChatStatus('Connected to support', 'connected');
             // Start polling for new messages
             startMessagePolling();
             
@@ -2137,7 +2162,25 @@ async function startChatSession() {
         }
     } catch (error) {
         console.error('Error starting chat session:', error);
+        updateChatStatus('Connection failed', 'error');
         showNotification('Connection error. Please try again.', 'error');
+        addChatMessage('Sorry, chat support is currently unavailable. Please try contacting us via email instead.', 'system');
+    }
+}
+
+
+function updateChatStatus(message, status) {
+    const chatStatus = document.getElementById('chatStatus');
+    if (chatStatus) {
+        const statusSpan = chatStatus.querySelector('span');
+        const statusDot = chatStatus.querySelector('.chat-status-dot');
+        
+        if (statusSpan) statusSpan.textContent = message;
+        
+        if (statusDot) {
+            statusDot.className = 'chat-status-dot';
+            statusDot.classList.add(`status-${status}`);
+        }
     }
 }
 
@@ -2577,6 +2620,133 @@ window.addEventListener('resize', function() {
         closeHamburgerMenu();
     }
 });
+
+
+
+
+
+
+
+async function sendChatMessage() {
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+    
+    if (!message) {
+        return;
+    }
+    
+    if (!currentChatSession) {
+        showNotification('Chat session not active. Please restart chat.', 'error');
+        return;
+    }
+    
+    // Add user message to UI immediately
+    addChatMessage(message, 'user');
+    chatInput.value = '';
+    
+    // Send message to backend
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch('https://pvnbank.onrender.com/api/user/message', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sessionId: currentChatSession,
+                message: message,
+                isFromSupport: false
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to send message: ${response.status}`);
+        }
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        addChatMessage('Sorry, there was an error sending your message. Please try again or contact us via email.', 'system');
+    }
+}
+
+// Add retry functionality for failed connections
+function retryConnection() {
+    if (document.getElementById('chatModal').style.display === 'block') {
+        startChatSession();
+    }
+}
+
+
+
+
+
+
+const statusStyles = `
+    .chat-status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #ccc;
+        margin-right: 8px;
+    }
+    
+    .chat-status-dot.status-connected {
+        background-color: #28a745;
+        animation: pulse 2s infinite;
+    }
+    
+    .chat-status-dot.status-connecting {
+        background-color: #ffc107;
+        animation: blink 1s infinite;
+    }
+    
+    .chat-status-dot.status-error {
+        background-color: #dc3545;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+    
+    .loading-transactions, .transaction-error {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+    }
+    
+    .retry-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    .retry-btn:hover {
+        background: #0056b3;
+    }
+`;
+
+
+if (!document.getElementById('dashboard-status-styles')) {
+    const styleSheet = document.createElement('style');
+    styleSheet.id = 'dashboard-status-styles';
+    styleSheet.textContent = statusStyles;
+    document.head.appendChild(styleSheet);
+}
     </script>
 
     <!-- Font Awesome for icons -->
