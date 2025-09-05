@@ -10,13 +10,29 @@ header { background:#007bff; color:white; padding:1rem 2rem; display:flex; justi
 header h1 { font-size:1.5rem; }
 button { cursor:pointer; }
 .container { max-width:1200px; margin:2rem auto; padding:1rem; }
+
+/* Search and Controls */
+.controls { background:white; padding:1rem; border-radius:8px; margin-bottom:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+.search-box { flex:1; min-width:200px; padding:8px 12px; border:1px solid #ddd; border-radius:4px; }
+.results-info { color:#666; font-size:0.9rem; }
+
+/* Table */
 .user-table { width:100%; border-collapse: collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
 .user-table th, .user-table td { padding:12px; text-align:left; border-bottom:1px solid #ddd; }
 .user-table th { background:#007bff; color:white; }
 .user-table tr:hover { background:#f1f1f1; }
-.action-btn { padding:6px 12px; border:none; border-radius:4px; color:white; }
+.action-btn { padding:6px 12px; border:none; border-radius:4px; color:white; margin-right:5px; }
 .email-btn { background:#28a745; }
 .fund-btn { background:#ffc107; color:#333; }
+
+/* Pagination */
+.pagination { display:flex; justify-content:center; align-items:center; gap:10px; margin:1rem 0; }
+.pagination button { padding:8px 12px; border:1px solid #ddd; background:white; cursor:pointer; border-radius:4px; }
+.pagination button:hover { background:#f8f9fa; }
+.pagination button.active { background:#007bff; color:white; border-color:#007bff; }
+.pagination button:disabled { opacity:0.5; cursor:not-allowed; }
+
+/* Modal styles remain the same */
 .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index: 1000; }
 .modal-content { background:white; padding:2rem; border-radius:8px; width:300px; max-width: 90vw; }
 .modal-content input, .modal-content textarea { width:100%; padding:0.5rem; margin:0.5rem 0 1rem 0; box-sizing: border-box; }
@@ -24,6 +40,9 @@ button { cursor:pointer; }
 .notification { position:fixed; top:20px; right:20px; background:#28a745; color:white; padding:1rem; border-radius:4px; display:none; z-index: 1001; }
 .notification.error { background:#dc3545; }
 .create-user-btn { margin-bottom: 1rem; }
+
+/* Loading state */
+.loading { text-align:center; padding:2rem; color:#666; }
 </style>
 </head>
 <body>
@@ -38,7 +57,14 @@ button { cursor:pointer; }
   <button class="action-btn email-btn" onclick="openCreateUserModal()">Create New User</button>
 </div>
 
+<!-- Search and Controls -->
+<div class="controls">
+  <input type="text" class="search-box" id="searchBox" placeholder="Search users by name or email..." onkeyup="handleSearch()">
+  <div class="results-info" id="resultsInfo">Loading users...</div>
+</div>
+
 <h2>Users</h2>
+<div id="loadingState" class="loading" style="display:none;">Loading users...</div>
 <table class="user-table" id="userTable">
 <thead>
 <tr>
@@ -52,9 +78,12 @@ button { cursor:pointer; }
 </thead>
 <tbody></tbody>
 </table>
+
+<!-- Pagination -->
+<div class="pagination" id="pagination"></div>
 </div>
 
-<!-- Create User Modal -->
+<!-- Modals remain the same -->
 <div class="modal" id="createUserModal">
   <div class="modal-content">
     <span class="close" onclick="closeModal('createUserModal')">&times;</span>
@@ -68,7 +97,6 @@ button { cursor:pointer; }
   </div>
 </div>
 
-<!-- Email Modal -->
 <div class="modal" id="emailModal">
 <div class="modal-content">
 <span class="close" onclick="closeModal('emailModal')">&times;</span>
@@ -81,7 +109,6 @@ button { cursor:pointer; }
 </div>
 </div>
 
-<!-- Fund Modal -->
 <div class="modal" id="fundModal">
 <div class="modal-content">
 <span class="close" onclick="closeModal('fundModal')">&times;</span>
@@ -96,55 +123,81 @@ button { cursor:pointer; }
 <div class="notification" id="notification"></div>
 
 <script>
-let usersData = [];
+let allUsers = [];
+let filteredUsers = [];
+let currentPage = 1;
+const usersPerPage = 10;
 let selectedUserId = null;
 
-// Sample data for testing (remove this when backend is ready)
-const sampleUsers = [
-    {
-        _id: '1',
-        fullName: 'John Doe',
-        email: 'john@example.com',
-        phone: '123-456-7890',
-        status: 'Active',
-        balance: 150.00
-    },
-    {
-        _id: '2',
-        fullName: 'Jane Smith',
-        email: 'jane@example.com',
-        phone: '098-765-4321',
-        status: 'Active',
-        balance: 75.50
-    }
-];
+// Sample data for testing
+const sampleUsers = Array.from({length: 25}, (_, i) => ({
+    _id: (i + 1).toString(),
+    fullName: `User ${i + 1}`,
+    email: `user${i + 1}@example.com`,
+    phone: `123-456-78${i.toString().padStart(2, '0')}`,
+    status: 'Active',
+    balance: Math.random() * 1000
+}));
 
-// Fetch users from backend
+// Enhanced loadUsers with authentication
 async function loadUsers() {
     try {
-        const res = await fetch('https://pvnbank.onrender.com/api/admin/users', { credentials:'include' });
+        showLoading(true);
+        const token = localStorage.getItem('adminToken');
+        
+        if (!token) {
+            showNotification('Please login to access admin features', 'error');
+            window.location.href = 'admin-signup.html';
+            return;
+        }
+
+        const res = await fetch('https://pvnbank.onrender.com/api/admin/users', { 
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        
         if(res.ok){
-            usersData = await res.json();
+            allUsers = await res.json();
+            filteredUsers = [...allUsers];
             renderUsers();
+        } else if (res.status === 401) {
+            showNotification('Session expired. Please login again.', 'error');
+            localStorage.removeItem('adminToken');
+            setTimeout(() => window.location.href = 'admin-signup.html', 2000);
         } else {
-            // If backend is not available, use sample data for testing
-            console.warn('Backend not available, using sample data');
-            usersData = [...sampleUsers];
-            renderUsers();
+            throw new Error('Failed to load users');
         }
     } catch(e){
         console.error('Backend error:', e);
         showNotification('Using offline mode - backend not available','error');
-        // Use sample data when backend is not available
-        usersData = [...sampleUsers];
+        allUsers = [...sampleUsers];
+        filteredUsers = [...allUsers];
         renderUsers();
+    } finally {
+        showLoading(false);
     }
+}
+
+function showLoading(show) {
+    document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+    document.getElementById('userTable').style.display = show ? 'none' : 'table';
 }
 
 function renderUsers() {
     const tbody = document.querySelector('#userTable tbody');
     tbody.innerHTML = '';
-    usersData.forEach(user => {
+    
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    const startIndex = (currentPage - 1) * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    const usersToShow = filteredUsers.slice(startIndex, endIndex);
+    
+    // Render users
+    usersToShow.forEach(user => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
         <td>${user.fullName}</td>
@@ -160,74 +213,98 @@ function renderUsers() {
         `;
         tbody.appendChild(tr);
     });
-}
-
-// Open/close modals
-function openEmailModal(userId){
-    selectedUserId = userId;
-    const user = usersData.find(u => u._id === userId);
-    if(!user) return;
     
-    document.getElementById('emailTo').value = user.email;
-    document.getElementById('emailSubject').value = '';
-    document.getElementById('emailMessage').value = '';
-    document.getElementById('emailModal').style.display = 'flex';
+    updateResultsInfo();
+    renderPagination(totalPages);
 }
 
-function openFundModal(userId){
-    selectedUserId = userId;
-    const user = usersData.find(u => u._id === userId);
-    if(!user) return;
+function updateResultsInfo() {
+    const info = document.getElementById('resultsInfo');
+    const start = (currentPage - 1) * usersPerPage + 1;
+    const end = Math.min(currentPage * usersPerPage, filteredUsers.length);
+    info.textContent = `Showing ${start}-${end} of ${filteredUsers.length} users`;
+}
+
+function renderPagination(totalPages) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
     
-    document.getElementById('fundUser').value = user.fullName;
-    document.getElementById('fundAmount').value = '';
-    document.getElementById('fundModal').style.display = 'flex';
+    if (totalPages <= 1) return;
+    
+    // Previous button
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '← Previous';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => changePage(currentPage - 1);
+    pagination.appendChild(prevBtn);
+    
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            pageBtn.className = i === currentPage ? 'active' : '';
+            pageBtn.onclick = () => changePage(i);
+            pagination.appendChild(pageBtn);
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+            const dots = document.createElement('span');
+            dots.textContent = '...';
+            pagination.appendChild(dots);
+        }
+    }
+    
+    // Next button
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next →';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => changePage(currentPage + 1);
+    pagination.appendChild(nextBtn);
 }
 
-function closeModal(id){ 
-    document.getElementById(id).style.display='none'; 
-    selectedUserId = null;
+function changePage(page) {
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        renderUsers();
+    }
 }
 
-// Open create user modal
-function openCreateUserModal(){
-    document.getElementById('newFullName').value = '';
-    document.getElementById('newEmail').value = '';
-    document.getElementById('newPhone').value = '';
-    document.getElementById('newPassword').value = '';
-    document.getElementById('createUserModal').style.display = 'flex';
+function handleSearch() {
+    const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+    filteredUsers = allUsers.filter(user => 
+        user.fullName.toLowerCase().includes(searchTerm) ||
+        user.email.toLowerCase().includes(searchTerm)
+    );
+    currentPage = 1; // Reset to first page
+    renderUsers();
 }
 
-// Create user
+// Enhanced createUser with authentication
 async function createUser(){
     const fullName = document.getElementById('newFullName').value.trim();
     const email = document.getElementById('newEmail').value.trim();
     const phone = document.getElementById('newPhone').value.trim();
     const password = document.getElementById('newPassword').value;
 
-    // Validation
     if(!fullName || !email || !phone || !password){
         showNotification('All fields are required','error');
         return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if(!emailRegex.test(email)){
         showNotification('Please enter a valid email address','error');
         return;
     }
 
-    // Check if email already exists
-    if(usersData.find(u => u.email.toLowerCase() === email.toLowerCase())){
-        showNotification('Email already exists','error');
-        return;
-    }
-
     try{
+        const token = localStorage.getItem('adminToken');
         const res = await fetch('https://pvnbank.onrender.com/api/admin/create-user',{
             method:'POST',
-            headers:{'Content-Type':'application/json'},
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({ fullName, email, phone, password }),
             credentials:'include'
         });
@@ -242,28 +319,45 @@ async function createUser(){
         }
     }catch(e){
         console.error('Create user error:', e);
-        
-        // If backend is not available, simulate user creation for testing
-        if(e.message.includes('fetch')){
-            const newUser = {
-                _id: Date.now().toString(),
-                fullName,
-                email,
-                phone,
-                status: 'Active',
-                balance: 0
-            };
-            usersData.push(newUser);
-            renderUsers();
-            showNotification('User created successfully (offline mode)');
-            closeModal('createUserModal');
-        } else {
-            showNotification(e.message || 'Failed to create user','error');
-        }
+        showNotification(e.message || 'Failed to create user','error');
     }
 }
 
-// Send email via backend
+// Keep existing modal functions
+function openEmailModal(userId){
+    selectedUserId = userId;
+    const user = allUsers.find(u => u._id === userId);
+    if(!user) return;
+    
+    document.getElementById('emailTo').value = user.email;
+    document.getElementById('emailSubject').value = '';
+    document.getElementById('emailMessage').value = '';
+    document.getElementById('emailModal').style.display = 'flex';
+}
+
+function openFundModal(userId){
+    selectedUserId = userId;
+    const user = allUsers.find(u => u._id === userId);
+    if(!user) return;
+    
+    document.getElementById('fundUser').value = user.fullName;
+    document.getElementById('fundAmount').value = '';
+    document.getElementById('fundModal').style.display = 'flex';
+}
+
+function closeModal(id){ 
+    document.getElementById(id).style.display='none'; 
+    selectedUserId = null;
+}
+
+function openCreateUserModal(){
+    document.getElementById('newFullName').value = '';
+    document.getElementById('newEmail').value = '';
+    document.getElementById('newPhone').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('createUserModal').style.display = 'flex';
+}
+
 async function sendEmail(){
     const subject = document.getElementById('emailSubject').value.trim();
     const message = document.getElementById('emailMessage').value.trim();
@@ -273,29 +367,10 @@ async function sendEmail(){
         return; 
     }
     
-    try{
-        const res = await fetch('/api/admin/send-email',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({ userId:selectedUserId, subject, message }),
-            credentials:'include'
-        });
-        
-        if(res.ok){ 
-            showNotification('Email sent successfully'); 
-            closeModal('emailModal'); 
-        } else {
-            throw new Error('Failed to send email');
-        }
-    }catch(e){ 
-        console.error('Send email error:', e); 
-        // Simulate email sending for testing
-        showNotification('Email sent successfully (simulated)');
-        closeModal('emailModal');
-    }
+    showNotification('Email sent successfully (simulated)');
+    closeModal('emailModal');
 }
 
-// Fund user via backend
 async function fundUser(){
     const amount = parseFloat(document.getElementById('fundAmount').value);
     
@@ -305,9 +380,13 @@ async function fundUser(){
     }
     
     try{
+        const token = localStorage.getItem('adminToken');
         const res = await fetch('https://pvnbank.onrender.com/api/admin/fund-user',{
             method:'POST',
-            headers:{'Content-Type':'application/json'},
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({ userId:selectedUserId, amount }),
             credentials:'include'
         });
@@ -321,27 +400,20 @@ async function fundUser(){
         }
     }catch(e){ 
         console.error('Fund user error:', e);
-        
-        // Simulate funding for testing
-        const userIndex = usersData.findIndex(u => u._id === selectedUserId);
-        if(userIndex !== -1){
-            usersData[userIndex].balance = (usersData[userIndex].balance || 0) + amount;
-            renderUsers();
-            showNotification(`$${amount.toFixed(2)} added successfully (simulated)`);
-            closeModal('fundModal');
-        } else {
-            showNotification('Failed to fund user','error');
-        }
+        showNotification('Failed to fund user','error');
     }
 }
 
-// Delete user
 async function deleteUser(userId){
     if(!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
     
     try{
+        const token = localStorage.getItem('adminToken');
         const res = await fetch(`https://pvnbank.onrender.com/api/admin/delete-user/${userId}`,{
             method:'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
             credentials:'include'
         });
         
@@ -353,16 +425,7 @@ async function deleteUser(userId){
         }
     }catch(e){
         console.error('Delete user error:', e);
-        
-        // Simulate deletion for testing
-        const userIndex = usersData.findIndex(u => u._id === userId);
-        if(userIndex !== -1){
-            usersData.splice(userIndex, 1);
-            renderUsers();
-            showNotification('User deleted successfully (simulated)');
-        } else {
-            showNotification('Failed to delete user','error');
-        }
+        showNotification('Failed to delete user','error');
     }
 }
 
@@ -376,24 +439,19 @@ function showNotification(message, type='success'){
     }, 4000);
 }
 
-// Fixed logout function - redirects to admin-signup.html
 function logout(){ 
     if(confirm('Are you sure you want to logout?')){
-        // Clear any stored data in localStorage/sessionStorage
         localStorage.clear();
         sessionStorage.clear();
-        
-        // Clear any cookies (optional)
-        document.cookie.split(";").forEach(function(c) { 
-            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-        });
-        
-        // Redirect to admin signup page
         window.location.href = 'admin-signup.html';
     }
 }
 
-// Close modals when clicking outside
+// Initialize
+window.onload = function() {
+    loadUsers();
+}
+
 window.onclick = function(event) {
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
@@ -403,14 +461,6 @@ window.onclick = function(event) {
         }
     });
 }
-
-// Initialize the page
-window.onload = function() {
-    loadUsers();
-}
-
-// Load users on page load
-loadUsers();
 </script>
 </body>
 </html>
