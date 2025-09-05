@@ -43,6 +43,305 @@ button { cursor:pointer; }
 
 /* Loading state */
 .loading { text-align:center; padding:2rem; color:#666; }
+
+
+
+/* Contact Messages Styles - Add this to your existing CSS */
+.contact-messages {
+    margin-top: 2rem;
+}
+
+.message-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 4px solid #007bff;
+}
+
+.message-card.unread {
+    border-left-color: #dc3545;
+    background: #fff8f8;
+}
+
+.message-card.replied {
+    border-left-color: #28a745;
+    background: #f8fff8;
+}
+
+.message-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.message-card p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.message-card button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.message-card button:hover {
+    background: #0056b3;
+}
+
+/* Reply Modal */
+.reply-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.reply-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90vw;
+}
+
+
+
+
+.chat-management {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.chat-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    color: #667eea;
+}
+
+.stat-card p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.active-chats h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.chats-list {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chat-session-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.chat-session-item:hover {
+    background-color: #f8f9fa;
+}
+
+.chat-session-item:last-child {
+    border-bottom: none;
+}
+
+.chat-user-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.chat-user-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.chat-meta {
+    text-align: right;
+}
+
+.chat-time {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 0.5rem;
+}
+
+.unread-badge {
+    background: #dc3545;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.no-sessions {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+/* Chat Modal Styles */
+.chat-modal {
+    max-width: 800px;
+    max-height: 80vh;
+}
+
+.chat-container {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+}
+
+.admin-chat-input {
+    padding: 1rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.admin-chat-input textarea {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+    resize: none;
+    font-family: inherit;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.chat-message.user-message {
+    flex-direction: row;
+}
+
+.chat-message.admin-message {
+    flex-direction: row-reverse;
+}
+
+.message-bubble {
+    max-width: 70%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    word-wrap: break-word;
+}
+
+.user-message .message-bubble {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+}
+
+.admin-message .message-bubble {
+    background: #667eea;
+    color: white;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+.admin-message .message-time {
+    color: rgba(255,255,255,0.8);
+}
+
+.message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.user-message .message-avatar {
+    background: #2196f3;
+    color: white;
+}
+
+.admin-message .message-avatar {
+    background: #667eea;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chat-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .chat-modal {
+        max-width: 95%;
+        margin: 2rem auto;
+    }
+    
+    .chat-container {
+        height: 400px;
+    }
+    
+    .admin-chat-input {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
 </style>
 </head>
 <body>
@@ -82,6 +381,61 @@ button { cursor:pointer; }
 <!-- Pagination -->
 <div class="pagination" id="pagination"></div>
 </div>
+
+<!-- Add this after the users table -->
+<h2>Contact Messages</h2>
+<div class="contact-messages" id="contactMessages">
+    <!-- Messages will be loaded here -->
+</div>
+
+
+<h2>Live Chat Management</h2>
+<div class="chat-management" id="chatManagement">
+    <!-- Chat Statistics -->
+    <div class="chat-stats">
+        <div class="stat-card">
+            <h3 id="activeSessions">0</h3>
+            <p>Active Sessions</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="unreadMessages">0</h3>
+            <p>Unread Messages</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="totalSessions">0</h3>
+            <p>Total Sessions Today</p>
+        </div>
+    </div>
+
+    <!-- Active Chat Sessions List -->
+    <div class="active-chats">
+        <h3>Active Chat Sessions</h3>
+        <div id="activeChatsList" class="chats-list">
+            <!-- Chat sessions will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<!-- Chat Modal for Admin -->
+<div class="modal" id="adminChatModal">
+    <div class="modal-content chat-modal">
+        <div class="modal-header">
+            <h3 id="chatUserName">Chat with User</h3>
+            <span class="close" onclick="closeAdminChatModal()">&times;</span>
+        </div>
+        <div class="chat-container">
+            <div id="adminChatMessages" class="admin-chat-messages">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="admin-chat-input">
+                <textarea id="adminChatInput" placeholder="Type your reply..." rows="3"></textarea>
+                <button class="action-btn email-btn" onclick="sendAdminMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Modals remain the same -->
 <div class="modal" id="createUserModal">
@@ -460,6 +814,395 @@ window.onclick = function(event) {
             selectedUserId = null;
         }
     });
+}
+
+
+
+
+
+
+// Add this to your existing JavaScript - replace the existing contact message functions
+
+async function loadContactMessages() {
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch('https://pvnbank.onrender.com/api/admin/contact-messages', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const messages = await response.json();
+            displayContactMessages(messages);
+        } else {
+            showNotification('Failed to load contact messages', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading contact messages:', error);
+        showNotification('Error loading contact messages', 'error');
+    }
+}
+
+function displayContactMessages(messages) {
+    const container = document.getElementById('contactMessages');
+    
+    if (messages.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">No contact messages yet.</p>';
+        return;
+    }
+    
+    container.innerHTML = messages.map(msg => `
+        <div class="message-card ${msg.status || 'unread'}">
+            <h4>${msg.subject}</h4>
+            <p><strong>From:</strong> ${msg.userId.fullName} (${msg.userId.email})</p>
+            <p><strong>Message:</strong> ${msg.message}</p>
+            <p><strong>Date:</strong> ${new Date(msg.createdAt).toLocaleDateString()}</p>
+            ${(msg.status !== 'replied') ? 
+                `<button onclick="replyToMessage('${msg._id}', '${msg.userId.email}', '${msg.subject}')">Reply</button>` : 
+                `<p><strong>Admin Reply:</strong> ${msg.adminReply}</p>
+                 <p><strong>Replied on:</strong> ${new Date(msg.repliedAt).toLocaleDateString()}</p>`
+            }
+        </div>
+    `).join('');
+}
+
+// Add reply functionality
+function replyToMessage(messageId, userEmail, subject) {
+    // Create reply modal if it doesn't exist
+    let replyModal = document.getElementById('replyModal');
+    if (!replyModal) {
+        replyModal = document.createElement('div');
+        replyModal.id = 'replyModal';
+        replyModal.className = 'reply-modal';
+        replyModal.innerHTML = `
+            <div class="reply-modal-content">
+                <span class="close" onclick="closeReplyModal()">&times;</span>
+                <h3>Reply to Message</h3>
+                <input type="text" id="replyTo" readonly>
+                <input type="text" id="replySubject" readonly>
+                <textarea id="replyMessage" rows="5" placeholder="Type your reply here..."></textarea>
+                <button class="action-btn email-btn" onclick="sendReply('${messageId}')">Send Reply</button>
+                <button class="action-btn" style="background:#6c757d; margin-left: 10px;" onclick="closeReplyModal()">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(replyModal);
+    }
+    
+    // Populate modal
+    document.getElementById('replyTo').value = userEmail;
+    document.getElementById('replySubject').value = `Re: ${subject}`;
+    document.getElementById('replyMessage').value = '';
+    
+    // Show modal
+    replyModal.style.display = 'flex';
+}
+
+function closeReplyModal() {
+    document.getElementById('replyModal').style.display = 'none';
+}
+
+async function sendReply(messageId) {
+    const replyText = document.getElementById('replyMessage').value.trim();
+    
+    if (!replyText) {
+        showNotification('Please enter a reply message', 'error');
+        return;
+    }
+    
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`https://pvnbank.onrender.com/api/admin/reply-message/${messageId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ reply: replyText })
+        });
+        
+        if (response.ok) {
+            showNotification('Reply sent successfully');
+            closeReplyModal();
+            loadContactMessages(); // Refresh the messages
+        } else {
+            throw new Error('Failed to send reply');
+        }
+    } catch (error) {
+        console.error('Error sending reply:', error);
+        showNotification('Error sending reply', 'error');
+    }
+}
+
+// Update your window.onload function to load contact messages
+window.onload = function() {
+    loadUsers();
+    loadContactMessages(); // Add this line
+}
+
+
+
+
+let activeChatSessions = [];
+let currentChatSession = null;
+let chatPollingInterval = null;
+let selectedChatUser = null;
+
+// Load chat statistics and sessions
+async function loadChatManagement() {
+    try {
+        const token = localStorage.getItem('adminToken');
+        
+        // Load chat statistics
+        const statsResponse = await fetch('https://pvnbank.onrender.com/api/admin/stats', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (statsResponse.ok) {
+            const stats = await statsResponse.json();
+            updateChatStats(stats);
+        }
+        
+        // Load active chat sessions
+        const sessionsResponse = await fetch('https://pvnbank.onrender.com/api/admin/sessions', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (sessionsResponse.ok) {
+            const data = await sessionsResponse.json();
+            activeChatSessions = data.sessions || [];
+            displayActiveChatSessions();
+        }
+        
+    } catch (error) {
+        console.error('Error loading chat management:', error);
+    }
+}
+
+// Update chat statistics display
+function updateChatStats(stats) {
+    document.getElementById('activeSessions').textContent = activeChatSessions.length || 0;
+    document.getElementById('unreadMessages').textContent = stats.unreadMessages || 0;
+    document.getElementById('totalSessions').textContent = stats.totalSessions || 0;
+}
+
+// Display active chat sessions
+function displayActiveChatSessions() {
+    const container = document.getElementById('activeChatsList');
+    
+    if (activeChatSessions.length === 0) {
+        container.innerHTML = '<div class="no-sessions">No active chat sessions</div>';
+        return;
+    }
+    
+    container.innerHTML = activeChatSessions.map(session => {
+        const user = session._id;
+        const lastMessageTime = new Date(session.lastMessageTime).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit'
+        });
+        
+        return `
+            <div class="chat-session-item" onclick="openChatSession('${user._id}', '${user.fullName}')">
+                <div class="chat-user-info">
+                    <h4>${user.fullName}</h4>
+                    <p>${user.email}</p>
+                    <p class="last-message">${session.lastMessage || 'No messages yet'}</p>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">${lastMessageTime}</div>
+                    ${session.unreadCount > 0 ? `<span class="unread-badge">${session.unreadCount}</span>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Open chat session with a user
+async function openChatSession(userId, userName) {
+    currentChatSession = userId;
+    selectedChatUser = { id: userId, name: userName };
+    
+    document.getElementById('chatUserName').textContent = `Chat with ${userName}`;
+    document.getElementById('adminChatModal').style.display = 'flex';
+    
+    // Load chat history
+    await loadChatHistory(userId);
+    
+    // Start polling for new messages
+    startAdminChatPolling();
+}
+
+// Load chat history for a user
+async function loadChatHistory(userId) {
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`https://pvnbank.onrender.com/api/admin/user/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            displayChatMessages(data.messages || []);
+        }
+        
+    } catch (error) {
+        console.error('Error loading chat history:', error);
+    }
+}
+
+// Display chat messages
+function displayChatMessages(messages) {
+    const container = document.getElementById('adminChatMessages');
+    
+    if (messages.length === 0) {
+        container.innerHTML = '<div class="no-messages">No messages yet</div>';
+        return;
+    }
+    
+    container.innerHTML = messages.map(message => {
+        const isUserMessage = message.sender === 'user';
+        const messageTime = new Date(message.createdAt).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit'
+        });
+        
+        const senderName = isUserMessage ? 
+            (message.userId ? message.userId.fullName : 'User') : 
+            (message.adminId ? message.adminId.fullName : 'Admin');
+        
+        return `
+            <div class="chat-message ${isUserMessage ? 'user-message' : 'admin-message'}">
+                <div class="message-avatar">
+                    ${isUserMessage ? '👤' : '👨‍💼'}
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <div class="message-text">${escapeHtml(message.message)}</div>
+                        <div class="message-time">${messageTime}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // Scroll to bottom
+    container.scrollTop = container.scrollHeight;
+}
+
+// Send admin message
+async function sendAdminMessage() {
+    const messageInput = document.getElementById('adminChatInput');
+    const message = messageInput.value.trim();
+    
+    if (!message || !currentChatSession) {
+        return;
+    }
+    
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch('https://pvnbank.onrender.com/api/user/message', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sessionId: currentChatSession,
+                message: message,
+                isFromSupport: true
+            })
+        });
+        
+        if (response.ok) {
+            messageInput.value = '';
+            // Message will appear via polling
+            showNotification('Message sent successfully');
+        } else {
+            throw new Error('Failed to send message');
+        }
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        showNotification('Error sending message', 'error');
+    }
+}
+
+// Start polling for new messages in admin chat
+function startAdminChatPolling() {
+    // Clear existing polling
+    if (chatPollingInterval) {
+        clearInterval(chatPollingInterval);
+    }
+    
+    chatPollingInterval = setInterval(async () => {
+        if (currentChatSession) {
+            await loadChatHistory(currentChatSession);
+        }
+    }, 3000); // Poll every 3 seconds
+}
+
+// Close admin chat modal
+function closeAdminChatModal() {
+    document.getElementById('adminChatModal').style.display = 'none';
+    currentChatSession = null;
+    selectedChatUser = null;
+    
+    // Stop polling
+    if (chatPollingInterval) {
+        clearInterval(chatPollingInterval);
+        chatPollingInterval = null;
+    }
+    
+    // Refresh the chat sessions list
+    loadChatManagement();
+}
+
+// Handle Enter key in admin chat input
+document.addEventListener('DOMContentLoaded', function() {
+    const adminChatInput = document.getElementById('adminChatInput');
+    if (adminChatInput) {
+        adminChatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendAdminMessage();
+            }
+        });
+    }
+});
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Auto-refresh chat management every 30 seconds
+setInterval(() => {
+    if (!document.getElementById('adminChatModal').style.display || 
+        document.getElementById('adminChatModal').style.display === 'none') {
+        loadChatManagement();
+    }
+}, 30000);
+
+// Update your existing window.onload function to include chat management
+const originalOnLoad = window.onload;
+window.onload = function() {
+    if (originalOnLoad) originalOnLoad();
+    loadUsers();
+    loadContactMessages();
+    loadChatManagement(); // Add this line
 }
 </script>
 </body>
