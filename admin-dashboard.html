@@ -492,6 +492,43 @@ button { cursor:pointer; }
 
 
 
+<div class="modal" id="fundModal"> ... </div>
+
+<!-- Transfer Modal -->
+<div class="modal" id="transferModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('transferModal')">&times;</span>
+    <h3>Transfer Funds</h3>
+
+    <!-- Sender (from user) -->
+    <select id="transferFromUser">
+      <option value="">Select Sender</option>
+      <!-- Options populated dynamically -->
+    </select>
+
+    <!-- Receiver (to user) -->
+    <select id="transferToUser">
+      <option value="">Select Receiver</option>
+      <!-- Options populated dynamically -->
+    </select>
+
+    <!-- Amount -->
+    <input type="number" id="transferAmount" placeholder="Amount to Transfer" step="0.01" min="0">
+
+    <!-- Description -->
+    <input type="text" id="transferDescription" placeholder="Description / Purpose of Transfer">
+
+    <!-- Custom Date/Time -->
+    <input type="datetime-local" id="transferDate">
+
+    <!-- Buttons -->
+    <button class="action-btn fund-btn" onclick="transferFunds()">Transfer</button>
+    <button class="action-btn" style="background:#6c757d; margin-left: 10px;" onclick="closeModal('transferModal')">Cancel</button>
+  </div>
+</div>
+
+<div class="notification" id="notification"></div>
+
 
 
 
@@ -786,6 +823,78 @@ async function fundUser(){
         showNotification('Failed to fund user','error');
     }
 }
+
+
+
+
+
+async function transferFunds() {
+    const fromUserId = document.getElementById('transferFromUser').value;
+    const toUserId = document.getElementById('transferToUser').value;
+    const amount = parseFloat(document.getElementById('transferAmount').value);
+    const description = document.getElementById('transferDescription').value.trim();
+
+    if (!fromUserId || !toUserId) {
+        showNotification('Select both sender and receiver', 'error');
+        return;
+    }
+    if (fromUserId === toUserId) {
+        showNotification('Sender and receiver cannot be the same', 'error');
+        return;
+    }
+    if (!amount || amount <= 0) {
+        showNotification('Enter a valid amount greater than 0', 'error');
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem('adminToken');
+
+        // Find accounts from allUsers
+        const fromUser = allUsers.find(u => u._id === fromUserId);
+        const toUser = allUsers.find(u => u._id === toUserId);
+
+        if (!fromUser?.primaryAccountId || !toUser?.primaryAccountNumber) {
+            showNotification('Users must have primary accounts', 'error');
+            return;
+        }
+
+        const res = await fetch(`https://pvnbank.onrender.com/api/transaction/account/${fromUser.primaryAccountId}/transfer`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                toAccountNumber: toUser.primaryAccountNumber,
+                amount,
+                description
+            }),
+            credentials: 'include'
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showNotification(`$${amount.toFixed(2)} transferred successfully`);
+            closeModal('transferModal');
+            loadUsers(); // refresh users table to update balances
+        } else {
+            throw new Error(data.message || 'Transfer failed');
+        }
+    } catch (e) {
+        console.error('Transfer error:', e);
+        showNotification(e.message || 'Failed to transfer funds', 'error');
+    }
+}
+
+
+
+
+
+
+
+
 
 async function deleteUser(userId){
     if(!userId) {
