@@ -1893,6 +1893,442 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
+
+
+// Enhanced Chat System with Fixed Polling
+let currentChatSession = null;
+let chatPollingInstance = null; // Changed from interval to instance
+let lastMessageId = null;
+let lastMessageTimestamp = null;
+let messageIdsSeen = new Set(); // Track seen messages to prevent duplicates
+
+// Chat Polling Class - Fixed Version
+class ChatPolling {
+    constructor(sessionId, onNewMessages, pollingInterval = 3000) {
+        this.sessionId = sessionId;
+        this.onNewMessages = onNewMessages;
+        this.pollingInterval = pollingInterval;
+        this.baseInterval = pollingInterval;
+        this.lastMessageId = null;
+        this.lastTimestamp = null;
+        this.isPolling = false;
+        this.pollTimeout = null;
+        this.isPageVisible = true;
+        this.errorCount = 0;
+        this.maxErrors = 3;
+        
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            this.isPageVisible = !document.hidden;
+            if (this.isPageVisible && !this.isPolling) {
+                this.startPolling();
+            } else if (!this.isPageVisible && this.isPolling) {
+                this.stopPolling();
+            }
+        });
+    }
+    
+    startPolling() {
+        if (this.isPolling) return;
+        this.isPolling = true;
+        this.errorCount = 0;
+        this.pollingInterval = this.baseInterval;
+        this.poll();
+    }
+    
+    stopPolling() {
+        this.isPolling = false;
+        if (this.pollTimeout) {
+            clearTimeout(this.pollTimeout);
+            this.pollTimeout = null;
+        }
+    }
+    
+    async poll() {
+        if (!this.isPolling || !this.isPageVisible) return;
+        
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.log('No auth token available for polling');
+                this.stopPolling();
+                return;
+            }
+            
+            // Build query parameters
+            const params = new URLSearchParams();
+            if (this.lastMessageId) {
+                params.append('after', this.lastMessageId);
+            }
+            if (this.lastTimestamp) {
+                params.append('timestamp', this.lastTimestamp);
+            }
+            
+            const response = await fetch(
+                `https://pvnbank.onrender.com/api/user/dashboard/messages/${this.sessionId}/new?${params}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.messages && data.messages.length > 0) {
+                    // Filter out messages we've already seen
+                    const newMessages = data.messages.filter(msg => 
+                        !messageIdsSeen.has(msg._id || msg.id)
+                    );
+                    
+                    if (newMessages.length > 0) {
+                        // Mark messages as seen
+                        newMessages.forEach(msg => {
+                            messageIdsSeen.add(msg._id || msg.id);
+                        });
+                        
+                        this.lastMessageId = data.lastMessageId || newMessages[newMessages.length - 1]._id;
+                        this.lastTimestamp = data.timestamp || new Date().toISOString();
+                        
+                        // Call the callback with only truly new messages
+                        this.onNewMessages(newMessages);
+                    }
+                }
+                
+                // Reset error count on success
+                this.errorCount = 0;
+                this.pollingInterval = this.baseInterval;
+                
+            } else if (response.status === 204) {
+                // No new messages - this is normal
+                this.errorCount = 0;
+            } else if (response.status === 401 || response.status === 403) {
+                console.log('Authentication error in polling, stopping');
+                this.stopPolling();
+                return;
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+        } catch (error) {
+            console.error('Polling error:', error);
+            this.errorCount++;
+            
+            // Increase polling interval on consecutive errors
+            if (this.errorCount < this.maxErrors) {
+                this.pollingInterval = Math.min(this.pollingInterval * 1.5, 30000);
+            } else {
+                console.log('Too many polling errors, stopping');
+                this.stopPolling();
+                updateChatStatus('Connection lost', 'error');
+                return;
+            }
+        }
+        
+        // Schedule next poll
+        if (this.isPolling) {
+            this.pollTimeout = setTimeout(() => this.poll(), this.pollingInterval);
+        }
+    }
+    
+    updateLastMessage(messageId, timestamp) {
+        this.lastMessageId = messageId;
+        this.lastTimestamp = timestamp;
+    }
+}
+
+// Updated start chat session function
+async function startChatSession() {
+    try {
+        updateChatStatus('Connecting...', 'connecting');
+        
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            updateChatStatus('Authentication required', 'error');
+            showNotification('Please log in to start a chat session', 'error');
+            return;
+        }
+
+        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/start', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            currentChatSession = data.sessionId;
+            
+            updateChatStatus('Connected to support', 'connected');
+            
+            // Reset message tracking
+            messageIdsSeen.clear();
+            lastMessageId = null;
+            lastMessageTimestamp = null;
+            
+            // Load existing messages first
+            await loadChatHistory();
+            
+            // Then start polling for new messages with the new system
+            startMessagePolling();
+            
+        } else {
+            console.error('Failed to start chat session');
+            updateChatStatus('Connection failed', 'error');
+            showNotification('Failed to connect to chat support', 'error');
+        }
+    } catch (error) {
+        console.error('Error starting chat session:', error);
+        updateChatStatus('Connection failed', 'error');
+        showNotification('Connection error. Please try again.', 'error');
+    }
+}
+
+// Updated message polling with new system
+function startMessagePolling() {
+    if (chatPollingInstance) {
+        chatPollingInstance.stopPolling();
+    }
+    
+    chatPollingInstance = new ChatPolling(
+        currentChatSession,
+        handleNewMessages,
+        3000 // Poll every 3 seconds
+    );
+    
+    chatPollingInstance.startPolling();
+}
+
+// Handle new messages without causing UI shake
+function handleNewMessages(newMessages) {
+    newMessages.forEach(message => {
+        // Only add support messages to avoid duplicating user's own messages
+        if (message.sender === 'admin' || message.isFromSupport) {
+            // Remove typing indicator before adding new message
+            removeTypingIndicator();
+            addChatMessageFromHistory(message);
+        }
+    });
+    
+    // Update tracking variables
+    if (newMessages.length > 0) {
+        const lastMsg = newMessages[newMessages.length - 1];
+        lastMessageId = lastMsg._id || lastMsg.id;
+        lastMessageTimestamp = lastMsg.createdAt || lastMsg.timestamp;
+        
+        if (chatPollingInstance) {
+            chatPollingInstance.updateLastMessage(lastMessageId, lastMessageTimestamp);
+        }
+    }
+}
+
+// Updated load chat history function
+async function loadChatHistory() {
+    if (!currentChatSession) return;
+    
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`https://pvnbank.onrender.com/api/user/dashboard/messages/${currentChatSession}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const messages = data.messages || [];
+            
+            // Clear existing messages except welcome message
+            const chatMessages = document.getElementById('chatMessages');
+            const welcomeMessage = chatMessages.querySelector('.message:first-child');
+            chatMessages.innerHTML = '';
+            if (welcomeMessage) {
+                chatMessages.appendChild(welcomeMessage);
+            }
+            
+            // Add historical messages and track them
+            messages.forEach(message => {
+                messageIdsSeen.add(message._id || message.id);
+                addChatMessageFromHistory(message);
+            });
+            
+            // Update tracking variables
+            if (messages.length > 0) {
+                const lastMsg = messages[messages.length - 1];
+                lastMessageId = lastMsg._id || lastMsg.id;
+                lastMessageTimestamp = data.timestamp || lastMsg.createdAt || new Date().toISOString();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading chat history:', error);
+    }
+}
+
+// Updated close chat modal function
+function closeChatModal() {
+    document.getElementById('chatModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Stop the new polling system
+    if (chatPollingInstance) {
+        chatPollingInstance.stopPolling();
+        chatPollingInstance = null;
+    }
+    
+    // Clear the old interval if it exists
+    if (chatPollingInterval) {
+        clearInterval(chatPollingInterval);
+        chatPollingInterval = null;
+    }
+    
+    // End chat session
+    if (currentChatSession) {
+        endChatSession();
+    }
+    
+    // Reset tracking
+    messageIdsSeen.clear();
+    lastMessageId = null;
+    lastMessageTimestamp = null;
+}
+
+// Updated send message function
+async function sendChatMessage() {
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+    
+    if (!message) {
+        return;
+    }
+    
+    if (!currentChatSession) {
+        showNotification('Chat session not active. Please restart chat.', 'error');
+        return;
+    }
+    
+    // Add user message to UI immediately
+    const userMessageId = 'temp_' + Date.now();
+    messageIdsSeen.add(userMessageId);
+    addChatMessage(message, 'user');
+    chatInput.value = '';
+    
+    // Send message to backend
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/message', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sessionId: currentChatSession,
+                message: message,
+                isFromSupport: false
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // Update tracking with the real message ID if provided
+            if (data.messageId) {
+                messageIdsSeen.delete(userMessageId);
+                messageIdsSeen.add(data.messageId);
+            }
+            
+            // Show typing indicator
+            showTypingIndicator();
+        } else {
+            throw new Error(`Failed to send message: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        addChatMessage('Sorry, there was an error sending your message. Please try again.', 'system');
+    }
+}
+
+// Clean up on page unload
+window.addEventListener('beforeunload', function() {
+    if (chatPollingInstance) {
+        chatPollingInstance.stopPolling();
+    }
+    if (currentChatSession) {
+        endChatSession();
+    }
+});
+
+
+
+// Initialize chat system
+function initializeChatSystem() {
+    // Reset message tracking
+    messageIdsSeen.clear();
+    lastMessageId = null;
+    lastMessageTimestamp = null;
+    
+    // Clear chat messages
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.innerHTML = `
+        <div class="message agent-message">
+            <div class="message-avatar">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-header">Customer Support</div>
+                <div class="message-text">Hello! I'm here to help you with your banking needs. How can I assist you today?</div>
+                <div class="message-time">Just now</div>
+            </div>
+        </div>
+    `;
+}
+
+function updateChatStatus(message, status) {
+    const chatStatus = document.getElementById('chatStatus');
+    if (chatStatus) {
+        const statusSpan = chatStatus.querySelector('span');
+        const statusDot = chatStatus.querySelector('.chat-status-dot');
+        
+        if (statusSpan) statusSpan.textContent = message;
+        
+        if (statusDot) {
+            statusDot.className = 'chat-status-dot';
+            statusDot.classList.add(`status-${status}`);
+        }
+    }
+}
+
+async function endChatSession() {
+    if (!currentChatSession) return;
+    
+    try {
+        const token = localStorage.getItem('authToken');
+        await fetch(`https://pvnbank.onrender.com/api/user/dashboard/end/${currentChatSession}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (error) {
+        console.error('Error ending chat session:', error);
+    }
+    
+    currentChatSession = null;
+}
+
+// The rest of the missing functions...
+
+
+
+
+
 // Prevent going back to login page after authentication
 history.pushState(null, null, location.href);
 window.onpopstate = function () {
@@ -2051,450 +2487,6 @@ document.getElementById('mailForm').addEventListener('submit', async function(e)
     }
 });
 
-// Chat Functions
-// Enhanced Chat System Functions
-
-// Global variables for chat functionality
-let currentChatSession = null;
-let chatPollingInterval = null;
-let lastMessageId = null;
-
-// Initialize chat system
-function initializeChatSystem() {
-    // Clear any existing polling
-    if (chatPollingInterval) {
-        clearInterval(chatPollingInterval);
-    }
-    
-    // Reset chat state
-    currentChatSession = null;
-    lastMessageId = null;
-    
-    // Clear chat messages
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.innerHTML = `
-        <div class="message agent-message">
-            <div class="message-avatar">
-                <i class="fas fa-user-tie"></i>
-            </div>
-            <div class="message-content">
-                <div class="message-header">Customer Support</div>
-                <div class="message-text">Hello! I'm here to help you with your banking needs. How can I assist you today?</div>
-                <div class="message-time">Just now</div>
-            </div>
-        </div>
-    `;
-}
-
-// Show online chat modal
-function showOnlineChat() {
-    closeContactModal();
-    initializeChatSystem();
-    document.getElementById('chatModal').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    // Start a new chat session
-    startChatSession();
-}
-
-// Close chat modal
-function closeChatModal() {
-    document.getElementById('chatModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-    
-    // Stop polling for messages
-    if (chatPollingInterval) {
-        clearInterval(chatPollingInterval);
-        chatPollingInterval = null;
-    }
-    
-    // End chat session
-    if (currentChatSession) {
-        endChatSession();
-    }
-}
-
-// Start a new chat session
-async function startChatSession() {
-    try {
-       updateChatStatus('Connecting...', 'connecting');
-        
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-            updateChatStatus('Authentication required', 'error');
-            showNotification('Please log in to start a chat session', 'error');
-            return;
-        }
-
-        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/start', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            currentChatSession = data.sessionId;
-            
-            updateChatStatus('Connected to support', 'connected');
-            // Start polling for new messages
-            startMessagePolling();
-            
-            // Load existing messages if any
-            await loadChatHistory();
-            
-        } else {
-            console.error('Failed to start chat session');
-            showNotification('Failed to connect to chat support', 'error');
-        }
-    } catch (error) {
-        console.error('Error starting chat session:', error);
-        updateChatStatus('Connection failed', 'error');
-        showNotification('Connection error. Please try again.', 'error');
-        addChatMessage('Sorry, chat support is currently unavailable. Please try contacting us via email instead.', 'system');
-    }
-}
-
-
-function updateChatStatus(message, status) {
-    const chatStatus = document.getElementById('chatStatus');
-    if (chatStatus) {
-        const statusSpan = chatStatus.querySelector('span');
-        const statusDot = chatStatus.querySelector('.chat-status-dot');
-        
-        if (statusSpan) statusSpan.textContent = message;
-        
-        if (statusDot) {
-            statusDot.className = 'chat-status-dot';
-            statusDot.classList.add(`status-${status}`);
-        }
-    }
-}
-
-// End chat session
-async function endChatSession() {
-    if (!currentChatSession) return;
-    
-    try {
-        const token = localStorage.getItem('authToken');
-        await fetch(`https://pvnbank.onrender.com/api/user/dashboard/end/${currentChatSession}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-    } catch (error) {
-        console.error('Error ending chat session:', error);
-    }
-    
-    currentChatSession = null;
-}
-
-// Load chat history
-async function loadChatHistory() {
-    if (!currentChatSession) return;
-    
-    try {
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`https://pvnbank.onrender.com/api/user/dashboard/messages/${currentChatSession}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const messages = data.messages || [];
-            
-            // Clear existing messages except welcome message
-            const chatMessages = document.getElementById('chatMessages');
-            const welcomeMessage = chatMessages.querySelector('.message');
-            chatMessages.innerHTML = '';
-            if (welcomeMessage) {
-                chatMessages.appendChild(welcomeMessage);
-            }
-            
-            // Add historical messages
-            messages.forEach(message => {
-                addChatMessageFromHistory(message);
-            });
-            
-            // Update last message ID
-            if (messages.length > 0) {
-                lastMessageId = messages[messages.length - 1].id;
-            }
-        }
-    } catch (error) {
-        console.error('Error loading chat history:', error);
-    }
-}
-
-// Start polling for new messages
-function startMessagePolling() {
-    if (chatPollingInterval) {
-        clearInterval(chatPollingInterval);
-    }
-    
-    chatPollingInterval = setInterval(async () => {
-        await pollForNewMessages();
-    }, 3000); // Poll every 3 seconds
-}
-
-// Poll for new messages
-async function pollForNewMessages() {
-    if (!currentChatSession) return;
-    
-    try {
-        const token = localStorage.getItem('authToken');
-        let url = `https://pvnbank.onrender.com/api/user/dashboard/messages/${currentChatSession}/new`;
-        if (lastMessageId) {
-            url += `?after=${lastMessageId}`;
-        }
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const newMessages = data.messages || [];
-            
-            newMessages.forEach(message => {
-                // Only add messages from support agents, not from the user
-                if (message.isFromSupport) {
-                    addChatMessageFromHistory(message);
-                    lastMessageId = message.id;
-                }
-            });
-        }
-    } catch (error) {
-        console.error('Error polling for messages:', error);
-    }
-}
-
-// Handle chat input keypress
-function handleChatKeyPress(event) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        sendChatMessage();
-    }
-}
-
-
-
-async function sendChatMessage() {
-    const chatInput = document.getElementById('chatInput');
-    const message = chatInput.value.trim();
-    
-    if (!message) {
-        return;
-    }
-    
-    if (!currentChatSession) {
-        showNotification('Chat session not active. Please restart chat.', 'error');
-        return;
-    }
-    
-    // Add user message to UI immediately
-    addChatMessage(message, 'user');
-    chatInput.value = '';
-    
-    // Send message to backend
-    try {
-        const token = localStorage.getItem('authToken');
-        const response = await fetch('https://pvnbank.onrender.com/api/user/dashboard/message', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                sessionId: currentChatSession,
-                message: message,
-                isFromSupport: false
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to send message: ${response.status}`);
-        }
-        
-        // Show typing indicator
-        showTypingIndicator();
-        
-    } catch (error) {
-        console.error('Error sending message:', error);
-        addChatMessage('Sorry, there was an error sending your message. Please try again or contact us via email.', 'system');
-    }
-}
-
-
-
-
-
-// Add chat message to UI
-function addChatMessage(text, sender, timestamp = null) {
-    const chatMessages = document.getElementById('chatMessages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    
-    const currentTime = timestamp ? 
-        new Date(timestamp).toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit' 
-        }) : 
-        new Date().toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit' 
-        });
-    
-    let avatarIcon = 'fa-user';
-    let senderName = 'You';
-    
-    if (sender === 'agent') {
-        avatarIcon = 'fa-user-tie';
-        senderName = 'Customer Support';
-    } else if (sender === 'system') {
-        avatarIcon = 'fa-exclamation-triangle';
-        senderName = 'System';
-    }
-    
-    messageDiv.innerHTML = `
-        <div class="message-avatar">
-            <i class="fas ${avatarIcon}"></i>
-        </div>
-        <div class="message-content">
-            <div class="message-header">${senderName}</div>
-            <div class="message-text">${escapeHtml(text)}</div>
-            <div class="message-time">${currentTime}</div>
-        </div>
-    `;
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Add message from chat history
-function addChatMessageFromHistory(messageData) {
-    const sender = messageData.isFromSupport ? 'agent' : 'user';
-    addChatMessage(messageData.message, sender, messageData.timestamp);
-}
-
-// Show typing indicator
-function showTypingIndicator() {
-    const chatMessages = document.getElementById('chatMessages');
-    
-    // Remove existing typing indicator
-    const existingIndicator = chatMessages.querySelector('.typing-indicator');
-    if (existingIndicator) {
-        existingIndicator.remove();
-    }
-    
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message agent-message typing-indicator';
-    typingDiv.innerHTML = `
-        <div class="message-avatar">
-            <i class="fas fa-user-tie"></i>
-        </div>
-        <div class="message-content">
-            <div class="message-header">Customer Support</div>
-            <div class="message-text">
-                <div class="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    // Remove typing indicator after 10 seconds if no response
-    setTimeout(() => {
-        const indicator = chatMessages.querySelector('.typing-indicator');
-        if (indicator) {
-            indicator.remove();
-        }
-    }, 10000);
-}
-
-// Remove typing indicator
-function removeTypingIndicator() {
-    const chatMessages = document.getElementById('chatMessages');
-    const typingIndicator = chatMessages.querySelector('.typing-indicator');
-    if (typingIndicator) {
-        typingIndicator.remove();
-    }
-}
-
-// Escape HTML to prevent XSS
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Chat session status check
-function checkChatStatus() {
-    if (!currentChatSession) {
-        showNotification('Chat session expired. Please restart the chat.', 'warning');
-        closeChatModal();
-    }
-}
-
-// Handle connection errors
-function handleChatError(error) {
-    console.error('Chat error:', error);
-    addChatMessage('Connection error. Please check your internet connection and try again.', 'system');
-}
-
-// Initialize chat when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Set up event listeners for chat input
-    const chatInput = document.getElementById('chatInput');
-    if (chatInput) {
-        chatInput.addEventListener('keypress', handleChatKeyPress);
-        
-        // Auto-resize textarea
-        chatInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-    }
-});
-
-// Clean up on page unload
-window.addEventListener('beforeunload', function() {
-    if (currentChatSession) {
-        endChatSession();
-    }
-    if (chatPollingInterval) {
-        clearInterval(chatPollingInterval);
-    }
-});
-// Close modals when clicking outside
-
-window.addEventListener('click', function(event) {
-    const modals = ['transferModal', 'contactModal', 'mailModal', 'chatModal', 'aboutModal', 'loanModal', 'loanApplicationModal'];
-    modals.forEach(modalId => {
-        const modal = document.getElementById(modalId);
-        if (event.target === modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-});
 
 
 
