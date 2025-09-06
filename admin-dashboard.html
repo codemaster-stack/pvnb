@@ -466,16 +466,30 @@ button { cursor:pointer; }
 </div>
 </div>
 
+
 <div class="modal" id="fundModal">
-<div class="modal-content">
-<span class="close" onclick="closeModal('fundModal')">&times;</span>
-<h3>Fund Account</h3>
-<input type="text" id="fundUser" readonly>
-<input type="number" id="fundAmount" placeholder="Amount to Add" step="0.01" min="0">
-<button class="action-btn fund-btn" onclick="fundUser()">Add Funds</button>
-<button class="action-btn" style="background:#6c757d; margin-left: 10px;" onclick="closeModal('fundModal')">Cancel</button>
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('fundModal')">&times;</span>
+    <h3>Fund Account</h3>
+    
+    <!-- User ID / name (readonly) -->
+    <input type="text" id="fundUser" readonly>
+    
+    <!-- Amount -->
+    <input type="number" id="fundAmount" placeholder="Amount to Add" step="0.01" min="0">
+    
+    <!-- Custom description/purpose -->
+    <input type="text" id="fundDescription" placeholder="Description / Purpose of Funds">
+    
+    <!-- Buttons -->
+    <button class="action-btn fund-btn" onclick="fundUser()">Add Funds</button>
+    <button class="action-btn" style="background:#6c757d; margin-left: 10px;" onclick="closeModal('fundModal')">Cancel</button>
+  </div>
 </div>
-</div>
+
+
+
+
 
 <div class="notification" id="notification"></div>
 
@@ -731,8 +745,9 @@ async function sendEmail(){
 
 async function fundUser(){
     const amount = parseFloat(document.getElementById('fundAmount').value);
-    
-    if(!amount||amount<=0){ 
+    const description = document.getElementById('fundDescription').value.trim(); // 👈 new line
+
+    if(!amount || amount <= 0){ 
         showNotification('Enter a valid amount greater than 0','error'); 
         return; 
     }
@@ -745,16 +760,22 @@ async function fundUser(){
                 'Content-Type':'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ userId:selectedUserId, amount }),
+            body: JSON.stringify({ 
+                userId: selectedUserId, 
+                amount, 
+                description // 👈 send description to backend
+            }),
             credentials:'include'
         });
         
+        const data = await res.json(); // 👈 read backend response
+        
         if(res.ok){
-            showNotification(`$${amount.toFixed(2)} added successfully`);
+            showNotification(data.message || `$${amount.toFixed(2)} added successfully`);
             closeModal('fundModal');
             loadUsers();
         } else {
-            throw new Error('Failed to fund user');
+            throw new Error(data.message || 'Failed to fund user');
         }
     }catch(e){ 
         console.error('Fund user error:', e);
