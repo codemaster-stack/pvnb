@@ -1981,17 +1981,6 @@ document.getElementById('transferForm').addEventListener('submit', function(e) {
     }, 500);
 });
 
-// Contact Modal Functions
-// function showContactModal() {
-//     document.getElementById('contactModal').style.display = 'block';
-//     document.body.style.overflow = 'hidden';
-// }
-
-// function closeContactModal() {
-//     document.getElementById('contactModal').style.display = 'none';
-//     document.body.style.overflow = 'auto';
-// }
-
 
 // Contact Modal Functions
 function showContactModal() {
@@ -2300,47 +2289,6 @@ function handleChatKeyPress(event) {
     }
 }
 
-// Send chat message
-// async function sendChatMessage() {
-//     const chatInput = document.getElementById('chatInput');
-//     const message = chatInput.value.trim();
-    
-//     if (!message || !currentChatSession) {
-//         return;
-//     }
-    
-//     // Add user message to UI immediately
-//     addChatMessage(message, 'user');
-//     chatInput.value = '';
-    
-//     // Send message to backend
-//     try {
-//         const token = localStorage.getItem('authToken');
-//         const response = await fetch('https://pvnbank.onrender.com/api/user/message', {
-//             method: 'POST',
-//             headers: {
-//                 'Authorization': `Bearer ${token}`,
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({
-//                 sessionId: currentChatSession,
-//                 message: message,
-//                 isFromSupport: false
-//             })
-//         });
-
-//         if (!response.ok) {
-//             throw new Error('Failed to send message');
-//         }
-        
-//         // Show typing indicator
-//         showTypingIndicator();
-        
-//     } catch (error) {
-//         console.error('Error sending message:', error);
-//         addChatMessage('Sorry, there was an error sending your message. Please try again.', 'system');
-//     }
-// }
 
 
 async function sendChatMessage() {
