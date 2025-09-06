@@ -516,11 +516,12 @@ async function loadUsers() {
             credentials: 'include'
         });
         
-        if(res.ok){
-            allUsers = await res.json();
-            filteredUsers = [...allUsers];
-            renderUsers();
-        } else if (res.status === 401) {
+       if(res.ok){
+    const data = await res.json();
+    allUsers = Array.isArray(data) ? data : data.users || [];
+    filteredUsers = [...allUsers];
+    renderUsers();
+} else if (res.status === 401) {
             showNotification('Session expired. Please login again.', 'error');
             localStorage.removeItem('adminToken');
             setTimeout(() => window.location.href = 'admin-signup.html', 2000);
@@ -762,30 +763,44 @@ async function fundUser(){
 }
 
 async function deleteUser(userId){
-    if(!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
+    if(!userId) {
+        showNotification('Invalid user ID', 'error');
+        return;
+    }
+
+    const user = allUsers.find(u => u._id === userId);
+    const userName = user ? user.fullName : 'this user';
+    
+    if(!confirm(`Are you sure you want to delete ${userName}? This action cannot be undone.`)) return;
     
     try{
         const token = localStorage.getItem('adminToken');
         const res = await fetch(`https://pvnbank.onrender.com/api/admin/delete-user/${userId}`,{
             method:'DELETE',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
             credentials:'include'
         });
         
         if(res.ok){
-            showNotification('User deleted successfully');
-            loadUsers();
+            const responseData = await res.json();
+            showNotification(responseData.message || 'User deleted successfully');
+            // Remove from local display immediately
+            allUsers = allUsers.filter(u => u._id !== userId);
+            filteredUsers = filteredUsers.filter(u => u._id !== userId);
+            renderUsers();
+            loadUsers(); // Refresh from server
         } else {
-            throw new Error('Failed to delete user');
+            const errorData = await res.json();
+            showNotification(errorData.message || 'Failed to delete user', 'error');
         }
     }catch(e){
         console.error('Delete user error:', e);
         showNotification('Failed to delete user','error');
     }
 }
-
 function showNotification(message, type='success'){
     const n = document.getElementById('notification');
     n.textContent = message;
