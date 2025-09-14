@@ -394,6 +394,32 @@
 
     <!-- Forgot Password Modal end-->
 
+     <!-- resetPassword -->
+                   
+                <div class="forgot-modal" id="resetPasswordModal">
+    <div class="forgot-form-container">
+        <button class="close-login" id="closeReset">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="login-header">
+            <h2>Set New Password</h2>
+            <p>Enter your new password</p>
+        </div>
+        <form class="forgot-form" id="resetPasswordForm">
+            <input type="hidden" id="resetToken">
+            <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmNewPassword">Confirm Password</label>
+                <input type="password" id="confirmNewPassword" required>
+            </div>
+            <button type="submit" class="login-btn">Reset Password</button>
+        </form>
+    </div>
+</div>
+         <!-- resetPassword end -->
 
 
          <!--Send Email Contact Modal -->
