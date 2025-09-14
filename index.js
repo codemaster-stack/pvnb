@@ -277,8 +277,23 @@ forgotForm.addEventListener("submit", async (e) => {
 });
 
 // Parse token from URL reset password
+// const urlParams = new URLSearchParams(window.location.search);
+// const token = urlParams.get("token");
+
+// if (token) {
+//     document.getElementById("resetPasswordModal").style.display = "flex";
+//     document.getElementById("resetToken").value = token;
+// }
+
+// Close modal
+document.getElementById("closeReset").addEventListener("click", () => {
+    document.getElementById("resetPasswordModal").style.display = "none";
+});
+
+// Handle reset form submission
+// Show modal if token exists in URL
 const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get("token");
+const token = urlParams.get("resetToken");
 
 if (token) {
     document.getElementById("resetPasswordModal").style.display = "flex";
@@ -290,9 +305,10 @@ document.getElementById("closeReset").addEventListener("click", () => {
     document.getElementById("resetPasswordModal").style.display = "none";
 });
 
-// Handle reset form submission
+// Handle reset form submit
 document.getElementById("resetPasswordForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const password = document.getElementById("newPassword").value;
     const confirmPassword = document.getElementById("confirmNewPassword").value;
     const token = document.getElementById("resetToken").value;
@@ -308,8 +324,8 @@ document.getElementById("resetPasswordForm").addEventListener("submit", async (e
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token, password })
         });
-        const data = await res.json();
 
+        const data = await res.json();
         if (res.ok) {
             alert(data.message);
             document.getElementById("resetPasswordModal").style.display = "none";
@@ -321,6 +337,7 @@ document.getElementById("resetPasswordForm").addEventListener("submit", async (e
         alert("An error occurred. Please try again.");
     }
 });
+
 
 // Login/SignUp End
 

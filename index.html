@@ -370,27 +370,30 @@
 
     <!-- Forgot Password Modal -->
 
-    <div class="forgot-modal" id="forgotModal">
-        <div class="forgot-form-container">
-            <button class="close-login" id="closeForgot">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="login-header">
-                <h2>Reset Password</h2>
-                <p>Enter your email to reset your password</p>
-            </div>
-            <form class="forgot-form" id="forgotForm">
-                <div class="form-group">
-                    <label for="forgotEmail">Email Address</label>
-                    <input type="email" id="forgotEmail" name="email" required>
-                </div>
-                <button type="submit" class="login-btn">Send Reset Link</button>
-            </form>
-            <div class="form-footer">
-                <button class="signup-btn" id="backToLoginFromForgot">Back to Login</button>
-            </div>
-        </div>
+    <div class="forgot-modal" id="resetPasswordModal">
+  <div class="forgot-form-container">
+    <button class="close-login" id="closeReset">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="login-header">
+      <h2>Set New Password</h2>
+      <p>Enter your new password</p>
     </div>
+    <form class="forgot-form" id="resetPasswordForm">
+      <input type="hidden" id="resetToken">
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirmNewPassword">Confirm Password</label>
+        <input type="password" id="confirmNewPassword" required>
+      </div>
+      <button type="submit" class="login-btn">Reset Password</button>
+    </form>
+  </div>
+</div>
+
 
     <!-- Forgot Password Modal end-->
 
