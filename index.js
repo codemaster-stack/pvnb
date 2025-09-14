@@ -178,41 +178,37 @@ window.addEventListener("click", (e) => {
 
 
   // =================== SIGNUP ===================
-const signupForm = document.getElementById("signupForm");
-signupForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+const name = document.getElementById("fullName").value; // use 'name'
+const email = document.getElementById("signupEmail").value;
+const phone = document.getElementById("phone").value;
+const password = document.getElementById("signupPassword").value;
+const confirmPassword = document.getElementById("confirmPassword").value;
 
-    const fullName = document.getElementById("fullName").value;
-    const email = document.getElementById("signupEmail").value;
-    const phone = document.getElementById("phone").value;
-    const password = document.getElementById("signupPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+if(password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+}
 
-    if(password !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
+try {
+    const res = await fetch("https://api.pvbonline.online/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, password }) // <-- send 'name'
+    });
+    const data = await res.json();
+
+    if(res.ok) {
+        alert("Signup successful! Please login.");
+        document.getElementById("signupModal").style.display = "none";
+        document.getElementById("loginModal").style.display = "flex";
+    } else {
+        alert(data.message || "Signup failed");
     }
+} catch (err) {
+    console.error(err);
+    alert("An error occurred. Please try again.");
+}
 
-    try {
-        const res = await fetch("https://api.pvbonline.online/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fullName, email, phone, password })
-        });
-        const data = await res.json();
-
-        if(res.ok) {
-            alert("Signup successful! Please login.");
-            document.getElementById("signupModal").style.display = "none";
-            document.getElementById("loginModal").style.display = "flex";
-        } else {
-            alert(data.message || "Signup failed");
-        }
-    } catch (err) {
-        console.error(err);
-        alert("An error occurred. Please try again.");
-    }
-});
 
 // =================== LOGIN ===================
 const loginForm = document.getElementById("loginForm");
