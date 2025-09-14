@@ -178,7 +178,11 @@ window.addEventListener("click", (e) => {
 
 
   // =================== SIGNUP ===================
-const name = document.getElementById("fullName").value; // use 'name'
+const signupForm = document.getElementById("signupForm");
+signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("fullName").value; // use 'name'
 const email = document.getElementById("signupEmail").value;
 const phone = document.getElementById("phone").value;
 const password = document.getElementById("signupPassword").value;
@@ -209,6 +213,7 @@ try {
     alert("An error occurred. Please try again.");
 }
 
+});
 
 // =================== LOGIN ===================
 const loginForm = document.getElementById("loginForm");
