@@ -274,9 +274,10 @@ if (forgotForm) {
 }
 
 // =================== RESET PASSWORD ===================
+// =================== RESET PASSWORD ===================
 window.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("resetToken"); // confirm with backend if param name is resetToken or token
+  const token = urlParams.get("resetToken");
 
   if (token) {
     const modal = document.getElementById("resetPasswordModal");
@@ -312,6 +313,11 @@ if (resetForm) {
       if (res.ok) {
         alert(data.message || "Password reset successful");
         document.getElementById("resetPasswordModal").style.display = "none";
+        
+        // ADD THESE LINES TO ROUTE TO LOGIN:
+        document.getElementById("loginModal").style.display = "flex";
+        // Optional: Clear the URL parameters
+        window.history.replaceState({}, document.title, window.location.pathname);
       } else {
         alert(data.message || "Reset failed");
       }
