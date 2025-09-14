@@ -126,8 +126,6 @@ function handleChatKeyPress(event) {
     }
   });
 
-// Login/SignUp End
-
 
 // Open forgot modal
 document.getElementById("showForgot").addEventListener("click", () => {
@@ -177,7 +175,108 @@ window.addEventListener("click", (e) => {
     }
   });
 
+
+
+  // =================== SIGNUP ===================
+const signupForm = document.getElementById("signupForm");
+signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const fullName = document.getElementById("fullName").value;
+    const email = document.getElementById("signupEmail").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("signupPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if(password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    try {
+        const res = await fetch("https://api.pvbonline.online/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fullName, email, phone, password })
+        });
+        const data = await res.json();
+
+        if(res.ok) {
+            alert("Signup successful! Please login.");
+            document.getElementById("signupModal").style.display = "none";
+            document.getElementById("loginModal").style.display = "flex";
+        } else {
+            alert(data.message || "Signup failed");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("An error occurred. Please try again.");
+    }
+});
+
+// =================== LOGIN ===================
+const loginForm = document.getElementById("loginForm");
+loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+        const res = await fetch("https://api.pvbonline.online/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if(res.ok) {
+            alert("Login successful!");
+            // Save token if your backend returns JWT
+            localStorage.setItem("token", data.token);
+            document.getElementById("loginModal").style.display = "none";
+            // Optionally redirect
+            window.location.href = "/";
+        } else {
+            alert(data.message || "Login failed");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("An error occurred. Please try again.");
+    }
+});
+
+// =================== FORGOT PASSWORD ===================
+const forgotForm = document.getElementById("forgotForm");
+forgotForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("forgotEmail").value;
+
+    try {
+        const res = await fetch("https://api.pvbonline.online/api/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+
+        if(res.ok) {
+            alert("Password reset link sent to your email!");
+            document.getElementById("forgotModal").style.display = "none";
+            document.getElementById("loginModal").style.display = "flex";
+        } else {
+            alert(data.message || "Failed to send reset link");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("An error occurred. Please try again.");
+    }
+});
+
+
 // End About Us Modal
+// Login/SignUp End
 
 
  //Send Email Contact Modal Functions
