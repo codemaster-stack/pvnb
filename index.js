@@ -276,8 +276,52 @@ forgotForm.addEventListener("submit", async (e) => {
     }
 });
 
+// Parse token from URL reset password
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get("token");
 
-// End About Us Modal
+if (token) {
+    document.getElementById("resetPasswordModal").style.display = "flex";
+    document.getElementById("resetToken").value = token;
+}
+
+// Close modal
+document.getElementById("closeReset").addEventListener("click", () => {
+    document.getElementById("resetPasswordModal").style.display = "none";
+});
+
+// Handle reset form submission
+document.getElementById("resetPasswordForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const password = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmNewPassword").value;
+    const token = document.getElementById("resetToken").value;
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    try {
+        const res = await fetch("https://api.pvbonline.online/api/auth/reset-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token, password })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            alert(data.message);
+            document.getElementById("resetPasswordModal").style.display = "none";
+        } else {
+            alert(data.message || "Reset failed");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("An error occurred. Please try again.");
+    }
+});
+
 // Login/SignUp End
 
 
