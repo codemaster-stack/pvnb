@@ -87,73 +87,6 @@ function handleChatKeyPress(event) {
 
 
 
-
-  // Open login modal when ONLINE BANKING button is clicked
-
-  document.querySelector(".button-olb").addEventListener("click", () => {
-    document.getElementById("loginModal").style.display = "flex";
-  });
-
-  // Close login modal
-  document.getElementById("closeLogin").addEventListener("click", () => {
-    document.getElementById("loginModal").style.display = "none";
-  });
-
-  // Open signup modal
-  document.getElementById("showSignup").addEventListener("click", () => {
-    document.getElementById("loginModal").style.display = "none";
-    document.getElementById("signupModal").style.display = "flex";
-  });
-
-  // Back to login from signup
-  document.getElementById("backToLogin").addEventListener("click", () => {
-    document.getElementById("signupModal").style.display = "none";
-    document.getElementById("loginModal").style.display = "flex";
-  });
-
-  // Close signup modal
-  document.getElementById("closeSignup").addEventListener("click", () => {
-    document.getElementById("signupModal").style.display = "none";
-  });
-
-  // Close if clicking outside modal content
-  window.addEventListener("click", (e) => {
-    if (e.target.classList.contains("login-modal")) {
-      document.getElementById("loginModal").style.display = "none";
-    }
-    if (e.target.classList.contains("signup-modal")) {
-      document.getElementById("signupModal").style.display = "none";
-    }
-  });
-
-
-// Open forgot modal
-document.getElementById("showForgot").addEventListener("click", () => {
-  document.getElementById("loginModal").style.display = "none";
-  document.getElementById("forgotModal").style.display = "flex";
-});
-
-// Back to login from forgot
-document.getElementById("backToLoginFromForgot").addEventListener("click", () => {
-  document.getElementById("forgotModal").style.display = "none";
-  document.getElementById("loginModal").style.display = "flex";
-});
-
-// Close forgot modal
-document.getElementById("closeForgot").addEventListener("click", () => {
-  document.getElementById("forgotModal").style.display = "none";
-});
-
-// Close if clicking outside modal
-window.addEventListener("click", (e) => {
-  if (e.target.classList.contains("forgot-modal")) {
-    document.getElementById("forgotModal").style.display = "none";
-  }
-});
-
-// Forgot password form End
-
-
     // About Us Modal
 
   const aboutModal = document.getElementById("aboutModal");
@@ -174,139 +107,190 @@ window.addEventListener("click", (e) => {
       closeAboutModal();
     }
   });
+// end of about us
 
 
+// all user onbarding
+// =================== OPEN/CLOSE MODALS ===================
 
-  // =================== SIGNUP ===================
-const signupForm = document.getElementById("signupForm");
-signupForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+// Open login modal
+document.querySelector(".button-olb").addEventListener("click", () => {
+  document.getElementById("loginModal").style.display = "flex";
+});
 
-    const name = document.getElementById("fullName").value; // use 'name'
-const email = document.getElementById("signupEmail").value;
-const phone = document.getElementById("phone").value;
-const password = document.getElementById("signupPassword").value;
-const confirmPassword = document.getElementById("confirmPassword").value;
+// Close login modal
+document.getElementById("closeLogin").addEventListener("click", () => {
+  document.getElementById("loginModal").style.display = "none";
+});
 
-if(password !== confirmPassword) {
-    alert("Passwords do not match!");
-    return;
+// Switch to signup modal
+document.getElementById("showSignup").addEventListener("click", () => {
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("signupModal").style.display = "flex";
+});
+
+// Back to login from signup
+document.getElementById("backToLogin").addEventListener("click", () => {
+  document.getElementById("signupModal").style.display = "none";
+  document.getElementById("loginModal").style.display = "flex";
+});
+
+// Close signup modal
+document.getElementById("closeSignup").addEventListener("click", () => {
+  document.getElementById("signupModal").style.display = "none";
+});
+
+// Switch to forgot modal
+document.getElementById("showForgot").addEventListener("click", () => {
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("forgotModal").style.display = "flex";
+});
+
+// Back to login from forgot
+document.getElementById("backToLoginFromForgot").addEventListener("click", () => {
+  document.getElementById("forgotModal").style.display = "none";
+  document.getElementById("loginModal").style.display = "flex";
+});
+
+// Close forgot modal
+document.getElementById("closeForgot").addEventListener("click", () => {
+  document.getElementById("forgotModal").style.display = "none";
+});
+
+// Close reset modal
+const closeResetBtn = document.getElementById("closeReset");
+if (closeResetBtn) {
+  closeResetBtn.addEventListener("click", () => {
+    document.getElementById("resetPasswordModal").style.display = "none";
+  });
 }
 
-try {
-    const res = await fetch("https://api.pvbonline.online/api/auth/register", {
+// Universal close if clicking outside any modal
+window.addEventListener("click", (e) => {
+  ["login-modal", "signup-modal", "forgot-modal", "reset-password-modal"].forEach((cls) => {
+    if (e.target.classList.contains(cls)) {
+      e.target.style.display = "none";
+    }
+  });
+});
+
+// =================== SIGNUP ===================
+const signupForm = document.getElementById("signupForm");
+if (signupForm) {
+  signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("fullName").value;
+    const email = document.getElementById("signupEmail").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("signupPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+      return alert("Passwords do not match!");
+    }
+
+    try {
+      const res = await fetch("https://api.pvbonline.online/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, password }) // <-- send 'name'
-    });
-    const data = await res.json();
+        body: JSON.stringify({ name, email, phone, password })
+      });
 
-    if(res.ok) {
+      const data = await res.json();
+      if (res.ok) {
         alert("Signup successful! Please login.");
         document.getElementById("signupModal").style.display = "none";
         document.getElementById("loginModal").style.display = "flex";
-    } else {
+      } else {
         alert(data.message || "Signup failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred. Please try again.");
     }
-} catch (err) {
-    console.error(err);
-    alert("An error occurred. Please try again.");
+  });
 }
-
-});
 
 // =================== LOGIN ===================
 const loginForm = document.getElementById("loginForm");
-loginForm.addEventListener("submit", async (e) => {
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
     try {
-        const res = await fetch("https://api.pvbonline.online/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
+      const res = await fetch("https://api.pvbonline.online/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
 
-        if(res.ok) {
-            alert("Login successful!");
-            // Save token if your backend returns JWT
-            localStorage.setItem("token", data.token);
-            document.getElementById("loginModal").style.display = "none";
-            // Optionally redirect
-           window.location.href = "userpage.html";
-
-        } else {
-            alert(data.message || "Login failed");
-        }
+      const data = await res.json();
+      if (res.ok && data.token) {
+        alert("Login successful!");
+        localStorage.setItem("token", data.token);
+        document.getElementById("loginModal").style.display = "none";
+        window.location.href = "userpage.html";
+      } else {
+        alert(data.message || "Login failed");
+      }
     } catch (err) {
-        console.error(err);
-        alert("An error occurred. Please try again.");
+      console.error(err);
+      alert("An error occurred. Please try again.");
     }
-});
+  });
+}
 
 // =================== FORGOT PASSWORD ===================
 const forgotForm = document.getElementById("forgotForm");
-forgotForm.addEventListener("submit", async (e) => {
+if (forgotForm) {
+  forgotForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = document.getElementById("forgotEmail").value;
-
     try {
-        const res = await fetch("https://api.pvbonline.online/api/auth/forgot-password", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-        });
-        const data = await res.json();
+      const res = await fetch("https://api.pvbonline.online/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
 
-        if(res.ok) {
-            alert("Password reset link sent to your email!");
-            document.getElementById("forgotModal").style.display = "none";
-            document.getElementById("loginModal").style.display = "flex";
-        } else {
-            alert(data.message || "Failed to send reset link");
-        }
+      const data = await res.json();
+      if (res.ok) {
+        alert("Password reset link sent to your email!");
+        document.getElementById("forgotModal").style.display = "none";
+        document.getElementById("loginModal").style.display = "flex";
+      } else {
+        alert(data.message || "Failed to send reset link");
+      }
     } catch (err) {
-        console.error(err);
-        alert("An error occurred. Please try again.");
+      console.error(err);
+      alert("An error occurred. Please try again.");
     }
-});
-
-// Parse token from URL reset password
-// const urlParams = new URLSearchParams(window.location.search);
-// const token = urlParams.get("token");
-
-// if (token) {
-//     document.getElementById("resetPasswordModal").style.display = "flex";
-//     document.getElementById("resetToken").value = token;
-// }
-
-// Close modal
-document.getElementById("closeReset").addEventListener("click", () => {
-    document.getElementById("resetPasswordModal").style.display = "none";
-});
-
-// Handle reset form submission
-// Show modal if token exists in URL
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get("resetToken");
-
-if (token) {
-    document.getElementById("resetPasswordModal").style.display = "flex";
-    document.getElementById("resetToken").value = token;
+  });
 }
 
-// Close modal
-document.getElementById("closeReset").addEventListener("click", () => {
-    document.getElementById("resetPasswordModal").style.display = "none";
+// =================== RESET PASSWORD ===================
+window.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("resetToken"); // confirm with backend if param name is resetToken or token
+
+  if (token) {
+    const modal = document.getElementById("resetPasswordModal");
+    const tokenInput = document.getElementById("resetToken");
+    if (modal && tokenInput) {
+      modal.style.display = "flex";
+      tokenInput.value = token;
+    }
+  }
 });
 
-// Handle reset form submit
-document.getElementById("resetPasswordForm").addEventListener("submit", async (e) => {
+const resetForm = document.getElementById("resetPasswordForm");
+if (resetForm) {
+  resetForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const password = document.getElementById("newPassword").value;
@@ -314,36 +298,33 @@ document.getElementById("resetPasswordForm").addEventListener("submit", async (e
     const token = document.getElementById("resetToken").value;
 
     if (password !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
+      return alert("Passwords do not match!");
     }
 
     try {
-        const res = await fetch("https://api.pvbonline.online/api/auth/reset-password", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token, password })
-        });
+      const res = await fetch("https://api.pvbonline.online/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, password })
+      });
 
-        const data = await res.json();
-        if (res.ok) {
-            alert(data.message);
-            document.getElementById("resetPasswordModal").style.display = "none";
-        } else {
-            alert(data.message || "Reset failed");
-        }
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || "Password reset successful");
+        document.getElementById("resetPasswordModal").style.display = "none";
+      } else {
+        alert(data.message || "Reset failed");
+      }
     } catch (err) {
-        console.error(err);
-        alert("An error occurred. Please try again.");
+      console.error(err);
+      alert("An error occurred. Please try again.");
     }
-});
+  });
+}
 
-
-// Login/SignUp End
-
+// all user onbarding end
 
  //Send Email Contact Modal Functions
-
 
   function showContactModal() {
     document.getElementById("contactModal").style.display = "flex";
@@ -408,8 +389,6 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
 document.getElementById('mobileOverlay').addEventListener('click', function() {
     closeContactSupportModal();
 });
-
-
 
 // End of fined us/card valet support by form
 

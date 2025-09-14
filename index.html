@@ -294,83 +294,107 @@
     <!-- About Us Modal end-->
 
 
-
+<!-- all user onbaording modal -->
     <!-- Login Modal -->
 
-    <div class="login-modal" id="loginModal">
-        <div class="login-form-container">
-            <button class="close-login" id="closeLogin">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="login-header">
-                <h2>Online Banking</h2>
-                <p>Access your account securely</p>
-            </div>
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="login-btn">Login</button>
-            </form>
-            <div class="form-footer">
-                <button class="signup-btn" id="showSignup">Sign Up</button>
-                <button class="forgot-btn" id="showForgot">Forgot Password?</button>
-            </div>
-        </div>
-    </div> 
- <!-- Login Modal end -->
-
-
-    <!-- Signup Modal -->
-
-     <div class="signup-modal" id="signupModal">
-        <div class="signup-form-container">
-            <button class="close-login" id="closeSignup">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="login-header">
-                <h2>Create Account</h2>
-                <p>Join Pauls Valley National Bank</p>
-            </div>
-            <form class="signup-form" id="signupForm">
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" required>
-                </div>
-                <div class="form-group">
-                    <label for="signupEmail">Email Address</label>
-                    <input type="email" id="signupEmail" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <input type="password" id="signupPassword" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                </div>
-                <button type="submit" class="login-btn">Create Account</button>
-            </form>
-            <div class="form-footer">
-                <button class="signup-btn" id="backToLogin">Back to Login</button>
-            </div>
-        </div>
+  <!-- ================= LOGIN MODAL ================= -->
+<div class="login-modal" id="loginModal">
+  <div class="login-form-container">
+    <button class="close-login" id="closeLogin">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="login-header">
+      <h2>Online Banking</h2>
+      <p>Access your account securely</p>
     </div>
+    <form class="login-form" id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+    <div class="form-footer">
+      <button class="signup-btn" id="showSignup">Sign Up</button>
+      <button class="forgot-btn" id="showForgot">Forgot Password?</button>
+    </div>
+  </div>
+</div>
+<!-- ================= END LOGIN MODAL ================= -->
 
-    <!-- Signup Modal end-->
 
-    <!-- Forgot Password Modal -->
+<!-- ================= SIGNUP MODAL ================= -->
+<div class="signup-modal" id="signupModal">
+  <div class="signup-form-container">
+    <button class="close-login" id="closeSignup">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="login-header">
+      <h2>Create Account</h2>
+      <p>Join Pauls Valley National Bank</p>
+    </div>
+    <form class="signup-form" id="signupForm">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" required>
+      </div>
+      <div class="form-group">
+        <label for="signupEmail">Email Address</label>
+        <input type="email" id="signupEmail" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+      </div>
+      <button type="submit" class="login-btn">Create Account</button>
+    </form>
+    <div class="form-footer">
+      <button class="signup-btn" id="backToLogin">Back to Login</button>
+    </div>
+  </div>
+</div>
+<!-- ================= END SIGNUP MODAL ================= -->
 
-    <div class="forgot-modal" id="resetPasswordModal">
+
+<!-- ================= FORGOT PASSWORD MODAL ================= -->
+<div class="forgot-modal" id="forgotModal">
+  <div class="forgot-form-container">
+    <button class="close-login" id="closeForgot">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="login-header">
+      <h2>Forgot Password</h2>
+      <p>Enter your email to reset your password</p>
+    </div>
+    <form class="forgot-form" id="forgotForm">
+      <div class="form-group">
+        <label for="forgotEmail">Email Address</label>
+        <input type="email" id="forgotEmail" name="email" required>
+      </div>
+      <button type="submit" class="login-btn">Send Reset Link</button>
+    </form>
+    <div class="form-footer">
+      <button class="signup-btn" id="backToLoginFromForgot">Back to Login</button>
+    </div>
+  </div>
+</div>
+<!-- ================= END FORGOT PASSWORD MODAL ================= -->
+
+
+<!-- ================= RESET PASSWORD MODAL ================= -->
+<div class="reset-modal" id="resetPasswordModal">
   <div class="forgot-form-container">
     <button class="close-login" id="closeReset">
       <i class="fas fa-times"></i>
@@ -393,37 +417,8 @@
     </form>
   </div>
 </div>
-
-
-    <!-- Forgot Password Modal end-->
-
-     <!-- resetPassword -->
-                   
-     <div class="forgot-modal" id="resetPasswordModal">
-    <div class="forgot-form-container">
-        <button class="close-login" id="closeReset">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="login-header">
-            <h2>Set New Password</h2>
-            <p>Enter your new password</p>
-        </div>
-        <form class="forgot-form" id="resetPasswordForm">
-            <input type="hidden" id="resetToken">
-            <div class="form-group">
-                <label for="newPassword">New Password</label>
-                <input type="password" id="newPassword" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="confirmNewPassword">Confirm Password</label>
-                <input type="password" id="confirmNewPassword" required>
-            </div>
-            <button type="submit" class="login-btn">Reset Password</button>
-        </form>
-    </div>
-</div>
-         <!-- resetPassword end -->
-
+<!-- ================= END RESET PASSWORD MODAL ================= -->
+<!-- all user onbaording modal end -->
 
          <!--Send Email Contact Modal -->
 
