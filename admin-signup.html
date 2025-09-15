@@ -240,40 +240,38 @@
     });
 
     // Signup logic
-    document.getElementById("signupForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const Username = document.getElementById("adminName").value;
-      const email = document.getElementById("adminEmail").value;
-      const password = document.getElementById("adminPassword").value;
-      const confirmPassword = document.getElementById("adminConfirmPassword").value;
+    // Signup logic
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("adminName").value;
+  const email = document.getElementById("adminEmail").value;
+  const password = document.getElementById("adminPassword").value;
+  const confirmPassword = document.getElementById("adminConfirmPassword").value;
 
-      if (password !== confirmPassword) {
-        alert("❌ Passwords do not match");
-        return;
-      }
+  if (password !== confirmPassword) {
+    alert("❌ Passwords do not match");
+    return;
+  }
 
-      try {
-        const res = await fetch("https://api.pvbonline.online/api/auth/admin/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          const username = document.getElementById("adminName").value;
-
-             body: JSON.stringify({ username, email, password })
-
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert("✅ Admin account created successfully!");
-          // Switch to login tab automatically
-          document.querySelector("[data-target='loginForm']").click();
-        } else {
-          alert("❌ " + data.message);
-        }
-      } catch (err) {
-        console.error(err);
-        alert("⚠️ Error connecting to server");
-      }
+  try {
+    const res = await fetch("https://api.pvbonline.online/api/auth/admin/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password })
     });
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ Admin account created successfully!");
+      // Switch to login tab automatically
+      document.querySelector("[data-target='loginForm']").click();
+    } else {
+      alert("❌ " + data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("⚠️ Error connecting to server");
+  }
+});
 
     // Login logic
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
