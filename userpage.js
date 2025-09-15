@@ -271,10 +271,18 @@ document.getElementById("transferForm").addEventListener("submit", function(e) {
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector(".action-title").addEventListener("click", () => {
-        document.getElementById("transferModal").style.display = "block";
+        document.getElementById("transferModal").style.display = "flex";
     });
 });
 
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector(".action-title").addEventListener("click", () => {
+        console.log("Transfer button clicked!"); // Add this line
+        document.getElementById("transferModal").style.display = "flex";
+    });
+});
 
 // contact by mail
 function openContactModal() {
