@@ -256,7 +256,10 @@
         const res = await fetch("https://api.pvbonline.online/api/auth/admin/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ Username, email, password })
+          const username = document.getElementById("adminName").value;
+
+             body: JSON.stringify({ username, email, password })
+
         });
         const data = await res.json();
         if (res.ok) {
