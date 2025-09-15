@@ -26,51 +26,64 @@ mobileNavItems.forEach(item => {
 
 
 // chat modal functionality
-<script src="/socket.io/socket.io.js"></script>
+function openChatModal() {
+  document.getElementById("chatModal").style.display = "flex";
+  document.getElementById("chatStatus").innerHTML = `
+    <div class="chat-status-dot" style="background: green;"></div>
+    <span>Connected</span>
+  `;
+}
 
-  const socket = io();
+function closeChatModal() {
+  document.getElementById("chatModal").style.display = "none";
+}
 
-  // Load chat history
-  socket.on("chatHistory", (history) => {
-    const messages = document.getElementById("chatMessages");
-    history.forEach(msg => appendMessage(msg));
-  });
+function sendChatMessage() {
+  const input = document.getElementById("chatInput");
+  const messageText = input.value.trim();
+  if (messageText === "") return;
 
-  // Receive new messages
-  socket.on("chatMessage", (msg) => {
-    appendMessage(msg);
-  });
+  const messages = document.getElementById("chatMessages");
 
-  function sendChatMessage() {
-    const input = document.getElementById("chatInput");
-    const messageText = input.value.trim();
-    if (!messageText) return;
+  // Add user message
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("message", "user-message");
+  messageDiv.innerHTML = `
+    <div class="message-content">
+      <div class="message-header">You</div>
+      <div class="message-text">${messageText}</div>
+      <div class="message-time">${new Date().toLocaleTimeString()}</div>
+    </div>
+  `;
+  messages.appendChild(messageDiv);
 
-    const msg = {
-      sender: "user", // or "admin" depending on page
-      message: messageText,
-      timestamp: new Date()
-    };
+  // Scroll to bottom
+  messages.scrollTop = messages.scrollHeight;
 
-    socket.emit("chatMessage", msg);
-    input.value = "";
-  }
+  input.value = "";
 
-  function appendMessage(msg) {
-    const messages = document.getElementById("chatMessages");
-    const div = document.createElement("div");
-    div.classList.add("message", msg.sender === "admin" ? "agent-message" : "user-message");
-    div.innerHTML = `
+  // Fake agent reply (optional)
+  setTimeout(() => {
+    const reply = document.createElement("div");
+    reply.classList.add("message", "agent-message");
+    reply.innerHTML = `
+      <div class="message-avatar"><i class="fas fa-user-tie"></i></div>
       <div class="message-content">
-        <div class="message-header">${msg.sender === "admin" ? "Customer Support" : "You"}</div>
-        <div class="message-text">${msg.message}</div>
-        <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>
+        <div class="message-header">Customer Support</div>
+        <div class="message-text">Thanks for your message! We'll assist shortly.</div>
+        <div class="message-time">${new Date().toLocaleTimeString()}</div>
       </div>
     `;
-    messages.appendChild(div);
+    messages.appendChild(reply);
     messages.scrollTop = messages.scrollHeight;
-  }
+  }, 1000);
+}
 
+function handleChatKeyPress(event) {
+  if (event.key === "Enter") {
+    sendChatMessage();
+  }
+}
 // end of chat modal functionality
 
 
@@ -234,10 +247,26 @@ document.getElementById('mobileOverlay').addEventListener('click', function() {
     closeContactSupportModal();
 });
 
+
 // End of fined us/card valet contact by form
 
 
-// Contact form submition, sending mail
+// Quick actions for Transaction/mail/transfer           quick-actions buttons
+// Simple modal open/close
+function openModal(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+// Fake transfer form submission
+document.getElementById("transferForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  alert("Transfer submitted!");
+  closeModal('transferModal');
+});
+
 // contact by mail
 function openContactModal() {
   document.getElementById("contactModal").style.display = "block";
@@ -246,6 +275,32 @@ function openContactModal() {
 function closeContactModal() {
   document.getElementById("contactModal").style.display = "none";
 }
+// contact by mail end
+
+
+// Open the Transactions modal
+function openTransactionsModal() {
+  document.getElementById("transactionsModal").style.display = "flex";
+}
+
+// Close the Transactions modal
+function closeTransactionsModal() {
+  document.getElementById("transactionsModal").style.display = "none";
+}
+
+// Also close if user clicks outside modal content
+window.onclick = function(event) {
+  const modal = document.getElementById("transactionsModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+};
+
+//   Quick actions for Transaction/mail/transfer           quick-actions buttons 
+
+
+
+// Contact form submition, sending mail
 
  function showContactModal() {
     document.getElementById("contactModal").style.display = "flex";
@@ -274,232 +329,65 @@ function closeContactModal() {
   });
 
 // Contact form submition, sending mail end
-  // contact by mail end
 
+
+
+// Helper to open/close modals //  Transaction pin
+
+function openModal(id) {
+  document.getElementById(id).style.display = "flex";
+}
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}
 
 // When transfer form is submitted
-// document.getElementById("transferForm").addEventListener("submit", function(e) {
-//   e.preventDefault();
+document.getElementById("transferForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-//   // 🔹 Simulate backend check
-//   // Later, replace with real API call to Node.js
-//   let userHasPin = true; // <-- Replace with backend response
+  // 🔹 Simulate backend check
+  // Later, replace with real API call to Node.js
+  let userHasPin = true; // <-- Replace with backend response
 
-//   if (userHasPin) {
-//     closeModal("transferModal");
-//     openModal("enterPinModal");
-//   } else {
-//     closeModal("transferModal");
-//     openModal("createPinModal");
-//   }
-// });
-
-// function openModal(id) {
-//   document.getElementById(id).style.display = 'flex';
-// }
-// function closeModal(id) {
-//   document.getElementById(id).style.display = 'none';
-// }
-
-
-  // ===transaction  Modal Controls ===
-  function openModal(id) {
-    document.getElementById(id).style.display = "flex";
+  if (userHasPin) {
+    closeModal("transferModal");
+    openModal("enterPinModal");
+  } else {
+    closeModal("transferModal");
+    openModal("createPinModal");
   }
-  function closeModal(id) {
-    document.getElementById(id).style.display = "none";
+});
+
+// Handle Enter PIN form
+document.getElementById("enterPinForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  let pin = document.getElementById("transferPin").value;
+  alert("PIN entered: " + pin);
+  closeModal("enterPinModal");
+  // 🔹 Send PIN to backend for validation
+});
+
+// Handle Create PIN form
+document.getElementById("createPinForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  let newPin = document.getElementById("newPin").value;
+  let confirmPin = document.getElementById("confirmNewPin").value;
+  
+  if (newPin !== confirmPin) {
+    alert("PINs do not match!");
+    return;
   }
+  alert("New PIN created: " + newPin);
+  closeModal("createPinModal");
+  // 🔹 Send to backend to save securely
+});
 
-  // Transactions modal
-  function openTransactionsModal() {
-    document.getElementById("transactionsModal").style.display = "flex";
-  }
-  function closeTransactionsModal() {
-    document.getElementById("transactionsModal").style.display = "none";
-  }
+// Handle Forgot PIN form
+document.getElementById("forgotPinForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  alert("Reset link sent to your email!");
+  closeModal("forgotPinModal");
+  // 🔹 Backend should send email reset link
+});
 
-  // Close when clicking outside modal
-  window.onclick = function (event) {
-    const modal = document.getElementById("transactionsModal");
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  };
-
-  // === Transfer Form ===
-  document.getElementById("transferForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const amount = document.getElementById("transferAmount").value;
-    const recipient = document.getElementById("accountNumber").value;
-
-    try {
-      const token = localStorage.getItem("token"); // assumes token stored at login
-      const res = await fetch("/api/transfer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ amount, recipient }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("✅ Transfer submitted successfully!");
-        closeModal("transferModal");
-        openModal("enterPinModal"); // ask for PIN after transfer starts
-      } else {
-        alert("❌ " + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("⚠️ Transfer failed. Try again.");
-    }
-  });
-
-  // === Enter PIN Form ===
-  document.getElementById("enterPinForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    let pin = document.getElementById("transferPin").value;
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/pin/validate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ pin }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("✅ PIN validated, transfer completed!");
-        closeModal("enterPinModal");
-      } else {
-        alert("❌ " + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("⚠️ Error validating PIN");
-    }
-  });
-
-  // === Create PIN Form ===
-  document.getElementById("createPinForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    let newPin = document.getElementById("newPin").value;
-    let confirmPin = document.getElementById("confirmNewPin").value;
-
-    if (newPin !== confirmPin) {
-      alert("❌ PINs do not match!");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/pin/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ pin: newPin }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("✅ New PIN created!");
-        closeModal("createPinModal");
-      } else {
-        alert("❌ " + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("⚠️ Error creating PIN");
-    }
-  });
-
-  // === Forgot PIN Form ===
-  document.getElementById("forgotPinForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/pin/reset", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("📧 Reset link sent to your email!");
-        closeModal("forgotPinModal");
-      } else {
-        alert("❌ " + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("⚠️ Error sending reset link");
-    }
-  });
-
-
-  async function loadTransactions() {
-  try {
-    const token = localStorage.getItem("token"); // your JWT from login
-    if (!token) {
-      alert("You must be logged in");
-      return;
-    }
-
-    const res = await fetch("/api/transactions?limit=20", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch transactions");
-    }
-
-    const txs = await res.json();
-    const container = document.getElementById("transactionsList");
-    container.innerHTML = "";
-
-    if (txs.length === 0) {
-      container.innerHTML = "<p>No transactions yet.</p>";
-      return;
-    }
-
-    txs.forEach((tx) => {
-      const div = document.createElement("div");
-      div.classList.add("transaction-item");
-      div.innerHTML = `
-        <p><b>${tx.type.toUpperCase()}</b> - ${tx.amount} USD</p>
-        <p>To: ${tx.to || "N/A"}</p>
-        <small>${new Date(tx.date).toLocaleString()}</small>
-      `;
-      container.appendChild(div);
-    });
-  } catch (err) {
-    console.error(err);
-    alert("Error loading transactions");
-  }
-}
-
-// Attach to modal open
-function openTransactionsModal() {
-  document.getElementById("transactionsModal").style.display = "flex";
-  loadTransactions(); // fetch when modal opens
-}
-
-
-// End Transaction 
+// End Transaction pin
