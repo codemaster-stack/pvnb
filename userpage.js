@@ -140,7 +140,7 @@ document.getElementById('loanApplicationForm').addEventListener('submit', async 
     const loanData = Object.fromEntries(formData);
 
     try {
-        const res = await fetch('https://api.pvbonline.online/api/loan/apply', {
+        const res = await fetch('/api/loan/apply', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loanData)
@@ -335,7 +335,7 @@ function closeContactModal() {
 
     try {
       const token = localStorage.getItem("token"); // assumes token stored at login
-      const res = await fetch("https://api.pvbonline.online/api/transfer", {
+      const res = await fetch("/api/transfer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -366,7 +366,7 @@ function closeContactModal() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("https://api.pvbonline.online/api/pin/validate", {
+      const res = await fetch("/api/pin/validate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -402,7 +402,7 @@ function closeContactModal() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("https://api.pvbonline.online/api/pin/create", {
+      const res = await fetch("/api/pin/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -454,7 +454,6 @@ function closeContactModal() {
   });
 
 
-// load transaction
   async function loadTransactions() {
   try {
     const token = localStorage.getItem("token"); // your JWT from login
@@ -463,7 +462,7 @@ function closeContactModal() {
       return;
     }
 
-    const res = await fetch("https://api.pvbonline.online/api/transactions?limit=20", {
+    const res = await fetch("/api/transactions?limit=20", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -501,5 +500,6 @@ function openTransactionsModal() {
   document.getElementById("transactionsModal").style.display = "flex";
   loadTransactions(); // fetch when modal opens
 }
+
 
 // End Transaction 
