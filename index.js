@@ -101,221 +101,247 @@ mobileNavItems.forEach(item => {
 // all user onbarding
 // =================== OPEN/CLOSE MODALS ===================
 
-// Open login modal
+// =================== MODAL HANDLERS ===================
 document.querySelector(".button-olb").addEventListener("click", () => {
-  document.getElementById("loginModal").style.display = "flex";
+    document.getElementById("loginModal").style.display = "flex";
 });
 
 // Close login modal
 document.getElementById("closeLogin").addEventListener("click", () => {
-  document.getElementById("loginModal").style.display = "none";
+    document.getElementById("loginModal").style.display = "none";
 });
 
 // Switch to signup modal
 document.getElementById("showSignup").addEventListener("click", () => {
-  document.getElementById("loginModal").style.display = "none";
-  document.getElementById("signupModal").style.display = "flex";
+    document.getElementById("loginModal").style.display = "none";
+    document.getElementById("signupModal").style.display = "flex";
 });
 
 // Back to login from signup
 document.getElementById("backToLogin").addEventListener("click", () => {
-  document.getElementById("signupModal").style.display = "none";
-  document.getElementById("loginModal").style.display = "flex";
+    document.getElementById("signupModal").style.display = "none";
+    document.getElementById("loginModal").style.display = "flex";
 });
 
 // Close signup modal
 document.getElementById("closeSignup").addEventListener("click", () => {
-  document.getElementById("signupModal").style.display = "none";
+    document.getElementById("signupModal").style.display = "none";
 });
 
 // Switch to forgot modal
 document.getElementById("showForgot").addEventListener("click", () => {
-  document.getElementById("loginModal").style.display = "none";
-  document.getElementById("forgotModal").style.display = "flex";
+    document.getElementById("loginModal").style.display = "none";
+    document.getElementById("forgotModal").style.display = "flex";
 });
 
 // Back to login from forgot
 document.getElementById("backToLoginFromForgot").addEventListener("click", () => {
-  document.getElementById("forgotModal").style.display = "none";
-  document.getElementById("loginModal").style.display = "flex";
+    document.getElementById("forgotModal").style.display = "none";
+    document.getElementById("loginModal").style.display = "flex";
 });
 
 // Close forgot modal
 document.getElementById("closeForgot").addEventListener("click", () => {
-  document.getElementById("forgotModal").style.display = "none";
+    document.getElementById("forgotModal").style.display = "none";
 });
 
 // Close reset modal
 const closeResetBtn = document.getElementById("closeReset");
 if (closeResetBtn) {
-  closeResetBtn.addEventListener("click", () => {
-    document.getElementById("resetPasswordModal").style.display = "none";
-  });
+    closeResetBtn.addEventListener("click", () => {
+        document.getElementById("resetPasswordModal").style.display = "none";
+        // Clear URL parameters when closing
+        window.history.replaceState({}, document.title, window.location.pathname);
+    });
 }
 
-// Universal close if clicking outside any modal
+// Universal close if clicking outside any modal - FIXED CLASS NAMES
 window.addEventListener("click", (e) => {
-  ["login-modal", "signup-modal", "forgot-modal", "reset-password-modal"].forEach((cls) => {
-    if (e.target.classList.contains(cls)) {
-      e.target.style.display = "none";
-    }
-  });
+    ["login-modal", "signup-modal", "forgot-modal", "reset-modal"].forEach((cls) => {
+        if (e.target.classList.contains(cls)) {
+            e.target.style.display = "none";
+        }
+    });
 });
 
 // =================== SIGNUP ===================
 const signupForm = document.getElementById("signupForm");
 if (signupForm) {
-  signupForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("fullName").value;
+        const email = document.getElementById("signupEmail").value;
+        const phone = document.getElementById("phone").value;
+        const password = document.getElementById("signupPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
 
-    const name = document.getElementById("fullName").value;
-    const email = document.getElementById("signupEmail").value;
-    const phone = document.getElementById("phone").value;
-    const password = document.getElementById("signupPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+        if (password !== confirmPassword) {
+            return alert("Passwords do not match!");
+        }
 
-    if (password !== confirmPassword) {
-      return alert("Passwords do not match!");
-    }
-
-    try {
-      const res = await fetch("https://api.pvbonline.online/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, password })
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        alert("Signup successful! Please login.");
-        document.getElementById("signupModal").style.display = "none";
-        document.getElementById("loginModal").style.display = "flex";
-      } else {
-        alert(data.message || "Signup failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred. Please try again.");
-    }
-  });
+        try {
+            const res = await fetch("https://api.pvbonline.online/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, phone, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                alert("Signup successful! Please login.");
+                document.getElementById("signupModal").style.display = "none";
+                document.getElementById("loginModal").style.display = "flex";
+            } else {
+                alert(data.message || "Signup failed");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("An error occurred. Please try again.");
+        }
+    });
 }
 
 // =================== LOGIN ===================
 const loginForm = document.getElementById("loginForm");
 if (loginForm) {
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    try {
-      const res = await fetch("https://api.pvbonline.online/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-      if (res.ok && data.token) {
-        alert("Login successful!");
-        localStorage.setItem("token", data.token);
-        document.getElementById("loginModal").style.display = "none";
-        window.location.href = "userpage.html";
-      } else {
-        alert(data.message || "Login failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred. Please try again.");
-    }
-  });
+        try {
+            const res = await fetch("https://api.pvbonline.online/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (res.ok && data.token) {
+                alert("Login successful!");
+                localStorage.setItem("token", data.token);
+                document.getElementById("loginModal").style.display = "none";
+                window.location.href = "userpage.html";
+            } else {
+                alert(data.message || "Login failed");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("An error occurred. Please try again.");
+        }
+    });
 }
 
 // =================== FORGOT PASSWORD ===================
 const forgotForm = document.getElementById("forgotForm");
 if (forgotForm) {
-  forgotForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    forgotForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("forgotEmail").value;
 
-    const email = document.getElementById("forgotEmail").value;
-    try {
-      const res = await fetch("https://api.pvbonline.online/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        alert("Password reset link sent to your email!");
-        document.getElementById("forgotModal").style.display = "none";
-        document.getElementById("loginModal").style.display = "flex";
-      } else {
-        alert(data.message || "Failed to send reset link");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred. Please try again.");
-    }
-  });
+        try {
+            const res = await fetch("https://api.pvbonline.online/api/auth/forgot-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                alert("Password reset link sent to your email!");
+                document.getElementById("forgotModal").style.display = "none";
+                document.getElementById("loginModal").style.display = "flex";
+            } else {
+                alert(data.message || "Failed to send reset link");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("An error occurred. Please try again.");
+        }
+    });
 }
 
-// =================== RESET PASSWORD ===================
-// =================== RESET PASSWORD ===================
+// =================== RESET PASSWORD - FIXED ===================
 window.addEventListener("DOMContentLoaded", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("resetToken");
-
-  if (token) {
-    const modal = document.getElementById("resetPasswordModal");
-    const tokenInput = document.getElementById("resetToken");
-    if (modal && tokenInput) {
-      modal.style.display = "flex";
-      tokenInput.value = token;
+    console.log("DOM loaded, checking for reset token...");
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("resetToken");
+    
+    console.log("Reset token found:", token);
+    
+    if (token) {
+        const modal = document.getElementById("resetPasswordModal");
+        const tokenInput = document.getElementById("resetToken");
+        
+        console.log("Modal element:", modal);
+        console.log("Token input element:", tokenInput);
+        
+        if (modal && tokenInput) {
+            // Hide all other modals first
+            const loginModal = document.getElementById("loginModal");
+            const signupModal = document.getElementById("signupModal");
+            const forgotModal = document.getElementById("forgotModal");
+            
+            if (loginModal) loginModal.style.display = "none";
+            if (signupModal) signupModal.style.display = "none";
+            if (forgotModal) forgotModal.style.display = "none";
+            
+            // Show reset password modal
+            modal.style.display = "flex";
+            tokenInput.value = token;
+            
+            console.log("Reset password modal should now be visible");
+        } else {
+            console.error("Missing modal or token input elements");
+            if (!modal) console.error("resetPasswordModal element not found in DOM");
+            if (!tokenInput) console.error("resetToken input element not found in DOM");
+        }
+    } else {
+        console.log("No reset token found in URL");
     }
-  }
 });
 
+// Reset password form submission
 const resetForm = document.getElementById("resetPasswordForm");
 if (resetForm) {
-  resetForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const password = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmNewPassword").value;
-    const token = document.getElementById("resetToken").value;
-
-    if (password !== confirmPassword) {
-      return alert("Passwords do not match!");
-    }
-
-    try {
-      const res = await fetch("https://api.pvbonline.online/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, password })
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        alert(data.message || "Password reset successful");
-        document.getElementById("resetPasswordModal").style.display = "none";
+    resetForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
         
-        // ADD THESE LINES TO ROUTE TO LOGIN:
-        document.getElementById("loginModal").style.display = "flex";
-        // Optional: Clear the URL parameters
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else {
-        alert(data.message || "Reset failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred. Please try again.");
-    }
-  });
+        const password = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmNewPassword").value;
+        const token = document.getElementById("resetToken").value;
+        
+        if (password !== confirmPassword) {
+            return alert("Passwords do not match!");
+        }
+        
+        if (password.length < 6) {
+            return alert("Password must be at least 6 characters long!");
+        }
+        
+        try {
+            const res = await fetch("https://api.pvbonline.online/api/auth/reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token, password })
+            });
+            
+            const data = await res.json();
+            
+            if (res.ok) {
+                alert(data.message || "Password reset successful!");
+                document.getElementById("resetPasswordModal").style.display = "none";
+                document.getElementById("loginModal").style.display = "flex";
+                
+                // Clear the URL parameters
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else {
+                alert(data.message || "Reset failed");
+            }
+        } catch (err) {
+            console.error("Reset password error:", err);
+            alert("An error occurred. Please try again.");
+        }
+    });
 }
-
 // all user onbarding end
 
  //Send Email Contact Modal Functions
