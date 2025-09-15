@@ -668,3 +668,26 @@ document.querySelector('.mail-icon').addEventListener('click', () => {
 });
 
 //  end notification icon
+
+
+
+// ===== Logout Handling =====
+document.addEventListener("DOMContentLoaded", () => {
+  // Redirect to login if not logged in
+  const token = localStorage.getItem("adminToken");
+  if (!token) {
+    window.location.href = "admin-signup.html"; 
+  }
+
+  // Attach logout logic
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem("adminToken");
+        window.location.href = "admin-signup.html"; 
+      }
+    });
+  }
+});
+// end log out  
