@@ -215,17 +215,11 @@ document.getElementById('supportForm').addEventListener('submit', async function
     const message = document.getElementById('supportMessage').value;
 
     try {
-        const token = localStorage.getItem("token"); // stored on login
-
-const res = await fetch("https://api.pvbonline.online/api/support/contact", {
-    method: "POST",
-    headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({ subject, message, phone })
-});
-
+        const res = await fetch("https://api.pvbonline.online/api/support/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, phone, subject, message })
+        });
 
         const data = await res.json();
 
@@ -248,7 +242,7 @@ document.getElementById('mobileOverlay').addEventListener('click', function() {
 });
 
 
-// End of fined us/card valet contact by form
+// End of fined us/card valet
 
 
 // Quick actions for Transaction/mail/transfer           quick-actions buttons
@@ -302,33 +296,37 @@ window.onclick = function(event) {
 
 // Contact form submition, sending mail
 
- function showContactModal() {
-    document.getElementById("contactModal").style.display = "flex";
+document.getElementById("contactForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const formData = {
+    name: document.getElementById("contactName").value,
+    email: document.getElementById("contactEmail").value,
+    subject: document.getElementById("contactSubject").value,
+    message: document.getElementById("contactMessage").value
+  };
+
+  try {
+    const res = await fetch("/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    if (res.ok) {
+      alert("✅ Support request sent successfully!");
+      closeContactModal();
+      document.getElementById("contactForm").reset();
+    } else {
+      alert("❌ Failed to send. Try again later.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("⚠️ Error sending message.");
   }
+});
 
-  function closeContactModal() {
-    document.getElementById("contactModal").style.display = "none";
-  }
-
-  // Handle form submit
-  document.getElementById("contactForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById("contactName").value;
-    const email = document.getElementById("contactEmail").value;
-    const subject = document.getElementById("contactSubject").value;
-    const message = document.getElementById("contactMessage").value;
-
-    // build mailto
-    const mailtoLink = `mailto:support@pvbonline.online?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("From: " + name + " (" + email + ")\n\n" + message)}`;
-
-    window.location.href = mailtoLink;
-
-    // close modal
-    closeContactModal();
-  });
-
-// Contact form submition, sending mail end
+// Contact form submition, sending mail
 
 
 
