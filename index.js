@@ -113,9 +113,14 @@ window.addEventListener("click", (e) => {
 // =================== OPEN/CLOSE MODALS ===================
 
 // Open login modal
-document.querySelector(".button-olb").addEventListener("click", () => {
-    document.getElementById("loginModal").style.display = "flex";
-});
+const button = document.querySelector(".button-olb");
+if (button) {
+    button.addEventListener("click", () => {
+        document.getElementById("loginModal").style.display = "flex";
+    });
+} else {
+    console.log("Button not found!");
+}
 
 // Close login modal
 document.getElementById("closeLogin").addEventListener("click", () => {
