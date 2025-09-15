@@ -262,18 +262,26 @@ function closeModal(id) {
 
 // Fake transfer form submission
 
-document.getElementById("transferForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  alert("Transfer submitted!");
-  closeModal('transferModal');
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM loaded");
+    const actionBtn = document.querySelector(".action-btn");
+    const modal = document.getElementById("transferModal");
+    
+    console.log("Action button found:", actionBtn);
+    console.log("Modal found:", modal);
+    
+    if (actionBtn && modal) {
+        actionBtn.addEventListener("click", () => {
+            console.log("Transfer button clicked!");
+            modal.style.display = "flex";
+        });
+    } else {
+        console.log("Missing elements - button or modal not found");
+    }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector(".action-btn").addEventListener("click", () => {
-        console.log("Transfer button clicked!");
-        document.getElementById("transferModal").style.display = "flex";
-    });
-});
+
+
 
 // contact by mail
 function openContactModal() {
