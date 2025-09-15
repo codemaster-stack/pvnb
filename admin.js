@@ -578,7 +578,7 @@ function toggleUserStatus(btn) {
 }
 
 // ========== Create User ==========
-function createUser(event) {
+async function createUser(event) {
   event.preventDefault();
 
   const name = document.getElementById("newUserName")?.value.trim();
@@ -591,27 +591,72 @@ function createUser(event) {
     return;
   }
 
-  const table = document.getElementById("manageUsersTable");
-  if (table) {
-    const row = table.insertRow();
-    
-    row.innerHTML = `
-      <td><input type="checkbox" class="userCheckbox"></td>
-      <td>${table.rows.length}</td>
-      <td>${name}</td>
-      <td>${email}</td>
-      <td>${phone}</td>
-      <td class="status">Active</td>
-      <td>
-        <button onclick="toggleUserStatus(this)">Deactivate</button>
-      </td>
-    `;
+  // Show loading state
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn?.textContent;
+  if (submitBtn) {
+    submitBtn.textContent = "Creating User...";
+    submitBtn.disabled = true;
   }
 
-  alert(`User "${name}" created successfully!`);
+  try {
+    // Make API call to register user
+    const response = await fetch("https://api.pvbonline.online/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        password: password
+      })
+    });
 
-  const form = document.getElementById("createUserForm");
-  if (form) form.reset();
+    const data = await response.json();
+
+    if (response.ok) {
+      // Success - add user to the manage users table
+      const table = document.getElementById("manageUsersTable");
+      if (table) {
+        const row = table.insertRow();
+        
+        row.innerHTML = `
+          <td><input type="checkbox" class="userCheckbox" data-id="${data.user?.id || 'unknown'}"></td>
+          <td>${table.rows.length}</td>
+          <td>${name}</td>
+          <td>${email}</td>
+          <td>${phone}</td>
+          <td class="status">Active</td>
+          <td>
+            <button onclick="toggleUserStatus(this)">Deactivate</button>
+          </td>
+        `;
+      }
+
+      alert(`User "${name}" created successfully!`);
+      
+      // Reset form
+      const form = document.getElementById("createUserForm");
+      if (form) form.reset();
+
+    } else {
+      // Handle API errors
+      const errorMessage = data.message || data.error || "Failed to create user";
+      alert(`Error: ${errorMessage}`);
+    }
+
+  } catch (error) {
+    console.error("Error creating user:", error);
+    alert("Network error. Please check your connection and try again.");
+  } finally {
+    // Reset button state
+    if (submitBtn) {
+      submitBtn.textContent = originalText || "Create User";
+      submitBtn.disabled = false;
+    }
+  }
 }
 
 // ========== Update User Profile ==========
