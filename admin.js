@@ -671,15 +671,16 @@ document.querySelector('.mail-icon').addEventListener('click', () => {
 
 
 
-// ===== Logout Handling =====
+// ========== Logout Handling ==========
 document.addEventListener("DOMContentLoaded", () => {
-  // Redirect to login if not logged in
   const token = localStorage.getItem("adminToken");
+
+  // Redirect to login if no token
   if (!token) {
-    window.location.href = "admin-signup.html"; 
+    window.location.href = "admin-signup.html";
   }
 
-  // Attach logout logic
+  // Logout logic
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
@@ -690,4 +691,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 // end log out  
