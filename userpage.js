@@ -264,21 +264,20 @@ function closeModal(id) {
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM loaded");
-    const actionBtn = document.querySelector(".action-btn");
+
     const modal = document.getElementById("transferModal");
-    
-    console.log("Action button found:", actionBtn);
-    console.log("Modal found:", modal);
-    
-    if (actionBtn && modal) {
-        actionBtn.addEventListener("click", () => {
+    const transferBtn = document.getElementById("transferBtn"); 
+
+    if (transferBtn && modal) {
+        transferBtn.addEventListener("click", () => {
             console.log("Transfer button clicked!");
             modal.style.display = "flex";
         });
     } else {
-        console.log("Missing elements - button or modal not found");
+        console.log("Transfer button or modal not found");
     }
 });
+
 
 
 
