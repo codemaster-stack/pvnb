@@ -531,20 +531,105 @@ function renderEmails() {
 }
 
 // ========== User Management ==========
+let allUsers = [];
+
+// Load users when manage users section is accessed
+async function loadUsers() {
+  try {
+    const response = await fetch("https://api.pvbonline.online/api/auth/admin/get-users");
+    const data = await response.json();
+
+    if (response.ok) {
+      allUsers = data.users || data || [];
+      renderUsers();
+    } else {
+      console.error("Failed to load users:", data.message || data.error);
+      alert("Failed to load users. Please try again.");
+    }
+  } catch (error) {
+    console.error("Error loading users:", error);
+    alert("Network error while loading users. Please check your connection.");
+  }
+}
+
+// Render users in the table
+function renderUsers(users = allUsers) {
+  const table = document.getElementById("manageUsersTable");
+  if (!table) return;
+
+  // Clear existing rows (except header)
+  const tbody = table.querySelector('tbody');
+  if (tbody) {
+    tbody.innerHTML = '';
+  } else {
+    // If no tbody, clear all rows except first one (header)
+    while (table.rows.length > 1) {
+      table.deleteRow(1);
+    }
+  }
+
+  users.forEach((user, index) => {
+    const row = table.insertRow();
+    row.innerHTML = `
+      <td><input type="checkbox" class="userCheckbox" data-id="${user.id || user._id}"></td>
+      <td>${index + 1}</td>
+      <td>${user.name || user.fullName || 'N/A'}</td>
+      <td>${user.email || 'N/A'}</td>
+      <td>₦${user.balance || '0.00'}</td>
+      <td class="status">${user.status || 'Active'}</td>
+      <td>
+        <button onclick="toggleUserStatus(this, '${user.id || user._id}')">
+          ${user.status === 'Active' ? 'Deactivate' : 'Activate'}
+        </button>
+      </td>
+    `;
+  });
+}
+
+// Auto-load users when manage-users section is clicked
+setTimeout(() => {
+  const manageUsersLink = document.querySelector('a[data-target="manage-users"]');
+  if (manageUsersLink) {
+    manageUsersLink.addEventListener('click', () => {
+      setTimeout(loadUsers, 100); // Small delay to ensure section is shown
+    });
+  }
+}, 100);
+
 function toggleAllUsers(source) {
   document.querySelectorAll(".userCheckbox").forEach(cb => cb.checked = source.checked);
 }
 
 function bulkFund() {
-  alert("Bulk Fund triggered");
+  const selected = document.querySelectorAll("#manageUsersTable input[type='checkbox']:checked");
+  if (selected.length === 0) {
+    alert("Please select at least one user.");
+    return;
+  }
+  alert("Bulk Fund triggered for " + selected.length + " users");
 }
 
 function bulkEmail() {
-  alert("Bulk Email triggered");
+  const selected = document.querySelectorAll("#manageUsersTable input[type='checkbox']:checked");
+  if (selected.length === 0) {
+    alert("Please select at least one user.");
+    return;
+  }
+  alert("Bulk Email triggered for " + selected.length + " users");
 }
 
 function bulkDelete() {
-  alert("Bulk Delete triggered");
+  const selected = document.querySelectorAll("#manageUsersTable input[type='checkbox']:checked");
+  if (selected.length === 0) {
+    alert("Please select at least one user to delete.");
+    return;
+  }
+
+  if (!confirm(`Are you sure you want to delete ${selected.length} selected users? This cannot be undone.`)) {
+    return;
+  }
+
+  alert("Bulk Delete triggered for " + selected.length + " users");
 }
 
 function bulkPinReset() {
@@ -564,7 +649,7 @@ function bulkPinReset() {
   alert("Selected users' PINs have been reset.");
 }
 
-function toggleUserStatus(btn) {
+function toggleUserStatus(btn, userId) {
   const row = btn.closest("tr");
   const statusCell = row.querySelector(".status");
   
@@ -575,6 +660,9 @@ function toggleUserStatus(btn) {
     statusCell.textContent = "Active";
     btn.textContent = "Deactivate";
   }
+
+  // TODO: Make API call to update user status
+  console.log(`Toggling status for user ID: ${userId}`);
 }
 
 // ========== Create User ==========
