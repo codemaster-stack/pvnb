@@ -261,11 +261,20 @@ function closeModal(id) {
 }
 
 // Fake transfer form submission
+
 document.getElementById("transferForm").addEventListener("submit", function(e) {
   e.preventDefault();
   alert("Transfer submitted!");
   closeModal('transferModal');
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector(".action-title").addEventListener("click", () => {
+        document.getElementById("transferModal").style.display = "block";
+    });
+});
+
 
 // contact by mail
 function openContactModal() {
