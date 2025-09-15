@@ -215,11 +215,17 @@ document.getElementById('supportForm').addEventListener('submit', async function
     const message = document.getElementById('supportMessage').value;
 
     try {
-        const res = await fetch("https://api.pvbonline.online/api/support/contact", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, phone, subject, message })
-        });
+        const token = localStorage.getItem("token"); // stored on login
+
+const res = await fetch("https://api.pvbonline.online/api/support/contact", {
+    method: "POST",
+    headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ subject, message, phone })
+});
+
 
         const data = await res.json();
 
