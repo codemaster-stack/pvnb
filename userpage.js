@@ -26,64 +26,51 @@ mobileNavItems.forEach(item => {
 
 
 // chat modal functionality
-function openChatModal() {
-  document.getElementById("chatModal").style.display = "flex";
-  document.getElementById("chatStatus").innerHTML = `
-    <div class="chat-status-dot" style="background: green;"></div>
-    <span>Connected</span>
-  `;
-}
+<script src="/socket.io/socket.io.js"></script>
 
-function closeChatModal() {
-  document.getElementById("chatModal").style.display = "none";
-}
+  const socket = io();
 
-function sendChatMessage() {
-  const input = document.getElementById("chatInput");
-  const messageText = input.value.trim();
-  if (messageText === "") return;
+  // Load chat history
+  socket.on("chatHistory", (history) => {
+    const messages = document.getElementById("chatMessages");
+    history.forEach(msg => appendMessage(msg));
+  });
 
-  const messages = document.getElementById("chatMessages");
+  // Receive new messages
+  socket.on("chatMessage", (msg) => {
+    appendMessage(msg);
+  });
 
-  // Add user message
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", "user-message");
-  messageDiv.innerHTML = `
-    <div class="message-content">
-      <div class="message-header">You</div>
-      <div class="message-text">${messageText}</div>
-      <div class="message-time">${new Date().toLocaleTimeString()}</div>
-    </div>
-  `;
-  messages.appendChild(messageDiv);
+  function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    const messageText = input.value.trim();
+    if (!messageText) return;
 
-  // Scroll to bottom
-  messages.scrollTop = messages.scrollHeight;
+    const msg = {
+      sender: "user", // or "admin" depending on page
+      message: messageText,
+      timestamp: new Date()
+    };
 
-  input.value = "";
+    socket.emit("chatMessage", msg);
+    input.value = "";
+  }
 
-  // Fake agent reply (optional)
-  setTimeout(() => {
-    const reply = document.createElement("div");
-    reply.classList.add("message", "agent-message");
-    reply.innerHTML = `
-      <div class="message-avatar"><i class="fas fa-user-tie"></i></div>
+  function appendMessage(msg) {
+    const messages = document.getElementById("chatMessages");
+    const div = document.createElement("div");
+    div.classList.add("message", msg.sender === "admin" ? "agent-message" : "user-message");
+    div.innerHTML = `
       <div class="message-content">
-        <div class="message-header">Customer Support</div>
-        <div class="message-text">Thanks for your message! We'll assist shortly.</div>
-        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        <div class="message-header">${msg.sender === "admin" ? "Customer Support" : "You"}</div>
+        <div class="message-text">${msg.message}</div>
+        <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>
       </div>
     `;
-    messages.appendChild(reply);
+    messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
-  }, 1000);
-}
-
-function handleChatKeyPress(event) {
-  if (event.key === "Enter") {
-    sendChatMessage();
   }
-}
+
 // end of chat modal functionality
 
 
@@ -144,21 +131,36 @@ function closeLoanApplication() {
     document.getElementById('loanApplicationModal').style.display = 'none';
 }
 
+
 // Handle loan application form submission
-document.getElementById('loanApplicationForm').addEventListener('submit', function(e) {
+document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // Get form data
     const formData = new FormData(this);
     const loanData = Object.fromEntries(formData);
-    
-    // Here you would normally send data to server
-    alert('Loan application submitted successfully! We will contact you soon.');
-    
-    // Close modal and reset form
-    closeLoanApplication();
-    this.reset();
+
+    try {
+        const res = await fetch('https://api.pvbonline.online/api/loan/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(loanData)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            alert('Loan application submitted successfully! We will contact you soon.');
+            closeLoanApplication();
+            this.reset();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    } catch (err) {
+        alert('Server error, please try again later.');
+    }
 });
+
+
 
 // Close modals when clicking outside
 window.onclick = function(event) {
@@ -190,7 +192,7 @@ function closeContactSupportModal() {
 }
 
 // Handle form submission
-document.getElementById('supportForm').addEventListener('submit', function(e) {
+document.getElementById('supportForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     // Get form data
@@ -198,13 +200,33 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
     const phone = document.getElementById('supportPhone').value;
     const subject = document.getElementById('supportSubject').value;
     const message = document.getElementById('supportMessage').value;
-    
-    // Here you can handle the form submission (send to server, etc.)
-    alert('Message sent successfully!');
-    closeContactSupportModal();
-    
-    // Reset form
-    this.reset();
+
+    try {
+        const token = localStorage.getItem("token"); // stored on login
+
+const res = await fetch("https://api.pvbonline.online/api/support/contact", {
+    method: "POST",
+    headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ subject, message, phone })
+});
+
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("Message sent successfully!");
+            closeContactSupportModal();
+            this.reset();
+        } else {
+            alert(data.message || "Failed to send message");
+        }
+    } catch (err) {
+        console.error("Support form error:", err);
+        alert("An error occurred. Please try again.");
+    }
 });
 
 // Close modal when clicking overlay
@@ -212,26 +234,10 @@ document.getElementById('mobileOverlay').addEventListener('click', function() {
     closeContactSupportModal();
 });
 
+// End of fined us/card valet contact by form
 
-// End of fined us/card valet
 
-
-// Quick actions for Transaction/mail/transfer           quick-actions buttons
-// Simple modal open/close
-function openModal(id) {
-  document.getElementById(id).style.display = 'flex';
-}
-function closeModal(id) {
-  document.getElementById(id).style.display = 'none';
-}
-
-// Fake transfer form submission
-document.getElementById("transferForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  alert("Transfer submitted!");
-  closeModal('transferModal');
-});
-
+// Contact form submition, sending mail
 // contact by mail
 function openContactModal() {
   document.getElementById("contactModal").style.display = "block";
@@ -240,125 +246,260 @@ function openContactModal() {
 function closeContactModal() {
   document.getElementById("contactModal").style.display = "none";
 }
-// contact by mail end
 
-
-// Open the Transactions modal
-function openTransactionsModal() {
-  document.getElementById("transactionsModal").style.display = "flex";
-}
-
-// Close the Transactions modal
-function closeTransactionsModal() {
-  document.getElementById("transactionsModal").style.display = "none";
-}
-
-// Also close if user clicks outside modal content
-window.onclick = function(event) {
-  const modal = document.getElementById("transactionsModal");
-  if (event.target === modal) {
-    modal.style.display = "none";
+ function showContactModal() {
+    document.getElementById("contactModal").style.display = "flex";
   }
-};
 
-
-
-//   Quick actions for Transaction/mail/transfer           quick-actions buttons 
-
-
-
-// Contact form submition, sending mail
-
-document.getElementById("contactForm").addEventListener("submit", async function (e) {
-  e.preventDefault();
-
-  const formData = {
-    name: document.getElementById("contactName").value,
-    email: document.getElementById("contactEmail").value,
-    subject: document.getElementById("contactSubject").value,
-    message: document.getElementById("contactMessage").value
-  };
-
-  try {
-    const res = await fetch("/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    });
-
-    if (res.ok) {
-      alert("✅ Support request sent successfully!");
-      closeContactModal();
-      document.getElementById("contactForm").reset();
-    } else {
-      alert("❌ Failed to send. Try again later.");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("⚠️ Error sending message.");
+  function closeContactModal() {
+    document.getElementById("contactModal").style.display = "none";
   }
-});
 
-// Contact form submition, sending mail
+  // Handle form submit
+  document.getElementById("contactForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
+    const name = document.getElementById("contactName").value;
+    const email = document.getElementById("contactEmail").value;
+    const subject = document.getElementById("contactSubject").value;
+    const message = document.getElementById("contactMessage").value;
 
+    // build mailto
+    const mailtoLink = `mailto:support@pvbonline.online?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("From: " + name + " (" + email + ")\n\n" + message)}`;
 
-// Helper to open/close modals // End Transaction pin
+    window.location.href = mailtoLink;
 
-function openModal(id) {
-  document.getElementById(id).style.display = "flex";
-}
-function closeModal(id) {
-  document.getElementById(id).style.display = "none";
-}
+    // close modal
+    closeContactModal();
+  });
+
+// Contact form submition, sending mail end
+  // contact by mail end
+
 
 // When transfer form is submitted
-document.getElementById("transferForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+// document.getElementById("transferForm").addEventListener("submit", function(e) {
+//   e.preventDefault();
 
-  // 🔹 Simulate backend check
-  // Later, replace with real API call to Node.js
-  let userHasPin = true; // <-- Replace with backend response
+//   // 🔹 Simulate backend check
+//   // Later, replace with real API call to Node.js
+//   let userHasPin = true; // <-- Replace with backend response
 
-  if (userHasPin) {
-    closeModal("transferModal");
-    openModal("enterPinModal");
-  } else {
-    closeModal("transferModal");
-    openModal("createPinModal");
+//   if (userHasPin) {
+//     closeModal("transferModal");
+//     openModal("enterPinModal");
+//   } else {
+//     closeModal("transferModal");
+//     openModal("createPinModal");
+//   }
+// });
+
+// function openModal(id) {
+//   document.getElementById(id).style.display = 'flex';
+// }
+// function closeModal(id) {
+//   document.getElementById(id).style.display = 'none';
+// }
+
+
+  // ===transaction  Modal Controls ===
+  function openModal(id) {
+    document.getElementById(id).style.display = "flex";
   }
-});
-
-// Handle Enter PIN form
-document.getElementById("enterPinForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  let pin = document.getElementById("transferPin").value;
-  alert("PIN entered: " + pin);
-  closeModal("enterPinModal");
-  // 🔹 Send PIN to backend for validation
-});
-
-// Handle Create PIN form
-document.getElementById("createPinForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  let newPin = document.getElementById("newPin").value;
-  let confirmPin = document.getElementById("confirmNewPin").value;
-  
-  if (newPin !== confirmPin) {
-    alert("PINs do not match!");
-    return;
+  function closeModal(id) {
+    document.getElementById(id).style.display = "none";
   }
-  alert("New PIN created: " + newPin);
-  closeModal("createPinModal");
-  // 🔹 Send to backend to save securely
-});
 
-// Handle Forgot PIN form
-document.getElementById("forgotPinForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  alert("Reset link sent to your email!");
-  closeModal("forgotPinModal");
-  // 🔹 Backend should send email reset link
-});
+  // Transactions modal
+  function openTransactionsModal() {
+    document.getElementById("transactionsModal").style.display = "flex";
+  }
+  function closeTransactionsModal() {
+    document.getElementById("transactionsModal").style.display = "none";
+  }
 
-// End Transaction pin
+  // Close when clicking outside modal
+  window.onclick = function (event) {
+    const modal = document.getElementById("transactionsModal");
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // === Transfer Form ===
+  document.getElementById("transferForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const amount = document.getElementById("transferAmount").value;
+    const recipient = document.getElementById("accountNumber").value;
+
+    try {
+      const token = localStorage.getItem("token"); // assumes token stored at login
+      const res = await fetch("https://api.pvbonline.online/api/transfer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ amount, recipient }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("✅ Transfer submitted successfully!");
+        closeModal("transferModal");
+        openModal("enterPinModal"); // ask for PIN after transfer starts
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Transfer failed. Try again.");
+    }
+  });
+
+  // === Enter PIN Form ===
+  document.getElementById("enterPinForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    let pin = document.getElementById("transferPin").value;
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("https://api.pvbonline.online/api/pin/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ pin }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("✅ PIN validated, transfer completed!");
+        closeModal("enterPinModal");
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Error validating PIN");
+    }
+  });
+
+  // === Create PIN Form ===
+  document.getElementById("createPinForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    let newPin = document.getElementById("newPin").value;
+    let confirmPin = document.getElementById("confirmNewPin").value;
+
+    if (newPin !== confirmPin) {
+      alert("❌ PINs do not match!");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("https://api.pvbonline.online/api/pin/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ pin: newPin }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("✅ New PIN created!");
+        closeModal("createPinModal");
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Error creating PIN");
+    }
+  });
+
+  // === Forgot PIN Form ===
+  document.getElementById("forgotPinForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/pin/reset", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("📧 Reset link sent to your email!");
+        closeModal("forgotPinModal");
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Error sending reset link");
+    }
+  });
+
+
+// load transaction
+  async function loadTransactions() {
+  try {
+    const token = localStorage.getItem("token"); // your JWT from login
+    if (!token) {
+      alert("You must be logged in");
+      return;
+    }
+
+    const res = await fetch("https://api.pvbonline.online/api/transactions?limit=20", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch transactions");
+    }
+
+    const txs = await res.json();
+    const container = document.getElementById("transactionsList");
+    container.innerHTML = "";
+
+    if (txs.length === 0) {
+      container.innerHTML = "<p>No transactions yet.</p>";
+      return;
+    }
+
+    txs.forEach((tx) => {
+      const div = document.createElement("div");
+      div.classList.add("transaction-item");
+      div.innerHTML = `
+        <p><b>${tx.type.toUpperCase()}</b> - ${tx.amount} USD</p>
+        <p>To: ${tx.to || "N/A"}</p>
+        <small>${new Date(tx.date).toLocaleString()}</small>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Error loading transactions");
+  }
+}
+
+// Attach to modal open
+function openTransactionsModal() {
+  document.getElementById("transactionsModal").style.display = "flex";
+  loadTransactions(); // fetch when modal opens
+}
+
+// End Transaction 

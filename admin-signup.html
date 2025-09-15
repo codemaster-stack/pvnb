@@ -165,7 +165,7 @@
     <form id="signupForm" class="form active">
       <h2>Create Admin Account</h2>
       <div class="form-group">
-        <label for="adminName">Full Name</label>
+        <label for="adminName">Username</label>
         <input type="text" id="adminName" required>
       </div>
       <div class="form-group">
@@ -208,6 +208,22 @@
     </form>
   </div>
 
+
+      <!-- Reset Password Form (hidden modal) -->
+    <form id="resetForm" class="form">
+      <h2>Set New Password</h2>
+      <div class="form-group">
+        <label for="resetPassword">New Password</label>
+        <input type="password" id="resetPassword" required>
+      </div>
+      <div class="form-group">
+        <label for="resetConfirmPassword">Confirm Password</label>
+        <input type="password" id="resetConfirmPassword" required>
+      </div>
+      <button type="submit">Update Password</button>
+    </form>
+
+
   <script>
     // Tab switching
     const tabs = document.querySelectorAll(".tab-btn");
@@ -226,7 +242,7 @@
     // Signup logic
     document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const fullName = document.getElementById("adminName").value;
+      const Username = document.getElementById("adminName").value;
       const email = document.getElementById("adminEmail").value;
       const password = document.getElementById("adminPassword").value;
       const confirmPassword = document.getElementById("adminConfirmPassword").value;
@@ -237,10 +253,10 @@
       }
 
       try {
-        const res = await fetch("https://pvnbank.onrender.com/api/auth/admin/register", {
+        const res = await fetch("https://api.pvbonline.online/api/auth/admin/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fullName, email, password })
+          body: JSON.stringify({ Username, email, password })
         });
         const data = await res.json();
         if (res.ok) {
@@ -263,7 +279,7 @@
       const password = document.getElementById("loginPassword").value;
 
       try {
-        const res = await fetch("https://pvnbank.onrender.com/api/auth/admin/login", {
+        const res = await fetch("https://api.pvbonline.online/api/auth/admin/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
@@ -272,7 +288,7 @@
         if (res.ok) {
           alert("✅ Login successful!");
           localStorage.setItem('adminToken', data.token);
-          window.location.href = "admin-dashboard.html"; // redirect
+          window.location.href = "admin.html"; // redirect
         } else {
           alert("❌ " + data.message);
         }
@@ -288,7 +304,7 @@
       const email = document.getElementById("forgotEmail").value;
 
       try {
-        const res = await fetch("https://pvnbank.onrender.com/api/auth/admin/forgot-password", {
+        const res = await fetch("https://api.pvbonline.online/api/auth/admin/forgot-password", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email })
@@ -304,6 +320,53 @@
         alert("⚠️ Error connecting to server");
       }
     });
+
+
+
+    // Auto-detect token from URL (if clicked from email)
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get("token");
+
+if (token) {
+  // Show Reset form if token exists in URL
+  forms.forEach(f => f.classList.remove("active"));
+  document.getElementById("resetForm").classList.add("active");
+}
+
+// Reset password logic
+document.getElementById("resetForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const password = document.getElementById("resetPassword").value;
+  const confirmPassword = document.getElementById("resetConfirmPassword").value;
+
+  if (password !== confirmPassword) {
+    alert("❌ Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/auth/admin/reset-password/${token}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ Password reset successful! Please login.");
+      // Redirect back to login form
+      forms.forEach(f => f.classList.remove("active"));
+      document.querySelector("[data-target='loginForm']").click();
+    } else {
+      alert("❌ " + data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("⚠️ Error connecting to server");
+  }
+});
+
   </script>
 </body>
 </html>

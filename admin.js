@@ -1,49 +1,50 @@
 
 // chatBox
 // Toggle chat box
-const openChatBtn = document.getElementById("openChat");
-const closeChatBtn = document.getElementById("closeChat");
-const chatBox = document.getElementById("chatBox");
+<script src="/socket.io/socket.io.js"></script>
 
-openChatBtn.addEventListener("click", () => {
-  chatBox.style.display = "flex";
-  openChatBtn.style.display = "none";
-});
+  const socket = io();
 
-closeChatBtn.addEventListener("click", () => {
-  chatBox.style.display = "none";
-  openChatBtn.style.display = "block";
-});
-// togle chatBox end
-// Chat logic
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
-const sendMessageBtn = document.getElementById("sendMessage");
+  // Load chat history
+  socket.on("chatHistory", (history) => {
+    const messages = document.getElementById("chatMessages");
+    history.forEach(msg => appendMessage(msg));
+  });
 
-function appendMessage(text, sender = "admin") {
-  const msg = document.createElement("div");
-  msg.classList.add("message", sender);
-  msg.textContent = text;
-  chatMessages.appendChild(msg);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-// chat logic end
-// Send message
-sendMessageBtn.addEventListener("click", () => {
-  const text = chatInput.value.trim();
-  if (text) {
-    appendMessage(text, "admin");
-    // send message end
-    // TODO: send to server via socket.emit()
-    chatInput.value = "";
+  // Receive new messages
+  socket.on("chatMessage", (msg) => {
+    appendMessage(msg);
+  });
+
+  function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    const messageText = input.value.trim();
+    if (!messageText) return;
+
+    const msg = {
+      sender: "user", // or "admin" depending on page
+      message: messageText,
+      timestamp: new Date()
+    };
+
+    socket.emit("chatMessage", msg);
+    input.value = "";
   }
-});
 
-chatInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    sendMessageBtn.click();
+  function appendMessage(msg) {
+    const messages = document.getElementById("chatMessages");
+    const div = document.createElement("div");
+    div.classList.add("message", msg.sender === "admin" ? "agent-message" : "user-message");
+    div.innerHTML = `
+      <div class="message-content">
+        <div class="message-header">${msg.sender === "admin" ? "Customer Support" : "You"}</div>
+        <div class="message-text">${msg.message}</div>
+        <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>
+      </div>
+    `;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
   }
-});
 
 // end chat Box
 
@@ -424,7 +425,7 @@ document.getElementById("sendEmailForm").addEventListener("submit", async (e) =>
 
   try {
     // Send request to backend
-    const res = await fetch("https://your-backend-url.com/api/admin/send-email", {
+    const res = await fetch("https://api.pvbonline.online/api/admin/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ to, subject, body })
@@ -632,5 +633,38 @@ function updateUserProfile(event) {
   document.getElementById("updateUserForm").reset();
 }
 
-
 // end of update userprofile
+
+
+
+// notification icon
+
+async function fetchUnreadNotifications() {
+    try {
+        const res = await fetch('https://api.pvbonline.online/api/loan/unread-count');
+        const data = await res.json();
+        const badge = document.getElementById('notificationBadge');
+
+        if (data.count > 0) {
+            badge.textContent = data.count;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Error fetching notifications:', err);
+    }
+}
+
+// Initial fetch
+fetchUnreadNotifications();
+
+// Refresh every 30s
+setInterval(fetchUnreadNotifications, 30000);
+
+// Optional: redirect to loan applications list when clicked
+document.querySelector('.mail-icon').addEventListener('click', () => {
+    window.location.href = 'https://api.pvbonline.online/admin/loan-applications';
+});
+
+//  end notification icon

@@ -25,64 +25,52 @@ mobileNavItems.forEach(item => {
 // end of hamburger menu code
 
 // chat modal functionality
-function openChatModal() {
-  document.getElementById("chatModal").style.display = "flex";
-  document.getElementById("chatStatus").innerHTML = `
-    <div class="chat-status-dot" style="background: green;"></div>
-    <span>Connected</span>
-  `;
-}
+<script src="/socket.io/socket.io.js"></script>
 
-function closeChatModal() {
-  document.getElementById("chatModal").style.display = "none";
-}
+  const socket = io();
 
-function sendChatMessage() {
-  const input = document.getElementById("chatInput");
-  const messageText = input.value.trim();
-  if (messageText === "") return;
+  // Load chat history
+  socket.on("chatHistory", (history) => {
+    const messages = document.getElementById("chatMessages");
+    history.forEach(msg => appendMessage(msg));
+  });
 
-  const messages = document.getElementById("chatMessages");
+  // Receive new messages
+  socket.on("chatMessage", (msg) => {
+    appendMessage(msg);
+  });
 
-  // Add user message
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", "user-message");
-  messageDiv.innerHTML = `
-    <div class="message-content">
-      <div class="message-header">You</div>
-      <div class="message-text">${messageText}</div>
-      <div class="message-time">${new Date().toLocaleTimeString()}</div>
-    </div>
-  `;
-  messages.appendChild(messageDiv);
+  function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    const messageText = input.value.trim();
+    if (!messageText) return;
 
-  // Scroll to bottom
-  messages.scrollTop = messages.scrollHeight;
+    const msg = {
+      sender: "user", // or "admin" depending on page
+      message: messageText,
+      timestamp: new Date()
+    };
 
-  input.value = "";
+    socket.emit("chatMessage", msg);
+    input.value = "";
+  }
 
-  // Fake agent reply (optional)
-  setTimeout(() => {
-    const reply = document.createElement("div");
-    reply.classList.add("message", "agent-message");
-    reply.innerHTML = `
-      <div class="message-avatar"><i class="fas fa-user-tie"></i></div>
+  function appendMessage(msg) {
+    const messages = document.getElementById("chatMessages");
+    const div = document.createElement("div");
+    div.classList.add("message", msg.sender === "admin" ? "agent-message" : "user-message");
+    div.innerHTML = `
       <div class="message-content">
-        <div class="message-header">Customer Support</div>
-        <div class="message-text">Thanks for your message! We'll assist shortly.</div>
-        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        <div class="message-header">${msg.sender === "admin" ? "Customer Support" : "You"}</div>
+        <div class="message-text">${msg.message}</div>
+        <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>
       </div>
     `;
-    messages.appendChild(reply);
+    messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
-  }, 1000);
-}
-
-function handleChatKeyPress(event) {
-  if (event.key === "Enter") {
-    sendChatMessage();
   }
-}
+
+
 // end of chat modal functionality
 
 
@@ -373,8 +361,9 @@ function closeContactSupportModal() {
     document.getElementById('mobileOverlay').classList.remove('active');
 }
 
+
 // Handle form submission
-document.getElementById('supportForm').addEventListener('submit', function(e) {
+document.getElementById('supportForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     // Get form data
@@ -382,19 +371,78 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
     const phone = document.getElementById('supportPhone').value;
     const subject = document.getElementById('supportSubject').value;
     const message = document.getElementById('supportMessage').value;
-    
-    // Here you can handle the form submission (send to server, etc.)
-    alert('Message sent successfully!');
-    closeContactSupportModal();
-    
-    // Reset form
-    this.reset();
+
+    try {
+        const res = await fetch("https://api.pvbonline.online/api/support/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, phone, subject, message })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("Message sent successfully!");
+            closeContactSupportModal();
+            this.reset();
+        } else {
+            alert(data.message || "Failed to send message");
+        }
+    } catch (err) {
+        console.error("Support form error:", err);
+        alert("An error occurred. Please try again.");
+    }
 });
 
 // Close modal when clicking overlay
 document.getElementById('mobileOverlay').addEventListener('click', function() {
     closeContactSupportModal();
 });
+
+
+
+
+// Polling for guest replies (every 12s)
+async function fetchGuestRepliesBadge() {
+  const email = localStorage.getItem('pv_support_contact_email');
+  if (!email) return;
+
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/support/email/messages?email=${encodeURIComponent(email)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const messages = data.data || [];
+
+    // count unread admin replies
+    let unreadReplies = 0;
+    messages.forEach(m => {
+      const adminReplies = (m.replies || []).filter(r => r.sender === 'admin');
+      // if any admin reply and isReadByUser is false => count
+      if (adminReplies.length && !m.isReadByUser) unreadReplies++;
+    });
+
+    // update UI
+    const mailIcon = document.querySelector('.mail-icon'); // change if your selector differs
+    if (mailIcon) {
+      // create or update badge
+      let badge = document.getElementById('guestSupportBadge');
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.id = 'guestSupportBadge';
+        badge.style.cssText = 'background:#ff4d4f;color:#fff;border-radius:12px;padding:2px 6px;margin-left:6px;font-size:12px;';
+        mailIcon.appendChild(badge);
+      }
+      badge.textContent = unreadReplies > 0 ? unreadReplies : '';
+    }
+  } catch (e) {
+    console.warn('Guest reply badge failed', e.message);
+  }
+}
+
+// start polling every 12s
+setInterval(fetchGuestRepliesBadge, 12000);
+document.addEventListener('DOMContentLoaded', fetchGuestRepliesBadge);
+
 
 // End of fined us/card valet support by form
 
@@ -432,21 +480,37 @@ function closeLoanApplication() {
     document.getElementById('loanApplicationModal').style.display = 'none';
 }
 
+
 // Handle loan application form submission
-document.getElementById('loanApplicationForm').addEventListener('submit', function(e) {
+document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     // Get form data
     const formData = new FormData(this);
     const loanData = Object.fromEntries(formData);
-    
-    // Here you would normally send data to server
-    alert('Loan application submitted successfully! We will contact you soon.');
-    
-    // Close modal and reset form
-    closeLoanApplication();
-    this.reset();
+
+    try {
+        const res = await fetch('https://api.pvbonline.online/api/loan/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(loanData)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            alert('Loan application submitted successfully! We will contact you soon.');
+            closeLoanApplication();
+            this.reset();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error, please try again later.');
+    }
 });
+
 
 // Close modals when clicking outside
 window.onclick = function(event) {
