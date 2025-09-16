@@ -198,36 +198,15 @@
 // Tab Switching for Signup/Login/Forgot
 // -------------------------------
 
+
 const tabButtons = document.querySelectorAll(".tab-btn");
 const forms = document.querySelectorAll(".form");
 
 tabButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    // Remove 'active' from all buttons
     tabButtons.forEach((b) => b.classList.remove("active"));
-    // Add 'active' to clicked button
     btn.classList.add("active");
 
-    // Show the corresponding form
-    const target = btn.getAttribute("data-target");
-    forms.forEach((form) => {
-      form.id === target ? form.classList.add("active") : form.classList.remove("active");
-    });
-  });
-});
-
-
-// const tabButtons = document.querySelectorAll(".tab-btn");
-// const forms = document.querySelectorAll(".form");
-
-tabButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    // Remove 'active' from all buttons
-    tabButtons.forEach((b) => b.classList.remove("active"));
-    // Add 'active' to clicked button
-    btn.classList.add("active");
-
-    // Show the corresponding form
     const target = btn.getAttribute("data-target");
     forms.forEach((form) => {
       form.id === target ? form.classList.add("active") : form.classList.remove("active");
@@ -236,12 +215,44 @@ tabButtons.forEach((btn) => {
 });
 
 // -------------------------------
-// Admin Dashboard JS
+// Admin Auth JS
 // -------------------------------
-
-// Base API URL
 const API_URL = "https://api.pvbonline.online/api/admin/auth";
 
+// -------------------------------
+// Signup Form Handling
+// -------------------------------
+const signupForm = document.getElementById("signupForm");
+
+signupForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById("signupUsername").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value.trim();
+
+  try {
+    const res = await fetch(`${API_URL}/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Signup failed");
+      return;
+    }
+
+    alert("Signup successful! Please login.");
+    // Switch to login tab automatically
+    document.querySelector('.tab-btn[data-target="loginForm"]').click();
+  } catch (error) {
+    console.error("Signup error:", error);
+    alert("An error occurred. Check console.");
+  }
+});
 
 // -------------------------------
 // Login Form Handling
@@ -268,11 +279,11 @@ loginForm?.addEventListener("submit", async (e) => {
       return;
     }
 
-    // Save token & username to localStorage
+    // Save token & username
     localStorage.setItem("adminToken", data.token);
     localStorage.setItem("adminUsername", data.username);
 
-    // Redirect to admin dashboard page
+    // Redirect to admin dashboard
     window.location.href = "admin.html";
   } catch (error) {
     console.error("Login error:", error);
@@ -281,23 +292,90 @@ loginForm?.addEventListener("submit", async (e) => {
 });
 
 // -------------------------------
+// Forgot Password Form Handling
+// -------------------------------
+const forgotForm = document.getElementById("forgotForm");
+
+forgotForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("forgotEmail").value.trim();
+
+  try {
+    const res = await fetch(`${API_URL}/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Failed to send reset email");
+      return;
+    }
+
+    alert("Password reset link sent to your email.");
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    alert("An error occurred. Check console.");
+  }
+});
+
+// -------------------------------
+// Reset Password (if resetToken in URL)
+// -------------------------------
+window.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const resetToken = urlParams.get("resetToken");
+
+  if (resetToken) {
+    const resetForm = document.getElementById("resetPasswordForm");
+    resetForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const password = document.getElementById("newPassword").value.trim();
+
+      try {
+        const res = await fetch(`${API_URL}/reset-password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ resetToken, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message || "Password reset failed");
+          return;
+        }
+
+        alert("Password reset successful! Please login.");
+        window.location.href = "admin-signup.html"; // back to login page
+      } catch (error) {
+        console.error("Reset password error:", error);
+        alert("An error occurred. Check console.");
+      }
+    });
+  }
+});
+
+// -------------------------------
 // Protect Admin Dashboard
 // -------------------------------
-
-// Run this only if this script is included in adminbashboard.html
 if (window.location.pathname.includes("admin.html")) {
   const token = localStorage.getItem("adminToken");
   if (!token) {
     alert("You must login first!");
-    window.location.href = "admin-signup.html"; // redirect to login tab page
+    window.location.href = "admin-signup.html";
   } else {
-    // Show admin username
     const adminNameSpan = document.getElementById("adminNameDisplay");
     if (adminNameSpan) {
       adminNameSpan.textContent = localStorage.getItem("adminUsername") || "Admin";
     }
   }
 }
+
 
 
   </script>
