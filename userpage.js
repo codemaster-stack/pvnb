@@ -413,11 +413,11 @@ document.getElementById("forgotPinForm").addEventListener("submit", function(e) 
 
 
 // Add this to the end of your current userpage.js file
-const logoutBtn = document.getElementById("logoutBtn"); // ✅ give this ID in HTML
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-        console.log("Logging out...");
-        localStorage.removeItem("token"); 
-        window.location.href = "/login"; 
-    });
-}
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    // Clear authentication data
+    localStorage.removeItem('token');
+    sessionStorage.clear();
+    
+    // Redirect back to index page where login modal exists
+    window.location.href = 'index.html'; // or whatever your index page is named
+});
