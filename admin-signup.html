@@ -76,81 +76,52 @@
 
     .tabs {
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
+      justify-content: center;
+      margin-bottom: 20px;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid #007bff;
     }
 
     .tabs button {
       flex: 1;
-      padding: 10px;
+      padding: 10px 0;
       border: none;
-      background: #e9ecef;
+      background: #f5f7fb;
       cursor: pointer;
       font-weight: bold;
+      color: #007bff;
+      transition: all 0.3s ease;
     }
 
     .tabs button.active {
       background: #007bff;
-      color: white;
+      color: #fff;
+    }
+
+    .tabs button:hover {
+      background: #e0ecff;
     }
 
     .form {
       display: none;
+      animation: fadeSlide 0.5s ease;
     }
 
     .form.active {
       display: block;
     }
-    .tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  border-radius: 30px;
-  overflow: hidden;
-  border: 1px solid #007bff;
-}
 
-.tabs button {
-  flex: 1;
-  padding: 10px 0;
-  border: none;
-  background: #f5f7fb;
-  cursor: pointer;
-  font-weight: bold;
-  color: #007bff;
-  transition: all 0.3s ease;
-}
-
-.tabs button.active {
-  background: #007bff;
-  color: #fff;
-}
-
-.tabs button:hover {
-  background: #e0ecff;
-}
-
-.form {
-  display: none;
-  animation: fadeSlide 0.5s ease;
-}
-
-.form.active {
-  display: block;
-}
-
-@keyframes fadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -206,10 +177,8 @@
       </div>
       <button type="submit">Send Reset Link</button>
     </form>
-  </div>
 
-
-      <!-- Reset Password Form (hidden modal) -->
+    <!-- Reset Password Form (shown when token is present) -->
     <form id="resetForm" class="form">
       <h2>Set New Password</h2>
       <div class="form-group">
@@ -222,151 +191,113 @@
       </div>
       <button type="submit">Update Password</button>
     </form>
-
+  </div>
 
   <script>
-    // Tab switching
-    const tabs = document.querySelectorAll(".tab-btn");
-    const forms = document.querySelectorAll(".form");
+//    -------------------------------
+// Tab Switching for Signup/Login/Forgot
+// -------------------------------
 
-    tabs.forEach(tab => {
-      tab.addEventListener("click", () => {
-        tabs.forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
+const tabButtons = document.querySelectorAll(".tab-btn");
+const forms = document.querySelectorAll(".form");
 
-        forms.forEach(f => f.classList.remove("active"));
-        document.getElementById(tab.dataset.target).classList.add("active");
-      });
+tabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // Remove 'active' from all buttons
+    tabButtons.forEach((b) => b.classList.remove("active"));
+    // Add 'active' to clicked button
+    btn.classList.add("active");
+
+    // Show the corresponding form
+    const target = btn.getAttribute("data-target");
+    forms.forEach((form) => {
+      form.id === target ? form.classList.add("active") : form.classList.remove("active");
     });
+  });
+});
 
-    // Signup logic
-    // Signup logic
-document.getElementById("signupForm").addEventListener("submit", async (e) => {
+
+// const tabButtons = document.querySelectorAll(".tab-btn");
+// const forms = document.querySelectorAll(".form");
+
+tabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // Remove 'active' from all buttons
+    tabButtons.forEach((b) => b.classList.remove("active"));
+    // Add 'active' to clicked button
+    btn.classList.add("active");
+
+    // Show the corresponding form
+    const target = btn.getAttribute("data-target");
+    forms.forEach((form) => {
+      form.id === target ? form.classList.add("active") : form.classList.remove("active");
+    });
+  });
+});
+
+// -------------------------------
+// Admin Dashboard JS
+// -------------------------------
+
+// Base API URL
+const API_URL = "api.pvbonline.online/api/admin/auth";
+
+// -------------------------------
+// Login Form Handling
+// -------------------------------
+const loginForm = document.getElementById("loginForm");
+
+loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const username = document.getElementById("adminName").value;
-  const email = document.getElementById("adminEmail").value;
-  const password = document.getElementById("adminPassword").value;
-  const confirmPassword = document.getElementById("adminConfirmPassword").value;
 
-  if (password !== confirmPassword) {
-    alert("❌ Passwords do not match");
-    return;
-  }
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
 
   try {
-    const res = await fetch("https://api.pvbonline.online/api/auth/admin/register", {
+    const res = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password })
+      body: JSON.stringify({ email, password }),
     });
+
     const data = await res.json();
-    if (res.ok) {
-      alert("✅ Admin account created successfully!");
-      // Switch to login tab automatically
-      document.querySelector("[data-target='loginForm']").click();
-    } else {
-      alert("❌ " + data.message);
+
+    if (!res.ok) {
+      alert(data.message || "Login failed");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    alert("⚠️ Error connecting to server");
+
+    // Save token & username to localStorage
+    localStorage.setItem("adminToken", data.token);
+    localStorage.setItem("adminUsername", data.username);
+
+    // Redirect to admin dashboard page
+    window.location.href = "adminbashboard.html";
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("An error occurred. Check console.");
   }
 });
 
-    // Login logic
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
+// -------------------------------
+// Protect Admin Dashboard
+// -------------------------------
 
-      try {
-        const res = await fetch("https://api.pvbonline.online/api/auth/admin/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert("✅ Login successful!");
-          localStorage.setItem('adminToken', data.token);
-          window.location.href = "admin.html"; // redirect
-        } else {
-          alert("❌ " + data.message);
-        }
-      } catch (err) {
-        console.error(err);
-        alert("⚠️ Error connecting to server");
-      }
-    });
-
-    // Forgot password logic
-    document.getElementById("forgotForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("forgotEmail").value;
-
-      try {
-        const res = await fetch("https://api.pvbonline.online/api/auth/admin/forgot-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert("📧 Reset link sent to your email!");
-        } else {
-          alert("❌ " + data.message);
-        }
-      } catch (err) {
-        console.error(err);
-        alert("⚠️ Error connecting to server");
-      }
-    });
-
-
-
-    // Auto-detect token from URL (if clicked from email)
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get("token");
-
-if (token) {
-  // Show Reset form if token exists in URL
-  forms.forEach(f => f.classList.remove("active"));
-  document.getElementById("resetForm").classList.add("active");
+// Run this only if this script is included in adminbashboard.html
+if (window.location.pathname.includes("adminbashboard.html")) {
+  const token = localStorage.getItem("adminToken");
+  if (!token) {
+    alert("You must login first!");
+    window.location.href = "admindashboard.html"; // redirect to login tab page
+  } else {
+    // Show admin username
+    const adminNameSpan = document.getElementById("adminNameDisplay");
+    if (adminNameSpan) {
+      adminNameSpan.textContent = localStorage.getItem("adminUsername") || "Admin";
+    }
+  }
 }
 
-// Reset password logic
-document.getElementById("resetForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const password = document.getElementById("resetPassword").value;
-  const confirmPassword = document.getElementById("resetConfirmPassword").value;
-
-  if (password !== confirmPassword) {
-    alert("❌ Passwords do not match");
-    return;
-  }
-
-  try {
-    const res = await fetch(`https://api.pvbonline.online/api/auth/admin/reset-password/${token}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password })
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      alert("✅ Password reset successful! Please login.");
-      // Redirect back to login form
-      forms.forEach(f => f.classList.remove("active"));
-      document.querySelector("[data-target='loginForm']").click();
-    } else {
-      alert("❌ " + data.message);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("⚠️ Error connecting to server");
-  }
-});
 
   </script>
 </body>
