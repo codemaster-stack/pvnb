@@ -240,7 +240,8 @@ tabButtons.forEach((btn) => {
 // -------------------------------
 
 // Base API URL
-const API_URL = "api.pvbonline.online/api/admin/auth";
+const API_URL = "https://api.pvbonline.online/api/admin/auth";
+
 
 // -------------------------------
 // Login Form Handling
@@ -272,7 +273,7 @@ loginForm?.addEventListener("submit", async (e) => {
     localStorage.setItem("adminUsername", data.username);
 
     // Redirect to admin dashboard page
-    window.location.href = "adminbashboard.html";
+    window.location.href = "admin.html";
   } catch (error) {
     console.error("Login error:", error);
     alert("An error occurred. Check console.");
@@ -284,11 +285,11 @@ loginForm?.addEventListener("submit", async (e) => {
 // -------------------------------
 
 // Run this only if this script is included in adminbashboard.html
-if (window.location.pathname.includes("adminbashboard.html")) {
+if (window.location.pathname.includes("admin.html")) {
   const token = localStorage.getItem("adminToken");
   if (!token) {
     alert("You must login first!");
-    window.location.href = "admindashboard.html"; // redirect to login tab page
+    window.location.href = "admin-signup.html"; // redirect to login tab page
   } else {
     // Show admin username
     const adminNameSpan = document.getElementById("adminNameDisplay");
