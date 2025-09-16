@@ -351,7 +351,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const res = await fetch(`${API_URL}/reset`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ resetToken, password }),
+          body: JSON.stringify({ token: resetToken, password }), // ✅ fixed
         });
 
         const data = await res.json();
@@ -369,6 +369,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 // -------------------------------
 // Protect Admin Dashboard
