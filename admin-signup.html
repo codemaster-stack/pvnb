@@ -287,7 +287,7 @@ loginForm?.addEventListener("submit", async (e) => {
     window.location.href = "admin.html";
   } catch (error) {
     console.error("Login error:", error);
-    alert("An error occurred. Check console.");
+    alert("An error occurred. Contact Admin Dev.");
   }
 });
 
@@ -302,7 +302,7 @@ forgotForm?.addEventListener("submit", async (e) => {
   const email = document.getElementById("forgotEmail").value.trim();
 
   try {
-    const res = await fetch(`${API_URL}/forgot-password`, {
+    const res = await fetch(`${API_URL}/forgot`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -318,7 +318,7 @@ forgotForm?.addEventListener("submit", async (e) => {
     alert("Password reset link sent to your email.");
   } catch (error) {
     console.error("Forgot password error:", error);
-    alert("An error occurred. Check console.");
+    alert("An error occurred. Contact Admin Dev .");
   }
 });
 
@@ -337,7 +337,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("newPassword").value.trim();
 
       try {
-        const res = await fetch(`${API_URL}/reset-password`, {
+        const res = await fetch(`${API_URL}/reset`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ resetToken, password }),
