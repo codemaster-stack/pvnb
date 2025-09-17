@@ -227,6 +227,29 @@ if (resetForm) {
 }
 
 
+
+
+// Show About Modal
+function showAboutModal() {
+  const modal = document.getElementById("aboutModal");
+  if (modal) modal.style.display = "block";
+}
+
+// Close About Modal
+function closeAboutModal() {
+  const modal = document.getElementById("aboutModal");
+  if (modal) modal.style.display = "none";
+}
+
+// Optional: close when clicking outside modal
+window.addEventListener("click", function (event) {
+  const modal = document.getElementById("aboutModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+
 // =================== MODAL HANDLING ===================
 
 // const $ = (selector) => document.querySelector(selector);
