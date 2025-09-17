@@ -234,15 +234,16 @@
 // Utility to get element safely
 const $ = (selector) => document.querySelector(selector);
 
-// Modal elements
-const loginModal = $("#loginModal");
-const signupModal = $("#signupModal");
-const forgotModal = $("#forgotModal");
-const resetModal = $("#resetPasswordModal");
-
 // Open and close modal helpers
-const openModal = (modal) => modal?.classList.add("active");
-const closeModal = (modal) => modal?.classList.remove("active");
+const openModal = (modalSelector) => {
+  const modal = typeof modalSelector === 'string' ? $(modalSelector) : modalSelector;
+  modal?.classList.add("active");
+};
+const closeModal = (modalSelector) => {
+  const modal = typeof modalSelector === 'string' ? $(modalSelector) : modalSelector;
+  modal?.classList.remove("active");
+};
+// const closeModal = (modal) => modal?.classList.remove("active");
 
 // ----- ONLINE BANKING BUTTON -----
 const onlineBankingBtn = document.querySelector(".button-olb");
@@ -278,6 +279,12 @@ const setButtonLoading = (button, isLoading, text = "Processing...") => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // Modal elements
+const loginModal = $("#loginModal");
+const signupModal = $("#signupModal");
+const forgotModal = $("#forgotModal");
+const resetModal = $("#resetPasswordModal");
   // ----- LOGIN -----
   const loginForm = $("#loginForm");
   if (loginForm) {
@@ -390,7 +397,7 @@ document.addEventListener("DOMContentLoaded", () => {
       closeModal(loginModal);
       closeModal(signupModal);
       closeModal(forgotModal);
-      openModal(resetModal);
+      openModal("#resetPasswordModal");
 
       // Populate hidden input
       const resetTokenInput = $("#resetToken");
