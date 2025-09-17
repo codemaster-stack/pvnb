@@ -84,9 +84,9 @@ if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = {
-      fullName: $("#fullName").value,
+      fullname: $("#fullName").value,  // changed
       email: $("#signupEmail").value,
-      phoneNumber: $("#phone").value,
+      phone: $("#phone").value,         // changed
       password: $("#signupPassword").value,
     };
     try {
