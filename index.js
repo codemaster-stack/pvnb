@@ -243,24 +243,6 @@ const closeModal = (modalSelector) => {
   const modal = typeof modalSelector === 'string' ? $(modalSelector) : modalSelector;
   modal?.classList.remove("active");
 };
-// const closeModal = (modal) => modal?.classList.remove("active");
-
-// ----- ONLINE BANKING BUTTON -----
-const onlineBankingBtn = document.querySelector(".button-olb");
-onlineBankingBtn?.addEventListener("click", () => openModal(loginModal));
-
-// ----- MODAL BUTTONS -----
-$("#closeLogin")?.addEventListener("click", () => closeModal(loginModal));
-$("#showSignup")?.addEventListener("click", () => { closeModal(loginModal); openModal(signupModal); });
-$("#showForgot")?.addEventListener("click", () => { closeModal(loginModal); openModal(forgotModal); });
-
-$("#closeSignup")?.addEventListener("click", () => closeModal(signupModal));
-$("#backToLogin")?.addEventListener("click", () => { closeModal(signupModal); openModal(loginModal); });
-
-$("#closeForgot")?.addEventListener("click", () => closeModal(forgotModal));
-$("#backToLoginFromForgot")?.addEventListener("click", () => { closeModal(forgotModal); openModal(loginModal); });
-
-$("#closeReset")?.addEventListener("click", () => closeModal(resetModal));
 
 // =================== FORM HANDLERS ===================
 const API_URL = "https://api.pvbonline.online/api/users";
@@ -279,12 +261,29 @@ const setButtonLoading = (button, isLoading, text = "Processing...") => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Modal elements - declared inside DOMContentLoaded so they exist when referenced
+  const loginModal = $("#loginModal");
+  const signupModal = $("#signupModal");
+  const forgotModal = $("#forgotModal");
+  const resetModal = $("#resetPasswordModal");
 
-  // Modal elements
-const loginModal = $("#loginModal");
-const signupModal = $("#signupModal");
-const forgotModal = $("#forgotModal");
-const resetModal = $("#resetPasswordModal");
+  // ----- ONLINE BANKING BUTTON -----
+  const onlineBankingBtn = document.querySelector(".button-olb");
+  onlineBankingBtn?.addEventListener("click", () => openModal(loginModal));
+
+  // ----- MODAL BUTTONS -----
+  $("#closeLogin")?.addEventListener("click", () => closeModal(loginModal));
+  $("#showSignup")?.addEventListener("click", () => { closeModal(loginModal); openModal(signupModal); });
+  $("#showForgot")?.addEventListener("click", () => { closeModal(loginModal); openModal(forgotModal); });
+
+  $("#closeSignup")?.addEventListener("click", () => closeModal(signupModal));
+  $("#backToLogin")?.addEventListener("click", () => { closeModal(signupModal); openModal(loginModal); });
+
+  $("#closeForgot")?.addEventListener("click", () => closeModal(forgotModal));
+  $("#backToLoginFromForgot")?.addEventListener("click", () => { closeModal(forgotModal); openModal(loginModal); });
+
+  $("#closeReset")?.addEventListener("click", () => closeModal(resetModal));
+
   // ----- LOGIN -----
   const loginForm = $("#loginForm");
   if (loginForm) {
@@ -393,11 +392,17 @@ const resetModal = $("#resetPasswordModal");
     const token = urlParams.get("resetToken");
 
     if (token) {
-      // Open reset modal automatically
+      console.log("Reset token found:", token); // Debug log
+      console.log("Reset modal element:", resetModal); // Debug log
+      
+      // Close other modals first
       closeModal(loginModal);
       closeModal(signupModal);
       closeModal(forgotModal);
-      openModal("#resetPasswordModal");
+      
+      // Open reset modal automatically
+      openModal(resetModal);
+      console.log("Reset modal should be open now"); // Debug log
 
       // Populate hidden input
       const resetTokenInput = $("#resetToken");
@@ -442,4 +447,3 @@ const resetModal = $("#resetPasswordModal");
     }
   }
 });
-
