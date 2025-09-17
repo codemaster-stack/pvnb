@@ -1390,6 +1390,14 @@
   align-items: center;
 }
 
+
+.reset-modal.active,
+.login-modal.active,
+.signup-modal.active,
+.forgot-modal.active {
+  display: flex;
+}
+
 /* Modal content box */
 .reset-modal .forgot-form-container,
 .login-modal .login-form-container,
