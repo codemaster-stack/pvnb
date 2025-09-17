@@ -2235,7 +2235,7 @@
 
 
    
-        /* Login Modal Styles 
+         /* Login Modal Styles  */
           .login-modal {
             position: fixed;
             top: 0;
@@ -2390,7 +2390,7 @@
             font-weight: 400;
         }
 
-        /* Signup Modal Styles 
+         /* Signup Modal Styles  */
            .signup-modal {
             position: fixed;
             top: 0;
@@ -2421,7 +2421,7 @@
             overflow-y: auto;
         } 
 
-        /* Forgot Password Modal Styles 
+         /* Forgot Password Modal Styles  */
            .forgot-modal {
             position: fixed;
             top: 0;
@@ -2450,7 +2450,7 @@
             animation: slideInDown 0.3s ease-out;
         } 
 
-        /* Additional responsive fixes 
+         /* Additional responsive fixes  */
                @media (max-width: 768px) { 
                 .mm-direction-nav {
                 width: 40px;

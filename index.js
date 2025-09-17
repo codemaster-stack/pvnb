@@ -1,3 +1,6 @@
+
+
+
 // =================== MODAL HANDLING ===================
 
 // Utility to get element safely
@@ -46,7 +49,7 @@ $("#backToLoginFromForgot")?.addEventListener("click", () => {
 $("#closeReset")?.addEventListener("click", () => closeModal(resetModal));
 
 // =================== FORM HANDLERS ===================
-const API_URL = "https://api.pvbonline.online/api/user"; // update if deployed
+const API_URL = "http://localhost:5000/api/user"; // update if deployed
 
 // ----- LOGIN -----
 const loginForm = $("#loginForm");
@@ -67,7 +70,7 @@ if (loginForm) {
       alert(result.message); // replace with UI message element if desired
       if (res.ok) {
         localStorage.setItem("token", result.token);
-        window.location.href = "/userpage.html";
+        window.location.href = "/dashboard.html";
       }
     } catch (err) {
       alert("Login failed.");
@@ -87,7 +90,7 @@ if (signupForm) {
       password: $("#signupPassword").value,
     };
     try {
-      const res = await fetch(`${API_URL}/register`, {
+      const res = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -111,7 +114,7 @@ if (forgotForm) {
     e.preventDefault();
     const email = $("#forgotEmail").value;
     try {
-      const res = await fetch(`${API_URL}/forgot`, {
+      const res = await fetch(`${API_URL}/forgotPassword`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -135,14 +138,14 @@ if (resetForm) {
       e.preventDefault();
       const password = $("#newPassword").value;
       try {
-        const res = await fetch(`${API_URL}/reset`, {
+        const res = await fetch(`${API_URL}/resetPassword`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token, password }),
         });
         const result = await res.json();
         alert(result.message);
-        if (res.ok) setTimeout(() => window.location.href = "/index.html", 1500);
+        if (res.ok) setTimeout(() => window.location.href = "/login.html", 1500);
       } catch (err) {
         alert("Reset failed.");
       }
