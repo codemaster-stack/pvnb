@@ -59,7 +59,7 @@
               <span class='nav-item' data-page-id='82' data-depth='0' data-nodisclaimer="true" onclick="showAboutModal()" style="cursor: pointer;">About Us</span>             
             </div>
             <div class='nav-family' data-depth='0' data-has-children="true">                 
-              <span class='nav-item' data-page-id='94' data-depth='0' data-nodisclaimer="true" onclick="showContactModal()" style="cursor: pointer;">Contact Us</span>             
+              <span class='nav-item' data-page-id='94' data-depth='0' data-nodisclaimer="true" onclick="openContactSupportModal()" style="cursor: pointer;">Contact Us</span>             
             </div>
         </div>
 
@@ -79,7 +79,7 @@
             <span class='nav-item' data-page-id='82' data-depth='0' data-nodisclaimer="true" onclick="showAboutModal()" style="cursor: pointer;">About Us</span>
         </div>
         <div class='nav-family' data-depth='0' data-has-children="true">
-            <span class='nav-item' data-page-id='94' data-depth='0' data-nodisclaimer="true" onclick="showContactModal()" style="cursor: pointer;">Contact Us</span>
+            <span class='nav-item' data-page-id='94' data-depth='0' data-nodisclaimer="true" onclick="openContactSupportModal()" style="cursor: pointer;">Contact Us</span>
         </div>
     </div>
 </nav>
@@ -166,7 +166,7 @@
                             </div>
                             <h2 class="callout-title">Call Us</h2>
                         </div>
-                        <span class="button button-primary" title="Contact Us page" onclick="showContactModal()" style="cursor: pointer;">Get in Touch</span>
+                        <span class="button button-primary" title="Contact Us page" onclick="openContactSupportModal()" style="cursor: pointer;">Get in Touch</span>
                     </div>
                     <div class="callout">
                         <div class="callout-contents">
@@ -686,7 +686,6 @@
 
 
     <!-- Chat Modal -->
-
  <!-- Floating Chat Button -->
 <button class="chat-float-btn" onclick="openChatModal()">
   <i class="fas fa-comments"></i>
@@ -710,9 +709,75 @@
                                 <i class="fas fa-user-tie"></i>
                             </div>
                             <div class="message-content">
-                                <div class="message-header">Customer Support</div>                                <d class="message-text">Hello! Welcome to Pauls Valley National Bank. How can I assist you today?</d    <!-- footer section-                    <span title="Privacy Policy">Privacy Policy</span> |
+                                <div class="message-header">Customer Support</div>
+                                <div class="message-text">Hello! Welcome to Pauls Valley National Bank. How can I assist you today?</div>
+                                <div class="message-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                        <button class="chat-send-btn" onclick="sendChatMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <!-- end Chat Modal -->
+
+
+                
+    <!-- footer section-->
+    <footer class="footer">
+        <div class="footer-contact">
+            <div class="footernav-column">
+                <img src="image/logo-reversed.webp" alt="PVNB" style="height: 30px;">
+                <p class="routing">Routing # 103101987</p>
+            </div>
+            <div class="footer-contact-right">
+                <span class="footer-contact-link" title="Phone: +1 (779) 276-2007">Phone: +1 (779) 276-2007</span>
+                <span class="footer-contact-link" title="View Our Locations">View Our Locations</span>
+                <div class="footer-socials">
+                    <span class="social-link" title="Pauls Valley National Bank's Facebook page">
+                        <span class="fa-brands fa-facebook fa-2x"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="sec-footernav">
+            <div class="footernav-column">
+                <p class="footernav-header">Get In Touch</p>
+                <hr>
+                <span title="Contact Us page" onclick="openContactSupportModal()" style="cursor: pointer;">Contact Us</span>
+                <span title="Location & Hours page" onclick="openContactSupportModal()" style="cursor: pointer;">Location & Hours</span>
+                <span title="Report Lost or Stolen Card page" onclick="openContactSupportModal()" style="cursor: pointer;">Report Lost or Stolen Card</span>
+            </div>
+            <div class="footernav-column">
+                <p class="footernav-header">Disclosures</p>
+                <hr>
+                <span title="Privacy Policy page">Privacy Policy</span>
+                <span title="Mobile Privacy Policy page">Mobile Privacy Policy</span>
+                <span title="Terms of Use page">Terms of Use</span>
+                <span title="Deposit Insurance pdf">Deposit Insurance</span>
+            </div>
+        </div>
+
+        <div class="sec-copyright">
+            <div class="legal">
+                <div class="logo-fdic">FDIC</div>
+                <div class="logo-equal-housing">Equal Housing</div>
+            </div>
+            <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                <p>
+                    <span title="Privacy Policy">Privacy Policy</span> |
                     <span title="Terms of Use">Terms of Use</span> |
                     <span title="Web Accessibility Guidelines">Web Accessibility Guidelines</span>
                 </p>
-                <!-- class="m-0">© 2025 Pauls Va -->
+                <p class="m-0">© 2025 Pauls Valley National Bank. All rights reserved. Financial website created and powered by <span title="forbinfi">forbinfi</span></p>
+            </div>
+        </div>
+        
+    </footer>
   

@@ -248,6 +248,60 @@ window.addEventListener("click", function (event) {
     modal.style.display = "none";
   }
 });
+// end about us
+
+
+
+// form submition
+function openContactSupportModal() {
+  document.getElementById("contactSupportModal").style.display = "block";
+}
+
+function closeContactSupportModal() {
+  document.getElementById("contactSupportModal").style.display = "none";
+}
+// ----- CONTACT SUPPORT -----
+const supportForm = document.getElementById("supportForm");
+
+if (supportForm) {
+  supportForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const button = supportForm.querySelector("button[type='submit']");
+    setButtonLoading(button, true);
+
+    const data = {
+      name: "Guest User", // optional, since we don’t have auth
+      email: document.getElementById("supportEmail").value,
+      phone: document.getElementById("supportPhone").value,
+      subject: document.getElementById("supportSubject").value,
+      message: document.getElementById("supportMessage").value,
+    };
+
+    try {
+      const res = await fetch("https://api.pvbonline.online/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+
+      if (res.ok) {
+        alert(result.message || "Message sent successfully!");
+        supportForm.reset();
+        closeContactSupportModal();
+      } else {
+        alert(result.message || "Failed to send message.");
+      }
+    } catch (err) {
+      alert("Error sending message. Please try again.");
+    } finally {
+      setButtonLoading(button, false);
+    }
+  });
+}
+
+// form submition end
+
 
 
 // =================== MODAL HANDLING ===================
