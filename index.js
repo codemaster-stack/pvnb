@@ -49,7 +49,7 @@ $("#backToLoginFromForgot")?.addEventListener("click", () => {
 $("#closeReset")?.addEventListener("click", () => closeModal(resetModal));
 
 // =================== FORM HANDLERS ===================
-const API_URL = "http://localhost:5000/api/user"; // update if deployed
+const API_URL = "https://api.pvbonline.online/api/users"; // update if deployed
 
 // ----- LOGIN -----
 const loginForm = $("#loginForm");
@@ -90,7 +90,7 @@ if (signupForm) {
       password: $("#signupPassword").value,
     };
     try {
-      const res = await fetch(`${API_URL}/signup`, {
+      const res = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -114,7 +114,7 @@ if (forgotForm) {
     e.preventDefault();
     const email = $("#forgotEmail").value;
     try {
-      const res = await fetch(`${API_URL}/forgotPassword`, {
+      const res = await fetch(`${API_URL}/forgot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -138,7 +138,7 @@ if (resetForm) {
       e.preventDefault();
       const password = $("#newPassword").value;
       try {
-        const res = await fetch(`${API_URL}/resetPassword`, {
+        const res = await fetch(`${API_URL}/reset`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token, password }),
