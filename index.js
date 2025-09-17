@@ -164,27 +164,56 @@ if (forgotForm) {
 
 // ----- RESET PASSWORD -----
 const resetForm = $("#resetPasswordForm");
+// const resetModal = $("#resetPasswordModal");
+// const loginModal = $("#loginModal");
+// const signupModal = $("#signupModal");
+// const forgotModal = $("#forgotModal");
+
 if (resetForm) {
   document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("resetToken");
 
+    if (token) {
+      // Open reset modal automatically
+      closeModal(loginModal);
+      closeModal(signupModal);
+      closeModal(forgotModal);
+      openModal(resetModal);
+
+      // Populate hidden input
+      const resetTokenInput = $("#resetToken");
+      if (resetTokenInput) resetTokenInput.value = token;
+    }
+
     resetForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      const password = $("#newPassword").value;
+      const confirmPassword = $("#confirmNewPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
       const button = resetForm.querySelector("button[type='submit']");
       setButtonLoading(button, true);
 
-      const password = $("#newPassword").value;
       try {
         const res = await fetch(`${API_URL}/reset`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token, password }),
         });
+
         const result = await res.json();
         if (res.ok) {
           alert(result.message || "Password reset successful!");
-          setTimeout(() => window.location.href = "/login.html", 1500);
+          setTimeout(() => {
+            closeModal(resetModal);
+            openModal(loginModal);
+          }, 1500);
         } else {
           alert(result.message || "Reset failed.");
         }
@@ -195,5 +224,5 @@ if (resetForm) {
       }
     });
   });
-};
+}
 
