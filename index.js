@@ -229,16 +229,21 @@
 
 // =================== MODAL HANDLING ===================
 
-// =================== MODAL HANDLING ===================
-
-// Utility to get element safely
 const $ = (selector) => document.querySelector(selector);
 
 // Open and close modal helpers
 const openModal = (modalSelector) => {
+  console.log("Opening modal:", modalSelector);
   const modal = typeof modalSelector === 'string' ? $(modalSelector) : modalSelector;
-  modal?.classList.add("active");
+  console.log("Modal element found:", modal);
+  if (modal) {
+    modal.classList.add("active");
+    console.log("Modal should now be active");
+  } else {
+    console.error("Modal element not found!");
+  }
 };
+
 const closeModal = (modalSelector) => {
   const modal = typeof modalSelector === 'string' ? $(modalSelector) : modalSelector;
   modal?.classList.remove("active");
@@ -260,12 +265,62 @@ const setButtonLoading = (button, isLoading, text = "Processing...") => {
   }
 };
 
+// Add this at the very top to check URL immediately
+console.log("=== RESET PASSWORD DEBUG ===");
+console.log("Current URL:", window.location.href);
+console.log("URL Search:", window.location.search);
+
+const urlParams = new URLSearchParams(window.location.search);
+const resetToken = urlParams.get("resetToken");
+console.log("Reset token from URL:", resetToken);
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Modal elements - declared inside DOMContentLoaded so they exist when referenced
+  console.log("DOM Content Loaded - Starting initialization");
+  
+  // Modal elements
   const loginModal = $("#loginModal");
   const signupModal = $("#signupModal");
   const forgotModal = $("#forgotModal");
   const resetModal = $("#resetPasswordModal");
+  
+  console.log("Modal elements found:");
+  console.log("Login modal:", loginModal);
+  console.log("Signup modal:", signupModal);
+  console.log("Forgot modal:", forgotModal);
+  console.log("Reset modal:", resetModal);
+
+  // Check if we have a reset token IMMEDIATELY
+  if (resetToken) {
+    console.log("=== RESET TOKEN DETECTED ===");
+    console.log("Token value:", resetToken);
+    
+    // Try to open reset modal immediately
+    if (resetModal) {
+      console.log("Reset modal exists, attempting to open...");
+      
+      // Close all other modals
+      if (loginModal) loginModal.classList.remove("active");
+      if (signupModal) signupModal.classList.remove("active");
+      if (forgotModal) forgotModal.classList.remove("active");
+      
+      // Open reset modal
+      resetModal.classList.add("active");
+      console.log("Reset modal classes after opening:", resetModal.classList.toString());
+      
+      // Check if modal is actually visible
+      const computedStyle = window.getComputedStyle(resetModal);
+      console.log("Reset modal display:", computedStyle.display);
+      console.log("Reset modal visibility:", computedStyle.visibility);
+    } else {
+      console.error("CRITICAL ERROR: Reset modal not found in DOM!");
+      console.log("Available elements with 'reset' in ID:");
+      document.querySelectorAll('[id*="reset"], [id*="Reset"]').forEach(el => {
+        console.log("Found element:", el.id, el);
+      });
+    }
+  } else {
+    console.log("No reset token found in URL");
+  }
 
   // ----- ONLINE BANKING BUTTON -----
   const onlineBankingBtn = document.querySelector(".button-olb");
@@ -387,63 +442,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ----- RESET PASSWORD -----
   const resetForm = $("#resetPasswordForm");
-  if (resetForm) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("resetToken");
-
-    if (token) {
-      console.log("Reset token found:", token); // Debug log
-      console.log("Reset modal element:", resetModal); // Debug log
-      
-      // Close other modals first
-      closeModal(loginModal);
-      closeModal(signupModal);
-      closeModal(forgotModal);
-      
-      // Open reset modal automatically
-      openModal(resetModal);
-      console.log("Reset modal should be open now"); // Debug log
-
-      // Populate hidden input
-      const resetTokenInput = $("#resetToken");
-      if (resetTokenInput) resetTokenInput.value = token;
-
-      resetForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const password = $("#newPassword").value;
-        const confirmPassword = $("#confirmNewPassword").value;
-
-        if (password !== confirmPassword) {
-          alert("Passwords do not match!");
-          return;
-        }
-
-        const button = resetForm.querySelector("button[type='submit']");
-        setButtonLoading(button, true);
-
-        try {
-          const res = await fetch(`${API_URL}/reset`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token, password }),
-          });
-          const result = await res.json();
-          if (res.ok) {
-            alert(result.message || "Password reset successful!");
-            setTimeout(() => {
-              closeModal(resetModal);
-              openModal(loginModal);
-            }, 1500);
-          } else {
-            alert(result.message || "Reset failed.");
-          }
-        } catch {
-          alert("Reset failed. Please try again.");
-        } finally {
-          setButtonLoading(button, false);
-        }
-      });
+  console.log("Reset form found:", resetForm);
+  
+  if (resetForm && resetToken) {
+    console.log("=== SETTING UP RESET FORM ===");
+    
+    // Populate hidden input
+    const resetTokenInput = $("#resetToken");
+    console.log("Reset token input found:", resetTokenInput);
+    if (resetTokenInput) {
+      resetTokenInput.value = resetToken;
+      console.log("Token set in hidden input:", resetTokenInput.value);
     }
+
+    resetForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      console.log("Reset form submitted");
+
+      const password = $("#newPassword")?.value;
+      const confirmPassword = $("#confirmNewPassword")?.value;
+      
+      console.log("Password fields:", { password: password ? "filled" : "empty", confirmPassword: confirmPassword ? "filled" : "empty" });
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      const button = resetForm.querySelector("button[type='submit']");
+      setButtonLoading(button, true);
+
+      try {
+        console.log("Sending reset request with token:", resetToken);
+        const res = await fetch(`${API_URL}/reset`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: resetToken, password }),
+        });
+        const result = await res.json();
+        console.log("Reset response:", result);
+        
+        if (res.ok) {
+          alert(result.message || "Password reset successful!");
+          setTimeout(() => {
+            closeModal(resetModal);
+            openModal(loginModal);
+          }, 1500);
+        } else {
+          alert(result.message || "Reset failed.");
+        }
+      } catch (error) {
+        console.error("Reset error:", error);
+        alert("Reset failed. Please try again.");
+      } finally {
+        setButtonLoading(button, false);
+      }
+    });
   }
 });
