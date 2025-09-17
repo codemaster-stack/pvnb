@@ -218,6 +218,18 @@ tabButtons.forEach((btn) => {
 // -------------------------------
 const API_URL = "https://api.pvbonline.online/api/admin/auth";
 
+// Utility function for button loading state
+const setButtonLoading = (button, isLoading, text = "Processing...") => {
+  if (isLoading) {
+    button.disabled = true;
+    button.dataset.originalText = button.textContent;
+    button.innerHTML = `<span class="spinner"></span> ${text}`;
+  } else {
+    button.disabled = false;
+    button.textContent = button.dataset.originalText || button.textContent;
+  }
+};
+
 // -------------------------------
 // Signup Form Handling
 // -------------------------------
@@ -225,6 +237,8 @@ const signupForm = document.getElementById("signupForm");
 
 signupForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const button = signupForm.querySelector("button[type='submit']");
+  setButtonLoading(button, true);
 
   const username = document.getElementById("adminName").value.trim();
   const email = document.getElementById("adminEmail").value.trim();
@@ -233,6 +247,7 @@ signupForm?.addEventListener("submit", async (e) => {
 
   if (password !== confirmPassword) {
     alert("Passwords do not match!");
+    setButtonLoading(button, false);
     return;
   }
 
@@ -246,14 +261,15 @@ signupForm?.addEventListener("submit", async (e) => {
     const data = await res.json();
     if (!res.ok) {
       alert(data.message || "Signup failed");
-      return;
+    } else {
+      alert("Signup successful! Please login.");
+      document.querySelector('.tab-btn[data-target="loginForm"]').click();
     }
-
-    alert("Signup successful! Please login.");
-    document.querySelector('.tab-btn[data-target="loginForm"]').click();
   } catch (error) {
     console.error("Signup error:", error);
     alert("An error occurred. Check console.");
+  } finally {
+    setButtonLoading(button, false);
   }
 });
 
@@ -264,6 +280,8 @@ const loginForm = document.getElementById("loginForm");
 
 loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const button = loginForm.querySelector("button[type='submit']");
+  setButtonLoading(button, true);
 
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
@@ -278,16 +296,16 @@ loginForm?.addEventListener("submit", async (e) => {
     const data = await res.json();
     if (!res.ok) {
       alert(data.message || "Login failed");
-      return;
+    } else {
+      localStorage.setItem("adminToken", data.token);
+      localStorage.setItem("adminUsername", data.username);
+      window.location.href = "admin.html"; // dashboard
     }
-
-    localStorage.setItem("adminToken", data.token);
-    localStorage.setItem("adminUsername", data.username);
-
-    window.location.href = "admin.html"; // dashboard
   } catch (error) {
     console.error("Login error:", error);
     alert("An error occurred. Contact Admin Dev.");
+  } finally {
+    setButtonLoading(button, false);
   }
 });
 
@@ -298,6 +316,8 @@ const forgotForm = document.getElementById("forgotForm");
 
 forgotForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const button = forgotForm.querySelector("button[type='submit']");
+  setButtonLoading(button, true);
 
   const email = document.getElementById("forgotEmail").value.trim();
 
@@ -311,39 +331,42 @@ forgotForm?.addEventListener("submit", async (e) => {
     const data = await res.json();
     if (!res.ok) {
       alert(data.message || "Failed to send reset email");
-      return;
+    } else {
+      alert("Password reset link sent to your email.");
     }
-
-    alert("Password reset link sent to your email.");
   } catch (error) {
     console.error("Forgot password error:", error);
     alert("An error occurred. Contact Admin Dev.");
+  } finally {
+    setButtonLoading(button, false);
   }
 });
 
 // -------------------------------
-// Reset Password (if resetToken in URL)
+// Reset Password Handling
 // -------------------------------
 window.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const resetToken = urlParams.get("resetToken");
 
   if (resetToken) {
-    // Show reset form, hide others
-    document.getElementById("resetForm").classList.add("active");
+    const resetForm = document.getElementById("resetForm");
+    resetForm.classList.add("active");
     document.getElementById("loginForm").classList.remove("active");
     document.getElementById("signupForm").classList.remove("active");
     document.getElementById("forgotForm").classList.remove("active");
 
-    const resetForm = document.getElementById("resetForm");
     resetForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const button = resetForm.querySelector("button[type='submit']");
+      setButtonLoading(button, true);
 
       const password = document.getElementById("resetPassword").value.trim();
       const confirmPassword = document.getElementById("resetConfirmPassword").value.trim();
 
       if (password !== confirmPassword) {
         alert("Passwords do not match!");
+        setButtonLoading(button, false);
         return;
       }
 
@@ -351,25 +374,25 @@ window.addEventListener("DOMContentLoaded", () => {
         const res = await fetch(`${API_URL}/reset`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: resetToken, password }), // ✅ fixed
+          body: JSON.stringify({ token: resetToken, password }),
         });
 
         const data = await res.json();
         if (!res.ok) {
           alert(data.message || "Password reset failed");
-          return;
+        } else {
+          alert("Password reset successful! Please login.");
+          window.location.href = "admin-signup.html";
         }
-
-        alert("Password reset successful! Please login.");
-        window.location.href = "admin-signup.html"; // back to login page
       } catch (error) {
         console.error("Reset password error:", error);
         alert("An error occurred. Check console.");
+      } finally {
+        setButtonLoading(button, false);
       }
     });
   }
 });
-
 
 // -------------------------------
 // Protect Admin Dashboard
@@ -385,7 +408,8 @@ if (window.location.pathname.includes("admin.html")) {
       adminNameSpan.textContent = localStorage.getItem("adminUsername") || "Admin";
     }
   }
-}
+};
+
 
 
   </script>

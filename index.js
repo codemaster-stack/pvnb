@@ -51,11 +51,26 @@ $("#closeReset")?.addEventListener("click", () => closeModal(resetModal));
 // =================== FORM HANDLERS ===================
 const API_URL = "https://api.pvbonline.online/api/users"; // update if deployed
 
+// Utility function to handle button loading state
+const setButtonLoading = (button, isLoading, text = "Processing...") => {
+  if (isLoading) {
+    button.disabled = true;
+    button.dataset.originalText = button.textContent;
+    button.innerHTML = `<span class="spinner"></span> ${text}`;
+  } else {
+    button.disabled = false;
+    button.textContent = button.dataset.originalText || button.textContent;
+  }
+};
+
 // ----- LOGIN -----
 const loginForm = $("#loginForm");
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const button = loginForm.querySelector("button[type='submit']");
+    setButtonLoading(button, true);
+
     const data = {
       email: $("#email").value,
       password: $("#password").value,
@@ -67,13 +82,17 @@ if (loginForm) {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      alert(result.message); // replace with UI message element if desired
       if (res.ok) {
+        alert("Login successful!");
         localStorage.setItem("token", result.token);
-        window.location.href = "/dashboard.html";
+        window.location.href = "/userpage.html";
+      } else {
+        alert(result.message || "Login failed.");
       }
     } catch (err) {
-      alert("Login failed.");
+      alert("Login failed. Please try again.");
+    } finally {
+      setButtonLoading(button, false);
     }
   });
 }
@@ -83,10 +102,13 @@ const signupForm = $("#signupForm");
 if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const button = signupForm.querySelector("button[type='submit']");
+    setButtonLoading(button, true);
+
     const data = {
-      fullname: $("#fullName").value,  // changed
+      fullname: $("#fullName").value,
       email: $("#signupEmail").value,
-      phone: $("#phone").value,         // changed
+      phone: $("#phone").value,
       password: $("#signupPassword").value,
     };
     try {
@@ -96,13 +118,17 @@ if (signupForm) {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      alert(result.message);
       if (res.ok) {
+        alert("Registration successful!");
         closeModal(signupModal);
         openModal(loginModal);
+      } else {
+        alert(result.message || "Signup failed.");
       }
     } catch (err) {
-      alert("Signup failed.");
+      alert("Signup failed. Please try again.");
+    } finally {
+      setButtonLoading(button, false);
     }
   });
 }
@@ -112,6 +138,9 @@ const forgotForm = $("#forgotForm");
 if (forgotForm) {
   forgotForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const button = forgotForm.querySelector("button[type='submit']");
+    setButtonLoading(button, true);
+
     const email = $("#forgotEmail").value;
     try {
       const res = await fetch(`${API_URL}/forgot`, {
@@ -120,9 +149,15 @@ if (forgotForm) {
         body: JSON.stringify({ email }),
       });
       const result = await res.json();
-      alert(result.message);
+      if (res.ok) {
+        alert(result.message || "Reset link sent. Check your email.");
+      } else {
+        alert(result.message || "Failed to send reset link.");
+      }
     } catch (err) {
-      alert("Failed to send reset link.");
+      alert("Failed to send reset link. Please try again.");
+    } finally {
+      setButtonLoading(button, false);
     }
   });
 }
@@ -136,6 +171,9 @@ if (resetForm) {
 
     resetForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const button = resetForm.querySelector("button[type='submit']");
+      setButtonLoading(button, true);
+
       const password = $("#newPassword").value;
       try {
         const res = await fetch(`${API_URL}/reset`, {
@@ -144,13 +182,18 @@ if (resetForm) {
           body: JSON.stringify({ token, password }),
         });
         const result = await res.json();
-        alert(result.message);
-        if (res.ok) setTimeout(() => window.location.href = "/login.html", 1500);
+        if (res.ok) {
+          alert(result.message || "Password reset successful!");
+          setTimeout(() => window.location.href = "/login.html", 1500);
+        } else {
+          alert(result.message || "Reset failed.");
+        }
       } catch (err) {
-        alert("Reset failed.");
+        alert("Reset failed. Please try again.");
+      } finally {
+        setButtonLoading(button, false);
       }
     });
   });
-}
-
+};
 
