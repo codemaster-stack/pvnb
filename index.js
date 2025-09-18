@@ -302,6 +302,43 @@ if (supportForm) {
 
 // form submition end
 
+// send email
+function showContactModal() {
+  document.getElementById("contactModal").style.display = "block";
+}
+
+function closeContactModal() {
+  document.getElementById("contactModal").style.display = "none";
+}
+
+// Optional: close when clicking outside the modal
+window.addEventListener("click", function (event) {
+  const modal = document.getElementById("contactModal");
+  if (event.target === modal) {
+    closeContactModal();
+  }
+});
+
+
+document.getElementById("contactForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const name = document.getElementById("contactName").value;
+  const email = document.getElementById("contactEmail").value;
+  const subject = document.getElementById("contactSubject").value;
+  const message = document.getElementById("contactMessage").value;
+
+  const adminEmail = "support@pvbonline.online"; // replace with your real admin email
+
+  const mailtoLink = `mailto:${adminEmail}?cc=${encodeURIComponent(email)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("From: " + name + " (" + email + ")\n\n" + message)}`;
+
+  window.location.href = mailtoLink;
+
+  alert("Your default email app will open. Please send the message.");
+  closeContactModal();
+});
+
+// send email end
 
 
 // =================== MODAL HANDLING ===================
