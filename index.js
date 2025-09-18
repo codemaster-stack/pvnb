@@ -341,6 +341,87 @@ document.getElementById("contactForm").addEventListener("submit", function (e) {
 // send email end
 
 
+
+// loan
+
+// ================= Loan Services Modal =================
+function showLoanModal() {
+  document.getElementById("loanModal").style.display = "block";
+}
+
+function closeLoanModal() {
+  document.getElementById("loanModal").style.display = "none";
+}
+
+// ================= Personal / Business Section =================
+function showPersonalLoan() {
+  showLoanModal();
+  document.getElementById("personalLoanSection").style.display = "block";
+  document.getElementById("businessLoanSection").style.display = "none";
+}
+
+function showBusinessLoan() {
+  showLoanModal();
+  document.getElementById("personalLoanSection").style.display = "none";
+  document.getElementById("businessLoanSection").style.display = "block";
+}
+
+// ================= Loan Application Modal =================
+function showLoanApplication() {
+  document.getElementById("loanApplicationModal").style.display = "block";
+}
+
+function closeLoanApplication() {
+  document.getElementById("loanApplicationModal").style.display = "none";
+}
+
+// ================= Close Modals when clicking outside =================
+window.addEventListener("click", function (event) {
+  const loanModal = document.getElementById("loanModal");
+  const loanAppModal = document.getElementById("loanApplicationModal");
+
+  if (event.target === loanModal) closeLoanModal();
+  if (event.target === loanAppModal) closeLoanApplication();
+});
+
+// ================= Loan Application Form Submit =================
+document.getElementById("loanApplicationForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const loanData = {
+    loanType: document.getElementById("loanType").value,
+    loanAmount: document.getElementById("loanAmount").value,
+    applicantName: document.getElementById("applicantName").value,
+    applicantEmail: document.getElementById("applicantEmail").value,
+    applicantPhone: document.getElementById("applicantPhone").value,
+    annualIncome: document.getElementById("annualIncome").value,
+    loanPurpose: document.getElementById("loanPurpose").value,
+  };
+
+  try {
+    const res = await fetch("https://your-backend-domain/api/public/loans/apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loanData),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Loan application submitted successfully!");
+      document.getElementById("loanApplicationForm").reset();
+      closeLoanApplication();
+    } else {
+      alert("Error: " + data.message);
+    }
+  } catch (err) {
+    console.error("Loan application error:", err);
+    alert("Something went wrong. Please try again later.");
+  }
+});
+// loan end
+
+
 // =================== MODAL HANDLING ===================
 
 // const $ = (selector) => document.querySelector(selector);
