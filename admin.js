@@ -834,54 +834,71 @@
 // chart
 
 
-  const socket = io("https://api.pvbonline.online"); // backend URL
-  const adminId = "admin123"; // TODO: replace with logged-in admin ID from backend
+    // Make sure this runs after DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    const socket = io("https://api.pvbonline.online"); // backend URL
+    const adminId = "admin123"; // replace with actual logged-in admin ID
 
-  // Join as admin
-  socket.emit("joinAdmin", adminId);
+    // Join as admin
+    socket.emit("joinAdmin", adminId);
 
-  const chatBox = document.getElementById("chatBox");
-  const openChatBtn = document.getElementById("openChat");
-  const closeChatBtn = document.getElementById("closeChat");
-  const chatMessages = document.getElementById("chatMessages");
-  const chatInput = document.getElementById("chatInput");
-  const sendMessageBtn = document.getElementById("sendMessage");
+    // Cache elements
+    const chatBox = document.getElementById("chatBox");
+    const openChatBtn = document.getElementById("openChat");
+    const closeChatBtn = document.getElementById("closeChat");
+    const chatMessages = document.getElementById("chatMessages");
+    const chatInput = document.getElementById("chatInput");
+    const sendMessageBtn = document.getElementById("sendMessage");
 
-  let activeVisitorId = null; // track the visitor we are replying to
+    let activeVisitorId = null; // track the visitor we are replying to
 
-  // Open / Close chat
-  openChatBtn.addEventListener("click", () => chatBox.style.display = "block");
-  closeChatBtn.addEventListener("click", () => chatBox.style.display = "none");
+    if (openChatBtn && chatBox) {
+      openChatBtn.addEventListener("click", () => {
+        chatBox.style.display = "block";
+      });
+    }
 
-  // Listen for visitor messages
-  socket.on("chatMessage", (data) => {
-    if (data.sender === "visitor") {
-      activeVisitorId = data.visitorId; // save visitor session
-      appendMessage("Visitor", data.text, "visitor");
+    if (closeChatBtn && chatBox) {
+      closeChatBtn.addEventListener("click", () => {
+        chatBox.style.display = "none";
+      });
+    }
+
+    // Listen for visitor messages
+    socket.on("chatMessage", (data) => {
+      if (data.sender === "visitor") {
+        activeVisitorId = data.visitorId || activeVisitorId; // save visitor session
+        appendMessage("Visitor", data.text, "visitor");
+      }
+    });
+
+    // Send admin reply
+    function sendAdminMessage() {
+      const text = chatInput.value.trim();
+      if (!text || !activeVisitorId) return;
+
+      socket.emit("adminMessage", { visitorId: activeVisitorId, text });
+      appendMessage("You", text, "admin");
+      chatInput.value = "";
+    }
+
+    if (sendMessageBtn) {
+      sendMessageBtn.addEventListener("click", sendAdminMessage);
+    }
+
+    if (chatInput) {
+      chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendAdminMessage();
+      });
+    }
+
+    // Helper to append messages
+    function appendMessage(sender, text, type) {
+      if (!chatMessages) return;
+      const div = document.createElement("div");
+      div.classList.add("message", type);
+      div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     }
   });
-
-  // Send admin reply
-  sendMessageBtn.addEventListener("click", sendAdminMessage);
-  chatInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") sendAdminMessage();
-  });
-
-  function sendAdminMessage() {
-    const text = chatInput.value.trim();
-    if (!text || !activeVisitorId) return;
-
-    socket.emit("adminMessage", { visitorId: activeVisitorId, text });
-    appendMessage("You", text, "admin");
-    chatInput.value = "";
-  }
-
-  // Helper to append messages
-  function appendMessage(sender, text, type) {
-    const div = document.createElement("div");
-    div.classList.add("message", type);
-    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-

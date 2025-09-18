@@ -425,44 +425,60 @@ document.getElementById("loanApplicationForm").addEventListener("submit", async 
 // chart
 
 
-  cconst socket = io("https://api.pvbonline.online"); // backend domain
+  // --- Initialize socket ---
+  const socket = io("https://api.pvbonline.online"); // backend domain
 
-// Open / close chat modal
-function openChatModal() { document.getElementById("chatModal").style.display = "block"; }
-function closeChatModal() { document.getElementById("chatModal").style.display = "none"; }
+  // Assign a unique visitor ID for this session
+  const visitorId = "visitor_" + Date.now();
+  socket.emit("joinVisitor", visitorId);
 
-// Send visitor message
-function sendChatMessage() {
-  const input = document.getElementById("chatInput");
-  const msg = input.value.trim();
-  if (!msg) return;
-
-  socket.emit("visitorMessage", { text: msg });
-  appendMessage("You", msg, "visitor");
-  input.value = "";
-}
-
-// Listen for admin replies
-socket.on("chatMessage", (data) => {
-  if (data.sender === "admin") {
-    appendMessage("Support", data.text, "agent");
+  // --- Open chat modal ---
+  function openChatModal() {
+    document.getElementById("chatModal").style.display = "block";
   }
-});
 
-// Append messages
-function appendMessage(sender, text, type) {
-  const chatMessages = document.getElementById("chatMessages");
-  const div = document.createElement("div");
-  div.classList.add("message", type);
-  div.innerHTML = `<strong>${sender}:</strong> ${text}`;
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+  // --- Close chat modal ---
+  function closeChatModal() {
+    document.getElementById("chatModal").style.display = "none";
+  }
 
-// Allow Enter key to send
-function handleChatKeyPress(e) {
-  if (e.key === "Enter") sendChatMessage();
-}
+  // --- Send message from visitor to admin ---
+  function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const payload = {
+      visitorId,
+      text: msg
+    };
+
+    socket.emit("visitorMessage", payload);
+    appendMessage("You", msg, "visitor");
+    input.value = "";
+  }
+
+  // --- Listen for admin replies ---
+  socket.on("adminMessage", (data) => {
+    if (data.visitorId === visitorId) {
+      appendMessage("Support", data.text, "agent");
+    }
+  });
+
+  // --- Append messages to chat box ---
+  function appendMessage(sender, text, type) {
+    const chatMessages = document.getElementById("chatMessages");
+    const div = document.createElement("div");
+    div.classList.add("message", type);
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // --- Allow Enter key to send message ---
+  function handleChatKeyPress(e) {
+    if (e.key === "Enter") sendChatMessage();
+  }
 
 
 // chart end
