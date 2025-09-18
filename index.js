@@ -399,7 +399,7 @@ document.getElementById("loanApplicationForm").addEventListener("submit", async 
   };
 
   try {
-    const res = await fetch("https://your-backend-domain/api/public/loans/apply", {
+    const res = await fetch("https://api.pvbonline.online/api/public/loans/apply", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loanData),
