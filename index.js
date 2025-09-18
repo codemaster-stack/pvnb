@@ -422,6 +422,31 @@ document.getElementById("loanApplicationForm").addEventListener("submit", async 
 // loan end
 
 
+// chart
+
+
+// const socket = io("https://api.pvbonline.online"); // your backend
+
+// auto-join visitor room
+// socket.emit("joinVisitor");
+
+const socket = io("https://api.pvbonline.online"); // your backend domain
+
+  function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    socket.emit("userMessage", msg);
+    input.value = "";
+  }
+
+  socket.on("userMessage", (msg) => {
+    // append admin reply
+    document.getElementById("chatMessages").innerHTML += `<div class="agent-message">${msg}</div>`;
+  });
+// chart end
+
 // =================== MODAL HANDLING ===================
 
 // const $ = (selector) => document.querySelector(selector);
