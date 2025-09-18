@@ -425,50 +425,44 @@ document.getElementById("loanApplicationForm").addEventListener("submit", async 
 // chart
 
 
-  const socket = io("https://api.pvbonline.online"); // backend domain
+  cconst socket = io("https://api.pvbonline.online"); // backend domain
 
-  // Open chat modal
-  function openChatModal() {
-    document.getElementById("chatModal").style.display = "block";
+// Open / close chat modal
+function openChatModal() { document.getElementById("chatModal").style.display = "block"; }
+function closeChatModal() { document.getElementById("chatModal").style.display = "none"; }
+
+// Send visitor message
+function sendChatMessage() {
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  socket.emit("visitorMessage", { text: msg });
+  appendMessage("You", msg, "visitor");
+  input.value = "";
+}
+
+// Listen for admin replies
+socket.on("chatMessage", (data) => {
+  if (data.sender === "admin") {
+    appendMessage("Support", data.text, "agent");
   }
+});
 
-  // Close chat modal
-  function closeChatModal() {
-    document.getElementById("chatModal").style.display = "none";
-  }
+// Append messages
+function appendMessage(sender, text, type) {
+  const chatMessages = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.classList.add("message", type);
+  div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
-  // Send message from visitor to server
-  function sendChatMessage() {
-    const input = document.getElementById("chatInput");
-    const msg = input.value.trim();
-    if (!msg) return;
-
-    socket.emit("visitorMessage", msg); // use visitorMessage instead of userMessage
-    appendMessage("You", msg, "visitor");
-    input.value = "";
-  }
-
-  // Listen for admin replies
-  socket.on("adminMessage", (msg) => {
-    appendMessage("Support", msg, "agent");
-  });
-
-  // Helper to append messages
-  function appendMessage(sender, text, type) {
-    const chatMessages = document.getElementById("chatMessages");
-    const div = document.createElement("div");
-    div.classList.add("message", type);
-    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  // Allow Enter key to send message
-  function handleChatKeyPress(e) {
-    if (e.key === "Enter") {
-      sendChatMessage();
-    }
-  }
+// Allow Enter key to send
+function handleChatKeyPress(e) {
+  if (e.key === "Enter") sendChatMessage();
+}
 
 
 // chart end
