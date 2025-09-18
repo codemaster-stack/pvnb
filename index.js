@@ -425,26 +425,52 @@ document.getElementById("loanApplicationForm").addEventListener("submit", async 
 // chart
 
 
-// const socket = io("https://api.pvbonline.online"); // your backend
+  const socket = io("https://api.pvbonline.online"); // backend domain
 
-// auto-join visitor room
-// socket.emit("joinVisitor");
+  // Open chat modal
+  function openChatModal() {
+    document.getElementById("chatModal").style.display = "block";
+  }
 
-const socket = io("https://api.pvbonline.online"); // your backend domain
+  // Close chat modal
+  function closeChatModal() {
+    document.getElementById("chatModal").style.display = "none";
+  }
 
+  // Send message from visitor to server
   function sendChatMessage() {
     const input = document.getElementById("chatInput");
     const msg = input.value.trim();
     if (!msg) return;
 
-    socket.emit("userMessage", msg);
+    socket.emit("visitorMessage", msg); // use visitorMessage instead of userMessage
+    appendMessage("You", msg, "visitor");
     input.value = "";
   }
 
-  socket.on("userMessage", (msg) => {
-    // append admin reply
-    document.getElementById("chatMessages").innerHTML += `<div class="agent-message">${msg}</div>`;
+  // Listen for admin replies
+  socket.on("adminMessage", (msg) => {
+    appendMessage("Support", msg, "agent");
   });
+
+  // Helper to append messages
+  function appendMessage(sender, text, type) {
+    const chatMessages = document.getElementById("chatMessages");
+    const div = document.createElement("div");
+    div.classList.add("message", type);
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // Allow Enter key to send message
+  function handleChatKeyPress(e) {
+    if (e.key === "Enter") {
+      sendChatMessage();
+    }
+  }
+
+
 // chart end
 
 // =================== MODAL HANDLING ===================
