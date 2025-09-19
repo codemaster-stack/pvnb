@@ -497,11 +497,12 @@ async function loadUserDashboard() {
 
     // Update profile picture
     const profilePicEl = document.getElementById("profilePic");
-    if (profilePicEl) {
-      profilePicEl.src = data.profilePic
-        ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}`
-        : "https://i.pravatar.cc/50";
-    }
+if (profilePicEl) {
+  profilePicEl.src = data.profilePic
+    ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}?t=${Date.now()}`
+    : "https://i.pravatar.cc/50";
+  profilePicEl.style.visibility = "visible"; // show after setting the correct src
+}
 
     // Update balances if elements exist
     if (data.balances) {
