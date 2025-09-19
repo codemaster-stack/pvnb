@@ -1,470 +1,522 @@
- hamburger menu code
-const hamburger = document.querySelector('.open-mobilemenu');
-const mobileMenu = document.getElementById('mobileMenu');
-const mobileOverlay = document.getElementById('mobileOverlay');
+//  hamburger menu code
+// const hamburger = document.querySelector('.open-mobilemenu');
+// const mobileMenu = document.getElementById('mobileMenu');
+// const mobileOverlay = document.getElementById('mobileOverlay');
 
-function toggleMobileMenu() {
-    mobileMenu.classList.toggle('active');
-    mobileOverlay.classList.toggle('active');
-}
+// function toggleMobileMenu() {
+//     mobileMenu.classList.toggle('active');
+//     mobileOverlay.classList.toggle('active');
+// }
 
-function closeMobileMenu() {
-    mobileMenu.classList.remove('active');
-    mobileOverlay.classList.remove('active');
-}
+// function closeMobileMenu() {
+//     mobileMenu.classList.remove('active');
+//     mobileOverlay.classList.remove('active');
+// }
 
-hamburger.addEventListener('click', toggleMobileMenu);
-mobileOverlay.addEventListener('click', closeMobileMenu);
+// hamburger.addEventListener('click', toggleMobileMenu);
+// mobileOverlay.addEventListener('click', closeMobileMenu);
 
-// Close menu when nav item is clicked
-const mobileNavItems = document.querySelectorAll('.mobile-menu .nav-item');
-mobileNavItems.forEach(item => {
-    item.addEventListener('click', closeMobileMenu);
-});
+// // Close menu when nav item is clicked
+// const mobileNavItems = document.querySelectorAll('.mobile-menu .nav-item');
+// mobileNavItems.forEach(item => {
+//     item.addEventListener('click', closeMobileMenu);
+// });
 
-// end of hamburger menu code
-
-
-// chat modal functionality
-function openChatModal() {
-  document.getElementById("chatModal").style.display = "flex";
-  document.getElementById("chatStatus").innerHTML = `
-    <div class="chat-status-dot" style="background: green;"></div>
-    <span>Connected</span>
-  `;
-}
-
-function closeChatModal() {
-  document.getElementById("chatModal").style.display = "none";
-}
-
-function sendChatMessage() {
-  const input = document.getElementById("chatInput");
-  const messageText = input.value.trim();
-  if (messageText === "") return;
-
-  const messages = document.getElementById("chatMessages");
-
-  // Add user message
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", "user-message");
-  messageDiv.innerHTML = `
-    <div class="message-content">
-      <div class="message-header">You</div>
-      <div class="message-text">${messageText}</div>
-      <div class="message-time">${new Date().toLocaleTimeString()}</div>
-    </div>
-  `;
-  messages.appendChild(messageDiv);
-
-  // Scroll to bottom
-  messages.scrollTop = messages.scrollHeight;
-
-  input.value = "";
-
-  // Fake agent reply (optional)
-  setTimeout(() => {
-    const reply = document.createElement("div");
-    reply.classList.add("message", "agent-message");
-    reply.innerHTML = `
-      <div class="message-avatar"><i class="fas fa-user-tie"></i></div>
-      <div class="message-content">
-        <div class="message-header">Customer Support</div>
-        <div class="message-text">Thanks for your message! We'll assist shortly.</div>
-        <div class="message-time">${new Date().toLocaleTimeString()}</div>
-      </div>
-    `;
-    messages.appendChild(reply);
-    messages.scrollTop = messages.scrollHeight;
-  }, 1000);
-}
-
-function handleChatKeyPress(event) {
-  if (event.key === "Enter") {
-    sendChatMessage();
-  }
-}
-// end of chat modal functionality
+// // end of hamburger menu code
 
 
+// // chat modal functionality
+// function openChatModal() {
+//   document.getElementById("chatModal").style.display = "flex";
+//   document.getElementById("chatStatus").innerHTML = `
+//     <div class="chat-status-dot" style="background: green;"></div>
+//     <span>Connected</span>
+//   `;
+// }
 
-    // About Us Modal
+// function closeChatModal() {
+//   document.getElementById("chatModal").style.display = "none";
+// }
 
-  const aboutModal = document.getElementById("aboutModal");
+// function sendChatMessage() {
+//   const input = document.getElementById("chatInput");
+//   const messageText = input.value.trim();
+//   if (messageText === "") return;
 
-  // Function called by your nav onclick
-  function showAboutModal() {
-    aboutModal.style.display = "flex";
-  }
+//   const messages = document.getElementById("chatMessages");
 
-  // Close modal
-  function closeAboutModal() {
-    aboutModal.style.display = "none";
-  }
+//   // Add user message
+//   const messageDiv = document.createElement("div");
+//   messageDiv.classList.add("message", "user-message");
+//   messageDiv.innerHTML = `
+//     <div class="message-content">
+//       <div class="message-header">You</div>
+//       <div class="message-text">${messageText}</div>
+//       <div class="message-time">${new Date().toLocaleTimeString()}</div>
+//     </div>
+//   `;
+//   messages.appendChild(messageDiv);
 
-  // Close when clicking outside modal content
-  window.addEventListener("click", (e) => {
-    if (e.target === aboutModal) {
-      closeAboutModal();
-    }
-  });
+//   // Scroll to bottom
+//   messages.scrollTop = messages.scrollHeight;
 
-// End About Us Modal
+//   input.value = "";
+
+//   // Fake agent reply (optional)
+//   setTimeout(() => {
+//     const reply = document.createElement("div");
+//     reply.classList.add("message", "agent-message");
+//     reply.innerHTML = `
+//       <div class="message-avatar"><i class="fas fa-user-tie"></i></div>
+//       <div class="message-content">
+//         <div class="message-header">Customer Support</div>
+//         <div class="message-text">Thanks for your message! We'll assist shortly.</div>
+//         <div class="message-time">${new Date().toLocaleTimeString()}</div>
+//       </div>
+//     `;
+//     messages.appendChild(reply);
+//     messages.scrollTop = messages.scrollHeight;
+//   }, 1000);
+// }
+
+// function handleChatKeyPress(event) {
+//   if (event.key === "Enter") {
+//     sendChatMessage();
+//   }
+// }
+// // end of chat modal functionality
 
 
 
-// Show loan modal functions
+//     // About Us Modal
 
-function showPersonalLoan() {
-    document.getElementById('loanModal').style.display = 'block';
-    // Show only personal loan section
-    document.getElementById('personalLoanSection').style.display = 'block';
-    document.getElementById('businessLoanSection').style.display = 'none';
-    document.getElementById('loanModalTitle').innerHTML = '<i class="fas fa-user"></i> Personal Loans';
-}
+//   const aboutModal = document.getElementById("aboutModal");
 
-function showBusinessLoan() {
-    document.getElementById('loanModal').style.display = 'block';
-    // Show only business loan section
-    document.getElementById('personalLoanSection').style.display = 'none';
-    document.getElementById('businessLoanSection').style.display = 'block';
-    document.getElementById('loanModalTitle').innerHTML = '<i class="fas fa-building"></i> Business Loans';
-}
+//   // Function called by your nav onclick
+//   function showAboutModal() {
+//     aboutModal.style.display = "flex";
+//   }
 
-function closeLoanModal() {
-    document.getElementById('loanModal').style.display = 'none';
-}
+//   // Close modal
+//   function closeAboutModal() {
+//     aboutModal.style.display = "none";
+//   }
 
-function showLoanApplication() {
-    document.getElementById('loanModal').style.display = 'none';
-    document.getElementById('loanApplicationModal').style.display = 'block';
-}
+//   // Close when clicking outside modal content
+//   window.addEventListener("click", (e) => {
+//     if (e.target === aboutModal) {
+//       closeAboutModal();
+//     }
+//   });
 
-function closeLoanApplication() {
-    document.getElementById('loanApplicationModal').style.display = 'none';
-}
+// // End About Us Modal
 
 
-// Handle loan application form submission
-document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+
+// // Show loan modal functions
+
+// function showPersonalLoan() {
+//     document.getElementById('loanModal').style.display = 'block';
+//     // Show only personal loan section
+//     document.getElementById('personalLoanSection').style.display = 'block';
+//     document.getElementById('businessLoanSection').style.display = 'none';
+//     document.getElementById('loanModalTitle').innerHTML = '<i class="fas fa-user"></i> Personal Loans';
+// }
+
+// function showBusinessLoan() {
+//     document.getElementById('loanModal').style.display = 'block';
+//     // Show only business loan section
+//     document.getElementById('personalLoanSection').style.display = 'none';
+//     document.getElementById('businessLoanSection').style.display = 'block';
+//     document.getElementById('loanModalTitle').innerHTML = '<i class="fas fa-building"></i> Business Loans';
+// }
+
+// function closeLoanModal() {
+//     document.getElementById('loanModal').style.display = 'none';
+// }
+
+// function showLoanApplication() {
+//     document.getElementById('loanModal').style.display = 'none';
+//     document.getElementById('loanApplicationModal').style.display = 'block';
+// }
+
+// function closeLoanApplication() {
+//     document.getElementById('loanApplicationModal').style.display = 'none';
+// }
+
+
+// // Handle loan application form submission
+// document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
+//     e.preventDefault();
     
-    const formData = new FormData(this);
-    const loanData = Object.fromEntries(formData);
+//     const formData = new FormData(this);
+//     const loanData = Object.fromEntries(formData);
 
-    try {
-        const res = await fetch('/api/loan/apply', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loanData)
-        });
+//     try {
+//         const res = await fetch('/api/loan/apply', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify(loanData)
+//         });
 
-        const result = await res.json();
+//         const result = await res.json();
 
-        if (result.success) {
-            alert('Loan application submitted successfully! We will contact you soon.');
-            closeLoanApplication();
-            this.reset();
-        } else {
-            alert('Error: ' + result.message);
-        }
-    } catch (err) {
-        alert('Server error, please try again later.');
-    }
-});
+//         if (result.success) {
+//             alert('Loan application submitted successfully! We will contact you soon.');
+//             closeLoanApplication();
+//             this.reset();
+//         } else {
+//             alert('Error: ' + result.message);
+//         }
+//     } catch (err) {
+//         alert('Server error, please try again later.');
+//     }
+// });
 
 
 
-// Close modals when clicking outside
-window.onclick = function(event) {
-    const loanModal = document.getElementById('loanModal');
-    const appModal = document.getElementById('loanApplicationModal');
+// // Close modals when clicking outside
+// window.onclick = function(event) {
+//     const loanModal = document.getElementById('loanModal');
+//     const appModal = document.getElementById('loanApplicationModal');
     
-    if (event.target === loanModal) {
-        closeLoanModal();
-    }
-    if (event.target === appModal) {
-        closeLoanApplication();
-    }
-}
+//     if (event.target === loanModal) {
+//         closeLoanModal();
+//     }
+//     if (event.target === appModal) {
+//         closeLoanApplication();
+//     }
+// }
 
-// Loan modal functions end here
+// // Loan modal functions end here
 
 
 
-//  fined us/card valet support by form
+// //  fined us/card valet support by form
 
-function openContactSupportModal() {
-    document.getElementById('contactSupportModal').style.display = 'block';
-    document.getElementById('mobileOverlay').classList.add('active'); // Use existing overlay
-}
+// function openContactSupportModal() {
+//     document.getElementById('contactSupportModal').style.display = 'block';
+//     document.getElementById('mobileOverlay').classList.add('active'); // Use existing overlay
+// }
 
-function closeContactSupportModal() {
-    document.getElementById('contactSupportModal').style.display = 'none';
-    document.getElementById('mobileOverlay').classList.remove('active');
-}
+// function closeContactSupportModal() {
+//     document.getElementById('contactSupportModal').style.display = 'none';
+//     document.getElementById('mobileOverlay').classList.remove('active');
+// }
 
-// Handle form submission
-document.getElementById('supportForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+// // Handle form submission
+// document.getElementById('supportForm').addEventListener('submit', async function(e) {
+//     e.preventDefault();
     
-    // Get form data
-    const email = document.getElementById('supportEmail').value;
-    const phone = document.getElementById('supportPhone').value;
-    const subject = document.getElementById('supportSubject').value;
-    const message = document.getElementById('supportMessage').value;
+//     // Get form data
+//     const email = document.getElementById('supportEmail').value;
+//     const phone = document.getElementById('supportPhone').value;
+//     const subject = document.getElementById('supportSubject').value;
+//     const message = document.getElementById('supportMessage').value;
 
-    try {
-        const token = localStorage.getItem("token"); // stored on login
+//     try {
+//         const token = localStorage.getItem("token"); // stored on login
 
-const res = await fetch("https://api.pvbonline.online/api/support/contact", {
-    method: "POST",
-    headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({ subject, message, phone })
-});
-
-
-        const data = await res.json();
-
-        if (res.ok) {
-            alert("Message sent successfully!");
-            closeContactSupportModal();
-            this.reset();
-        } else {
-            alert(data.message || "Failed to send message");
-        }
-    } catch (err) {
-        console.error("Support form error:", err);
-        alert("An error occurred. Please try again.");
-    }
-});
-
-// Close modal when clicking overlay
-document.getElementById('mobileOverlay').addEventListener('click', function() {
-    closeContactSupportModal();
-});
+// const res = await fetch("https://api.pvbonline.online/api/support/contact", {
+//     method: "POST",
+//     headers: { 
+//         "Content-Type": "application/json",
+//         "Authorization": `Bearer ${token}`
+//     },
+//     body: JSON.stringify({ subject, message, phone })
+// });
 
 
-// End of fined us/card valet
+//         const data = await res.json();
+
+//         if (res.ok) {
+//             alert("Message sent successfully!");
+//             closeContactSupportModal();
+//             this.reset();
+//         } else {
+//             alert(data.message || "Failed to send message");
+//         }
+//     } catch (err) {
+//         console.error("Support form error:", err);
+//         alert("An error occurred. Please try again.");
+//     }
+// });
+
+// // Close modal when clicking overlay
+// document.getElementById('mobileOverlay').addEventListener('click', function() {
+//     closeContactSupportModal();
+// });
 
 
-// Quick actions for Transaction/mail/transfer           quick-actions buttons
-// Simple modal open/close
-function openModal(id) {
-  document.getElementById(id).style.display = 'flex';
-}
-function closeModal(id) {
-  document.getElementById(id).style.display = 'none';
-}
-
-// Fake transfer form submission
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOM loaded");
-
-    const modal = document.getElementById("transferModal");
-    const transferBtn = document.getElementById("transferBtn"); 
-
-    if (transferBtn && modal) {
-        transferBtn.addEventListener("click", () => {
-            console.log("Transfer button clicked!");
-            modal.style.display = "flex";
-        });
-    } else {
-        console.log("Transfer button or modal not found");
-    }
-});
+// // End of fined us/card valet
 
 
+// // Quick actions for Transaction/mail/transfer           quick-actions buttons
+// // Simple modal open/close
+// function openModal(id) {
+//   document.getElementById(id).style.display = 'flex';
+// }
+// function closeModal(id) {
+//   document.getElementById(id).style.display = 'none';
+// }
+
+// // Fake transfer form submission
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     console.log("DOM loaded");
+
+//     const modal = document.getElementById("transferModal");
+//     const transferBtn = document.getElementById("transferBtn"); 
+
+//     if (transferBtn && modal) {
+//         transferBtn.addEventListener("click", () => {
+//             console.log("Transfer button clicked!");
+//             modal.style.display = "flex";
+//         });
+//     } else {
+//         console.log("Transfer button or modal not found");
+//     }
+// });
 
 
 
-// contact by mail
-function openContactModal() {
-  document.getElementById("contactModal").style.display = "block";
-}
-
-function closeContactModal() {
-  document.getElementById("contactModal").style.display = "none";
-}
-// contact by mail end
 
 
-// Open the Transactions modal
-function openTransactionsModal() {
-  document.getElementById("transactionsModal").style.display = "flex";
-}
+// // contact by mail
+// function openContactModal() {
+//   document.getElementById("contactModal").style.display = "block";
+// }
 
-// Close the Transactions modal
-function closeTransactionsModal() {
-  document.getElementById("transactionsModal").style.display = "none";
-}
-
-// Also close if user clicks outside modal content
-window.onclick = function(event) {
-  const modal = document.getElementById("transactionsModal");
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-};
-
-//   Quick actions for Transaction/mail/transfer           quick-actions buttons 
+// function closeContactModal() {
+//   document.getElementById("contactModal").style.display = "none";
+// }
+// // contact by mail end
 
 
+// // Open the Transactions modal
+// function openTransactionsModal() {
+//   document.getElementById("transactionsModal").style.display = "flex";
+// }
 
-// Contact form submition, sending mail
+// // Close the Transactions modal
+// function closeTransactionsModal() {
+//   document.getElementById("transactionsModal").style.display = "none";
+// }
 
-document.getElementById("contactForm").addEventListener("submit", async function (e) {
-  e.preventDefault();
+// // Also close if user clicks outside modal content
+// window.onclick = function(event) {
+//   const modal = document.getElementById("transactionsModal");
+//   if (event.target === modal) {
+//     modal.style.display = "none";
+//   }
+// };
 
-  const formData = {
-    name: document.getElementById("contactName").value,
-    email: document.getElementById("contactEmail").value,
-    subject: document.getElementById("contactSubject").value,
-    message: document.getElementById("contactMessage").value
-  };
-
-  try {
-    const res = await fetch("/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    });
-
-    if (res.ok) {
-      alert("✅ Support request sent successfully!");
-      closeContactModal();
-      document.getElementById("contactForm").reset();
-    } else {
-      alert("❌ Failed to send. Try again later.");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("⚠️ Error sending message.");
-  }
-});
-
-// Contact form submition, sending mail
+// //   Quick actions for Transaction/mail/transfer           quick-actions buttons 
 
 
 
-// Helper to open/close modals //  Transaction pin
+// // Contact form submition, sending mail
 
-function openModal(id) {
-  document.getElementById(id).style.display = "flex";
-}
-function closeModal(id) {
-  document.getElementById(id).style.display = "none";
-}
+// document.getElementById("contactForm").addEventListener("submit", async function (e) {
+//   e.preventDefault();
 
-// When transfer form is submitted
-document.getElementById("transferForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+//   const formData = {
+//     name: document.getElementById("contactName").value,
+//     email: document.getElementById("contactEmail").value,
+//     subject: document.getElementById("contactSubject").value,
+//     message: document.getElementById("contactMessage").value
+//   };
 
-  // 🔹 Simulate backend check
-  // Later, replace with real API call to Node.js
-  let userHasPin = true; // <-- Replace with backend response
+//   try {
+//     const res = await fetch("/send-email", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(formData)
+//     });
 
-  if (userHasPin) {
-    closeModal("transferModal");
-    openModal("enterPinModal");
-  } else {
-    closeModal("transferModal");
-    openModal("createPinModal");
-  }
-});
+//     if (res.ok) {
+//       alert("✅ Support request sent successfully!");
+//       closeContactModal();
+//       document.getElementById("contactForm").reset();
+//     } else {
+//       alert("❌ Failed to send. Try again later.");
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     alert("⚠️ Error sending message.");
+//   }
+// });
 
-// Handle Enter PIN form
-document.getElementById("enterPinForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  let pin = document.getElementById("transferPin").value;
-  alert("PIN entered: " + pin);
-  closeModal("enterPinModal");
-  // 🔹 Send PIN to backend for validation
-});
+// // Contact form submition, sending mail
 
-// Handle Create PIN form
-document.getElementById("createPinForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  let newPin = document.getElementById("newPin").value;
-  let confirmPin = document.getElementById("confirmNewPin").value;
+
+
+// // Helper to open/close modals //  Transaction pin
+
+// function openModal(id) {
+//   document.getElementById(id).style.display = "flex";
+// }
+// function closeModal(id) {
+//   document.getElementById(id).style.display = "none";
+// }
+
+// // When transfer form is submitted
+// document.getElementById("transferForm").addEventListener("submit", function(e) {
+//   e.preventDefault();
+
+//   // 🔹 Simulate backend check
+//   // Later, replace with real API call to Node.js
+//   let userHasPin = true; // <-- Replace with backend response
+
+//   if (userHasPin) {
+//     closeModal("transferModal");
+//     openModal("enterPinModal");
+//   } else {
+//     closeModal("transferModal");
+//     openModal("createPinModal");
+//   }
+// });
+
+// // Handle Enter PIN form
+// document.getElementById("enterPinForm").addEventListener("submit", function(e) {
+//   e.preventDefault();
+//   let pin = document.getElementById("transferPin").value;
+//   alert("PIN entered: " + pin);
+//   closeModal("enterPinModal");
+//   // 🔹 Send PIN to backend for validation
+// });
+
+// // Handle Create PIN form
+// document.getElementById("createPinForm").addEventListener("submit", function(e) {
+//   e.preventDefault();
+//   let newPin = document.getElementById("newPin").value;
+//   let confirmPin = document.getElementById("confirmNewPin").value;
   
-  if (newPin !== confirmPin) {
-    alert("PINs do not match!");
-    return;
+//   if (newPin !== confirmPin) {
+//     alert("PINs do not match!");
+//     return;
+//   }
+//   alert("New PIN created: " + newPin);
+//   closeModal("createPinModal");
+//   // 🔹 Send to backend to save securely
+// });
+
+// // Handle Forgot PIN form
+// document.getElementById("forgotPinForm").addEventListener("submit", function(e) {
+//   e.preventDefault();
+//   alert("Reset link sent to your email!");
+//   closeModal("forgotPinModal");
+//   // 🔹 Backend should send email reset link
+// });
+
+// // End Transaction pin
+
+
+// // Add this to the end of your current userpage.js file
+// document.getElementById('logoutBtn').addEventListener('click', function() {
+//     // Clear authentication data
+//     localStorage.removeItem('token');
+//     sessionStorage.clear();
+    
+//     // Redirect back to index page where login modal exists
+//     window.location.href = 'index.html'; // or whatever your index page is named
+// });
+
+
+
+
+// function showCreateCardModal() {
+//     document.getElementById("createCardModal").style.display = "block";
+// }
+
+// function closeCreateCardModal() {
+//     document.getElementById("createCardModal").style.display = "none";
+// }
+
+// // Handle form submission
+// document.getElementById("createCardForm").addEventListener("submit", async function(e) {
+//     e.preventDefault();
+    
+//     const cardData = {
+//         cardType: document.getElementById("cardType").value,
+//         cardLimit: document.getElementById("cardLimit").value
+//     };
+
+//     try {
+//         const res = await fetch("https://api.pvbonline.online/api/users/create-card", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 // Include auth token if required
+//                 // "Authorization": "Bearer " + token
+//             },
+//             body: JSON.stringify(cardData)
+//         });
+
+//         const data = await res.json();
+
+//         if(res.ok) {
+//             alert("Credit Card created successfully!");
+//             document.getElementById("createCardForm").reset();
+//             closeCreateCardModal();
+//         } else {
+//             alert("Error: " + data.message);
+//         }
+//     } catch(err) {
+//         console.error("Error creating credit card:", err);
+//         alert("Something went wrong. Please try again.");
+//     }
+// });
+// // card creation end 
+
+
+
+// profilepicture/name display
+async function loadUserDashboard() {
+  const res = await fetch("/api/user/me", {
+    headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+  });
+  const data = await res.json();
+
+  if (res.ok) {
+    document.getElementById("userName").textContent = data.name;
+    document.getElementById("profilePic").src = data.profilePic || "https://i.pravatar.cc/50";
+  } else {
+    console.error("Failed to load user info");
   }
-  alert("New PIN created: " + newPin);
-  closeModal("createPinModal");
-  // 🔹 Send to backend to save securely
-});
-
-// Handle Forgot PIN form
-document.getElementById("forgotPinForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  alert("Reset link sent to your email!");
-  closeModal("forgotPinModal");
-  // 🔹 Backend should send email reset link
-});
-
-// End Transaction pin
-
-
-// Add this to the end of your current userpage.js file
-document.getElementById('logoutBtn').addEventListener('click', function() {
-    // Clear authentication data
-    localStorage.removeItem('token');
-    sessionStorage.clear();
-    
-    // Redirect back to index page where login modal exists
-    window.location.href = 'index.html'; // or whatever your index page is named
-});
-
-
-
-
-function showCreateCardModal() {
-    document.getElementById("createCardModal").style.display = "block";
 }
 
-function closeCreateCardModal() {
-    document.getElementById("createCardModal").style.display = "none";
-}
+loadUserDashboard();
 
-// Handle form submission
-document.getElementById("createCardForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    
-    const cardData = {
-        cardType: document.getElementById("cardType").value,
-        cardLimit: document.getElementById("cardLimit").value
-    };
+// Profile picture update
+const profilePic = document.getElementById("profilePic");
+const uploadInput = document.createElement("input");
+uploadInput.type = "file";
+uploadInput.style.display = "none";
+document.body.appendChild(uploadInput);
 
-    try {
-        const res = await fetch("https://api.pvbonline.online/api/users/create-card", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                // Include auth token if required
-                // "Authorization": "Bearer " + token
-            },
-            body: JSON.stringify(cardData)
-        });
+profilePic.addEventListener("click", () => uploadInput.click());
 
-        const data = await res.json();
+uploadInput.addEventListener("change", async () => {
+  const file = uploadInput.files[0];
+  if (!file) return;
 
-        if(res.ok) {
-            alert("Credit Card created successfully!");
-            document.getElementById("createCardForm").reset();
-            closeCreateCardModal();
-        } else {
-            alert("Error: " + data.message);
-        }
-    } catch(err) {
-        console.error("Error creating credit card:", err);
-        alert("Something went wrong. Please try again.");
-    }
+  const formData = new FormData();
+  formData.append("profilePic", file);
+
+  const res = await fetch("/api/user/profile-picture", {
+    method: "PUT",
+    headers: { "Authorization": "Bearer " + localStorage.getItem("token") },
+    body: formData
+  });
+  const data = await res.json();
+
+  if (res.ok) {
+    profilePic.src = data.profilePic; // Update dashboard
+  } else {
+    alert(data.message || "Upload failed");
+  }
 });
-// card creation end 
+
+
+//  profile picture/name display end

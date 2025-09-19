@@ -88,11 +88,14 @@
 
 <!-- account display section -->
 
-           <div class="dashboard-card">
+    <div class="dashboard-card">
     <div class="user-info">
-      <img src="https://i.pravatar.cc/50" alt="User photo" />
-      <h3>John Campbell</h3>
+      <img id="profilePic" src="https://i.pravatar.cc/50" alt="User photo" />
+      <h3 id="userName">John Campbell</h3>
+     <!-- Hidden file input for uploading profile picture -->
+     <input type="file" id="uploadPicInput" style="display:none" />
     </div>
+
 
     <div class="balance">$1,250,000.00</div>
 
