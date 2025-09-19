@@ -478,7 +478,7 @@ const BACKEND_URL = "https://api.pvbonline.online";
 // Load user dashboard info
 async function loadUserDashboard() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user/me`, {
+    const res = await fetch(`${BACKEND_URL}/api/users/me`, {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token")
       }
@@ -549,7 +549,7 @@ function setupProfilePictureUpload() {
     formData.append("profilePic", file);
 
     try {
-      const res = await fetch(`${BACKEND_URL}/api/user/profile-picture`, {
+      const res = await fetch(`${BACKEND_URL}/api/users/profile-picture`, {
         method: "PUT",
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("token")
