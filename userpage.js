@@ -473,7 +473,7 @@
 
 // profilepicture/name display
 async function loadUserDashboard() {
-  const res = await fetch("/api/user/me", {
+  const res = await fetch("https://api.pvbonline.online/api/user/me", {
     headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
   });
   const data = await res.json();
@@ -504,7 +504,7 @@ uploadInput.addEventListener("change", async () => {
   const formData = new FormData();
   formData.append("profilePic", file);
 
-  const res = await fetch("/api/user/profile-picture", {
+  const res = await fetch("https://api.pvbonline.online/api/user/profile-picture", {
     method: "PUT",
     headers: { "Authorization": "Bearer " + localStorage.getItem("token") },
     body: formData
