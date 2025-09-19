@@ -413,14 +413,14 @@
 
 
 // // Add this to the end of your current userpage.js file
-// document.getElementById('logoutBtn').addEventListener('click', function() {
+document.getElementById('logoutBtn').addEventListener('click', function() {
 //     // Clear authentication data
-//     localStorage.removeItem('token');
-//     sessionStorage.clear();
+    localStorage.removeItem('token');
+    sessionStorage.clear();
     
-//     // Redirect back to index page where login modal exists
-//     window.location.href = 'index.html'; // or whatever your index page is named
-// });
+    // Redirect back to index page where login modal exists
+    window.location.href = 'index.html'; // or whatever your index page is named
+});
 
 
 

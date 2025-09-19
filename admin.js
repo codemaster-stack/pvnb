@@ -65,17 +65,17 @@
 // }
 
 // // ========== Logout Functionality ==========
-// function initializeLogout() {
-//   const logoutBtn = document.getElementById("logoutBtn");
-//   if (logoutBtn) {
-//     logoutBtn.addEventListener("click", () => {
-//       if (confirm("Are you sure you want to log out?")) {
-//         localStorage.removeItem("adminToken");
-//         window.location.href = "admin-signup.html"; 
-//       }
-//     });
-//   }
-// }
+function initializeLogout() {
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem("adminToken");
+        window.location.href = "admin-signup.html"; 
+      }
+    });
+  }
+}
 
 // // ========== Chat Functionality ==========
 // function initializeChat() {
