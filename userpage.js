@@ -469,139 +469,131 @@
 // });
 // // card creation end 
 document.addEventListener("DOMContentLoaded", () => {
+  const BACKEND_URL = "https://api.pvbonline.online";
+
   loadUserDashboard();
   setupProfilePictureUpload();
 
-
-// profilepicture/name display
-// Backend URL
-const BACKEND_URL = "https://api.pvbonline.online";
-
-// Load user dashboard info
-async function loadUserDashboard() {
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/users/me`, {
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
-      }
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      console.error("Failed to load user info", data);
-      return;
-    }
-
-    // Update user name
-    const userNameEl = document.getElementById("userName");
-    if (userNameEl) userNameEl.textContent = data.fullname;
-
-    // Update profile picture
-    const profilePicEl = document.getElementById("profilePic");
-if (profilePicEl) {
-  profilePicEl.src = data.profilePic
-    ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}?t=${Date.now()}`
-    : "https://i.pravatar.cc/50";
-  profilePicEl.style.visibility = "visible"; // show after setting the correct src
-}
-
-    // Update balances if elements exist
-    if (data.balances) {
-  const { savings, current, loan, inflow, outflow } = data.balances;
-
-  // Top balance (Total balance = current + savings)
-  const totalEl = document.getElementById("currentBalance");
-  if (totalEl) totalEl.textContent = `$${(current + savings).toLocaleString()}`;
-
-  // Individual balances
-  const savingsEl = document.getElementById("savingsBalance");
-  if (savingsEl) savingsEl.textContent = `$${savings.toLocaleString()}`;
-
-  const currentEl = document.getElementById("onlyCurrentBalance"); // <-- needs its own span
-  if (currentEl) currentEl.textContent = `$${current.toLocaleString()}`;
-
-  const loanEl = document.getElementById("loanBalance");
-  if (loanEl) loanEl.textContent = `$${loan.toLocaleString()}`;
-
-  const inflowEl = document.getElementById("inflow");
-if (inflowEl) {
-  inflowEl.textContent = `$${inflow.toLocaleString()}`;
-  inflowEl.style.color = inflow > 0 ? "green" : "inherit";
-}
-  const outflowEl = document.getElementById("outflow");
-if (outflowEl) {
-  outflowEl.textContent = `-$${outflow.toLocaleString()}`;
-  outflowEl.style.color = outflow > 0 ? "red" : "inherit"; // red if money went out
-}
-
-}
-
-
-  } catch (err) {
-    console.error("Error loading dashboard:", err);
-  }
-}
-
-// Profile picture upload
-function setupProfilePictureUpload() {
-  const profilePicEl = document.getElementById("profilePic");
-  if (!profilePicEl) return;
-
-  const uploadInput = document.createElement("input");
-  uploadInput.type = "file";
-  uploadInput.accept = "image/*";
-  uploadInput.style.display = "none";
-  document.body.appendChild(uploadInput);
-
-  profilePicEl.addEventListener("click", () => uploadInput.click());
-
-  uploadInput.addEventListener("change", async () => {
-    const file = uploadInput.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("profilePic", file);
-
+  // Load user dashboard info
+  async function loadUserDashboard() {
     try {
-      const res = await fetch(`${BACKEND_URL}/api/users/profile-picture`, {
-        method: "PUT",
+      const res = await fetch(`${BACKEND_URL}/api/users/me`, {
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("token")
-        },
-        body: formData
+        }
       });
 
       const data = await res.json();
-
-      if (res.ok) {
-        profilePicEl.src = data.profilePic
-          ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}`
-          : "https://i.pravatar.cc/50";
-      } else {
-        alert(data.message || "Profile picture upload failed");
+      if (!res.ok) {
+        console.error("Failed to load user info", data);
+        return;
       }
+
+      // Update name
+      const userNameEl = document.getElementById("userName");
+      if (userNameEl) userNameEl.textContent = data.fullname;
+
+      // Update profile picture
+      const profilePicEl = document.getElementById("profilePic");
+      if (profilePicEl) {
+        profilePicEl.src = data.profilePic
+          ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}?t=${Date.now()}`
+          : "https://i.pravatar.cc/50";
+        profilePicEl.style.visibility = "visible";
+      }
+
+      // Update balances
+      if (data.balances) {
+        const { savings, current, loan, inflow, outflow } = data.balances;
+
+        // Top balance (current + savings)
+        const totalEl = document.getElementById("currentBalance");
+        if (totalEl) totalEl.textContent = `₦${(current + savings).toLocaleString()}`;
+
+        // Individual balances
+        const savingsEl = document.getElementById("savingsBalance");
+        if (savingsEl) savingsEl.textContent = `₦${savings.toLocaleString()}`;
+
+        const currentEl = document.getElementById("onlyCurrentBalance");
+        if (currentEl) currentEl.textContent = `₦${current.toLocaleString()}`;
+
+        const loanEl = document.getElementById("loanBalance");
+        if (loanEl) loanEl.textContent = `₦${loan.toLocaleString()}`;
+
+        const inflowEl = document.getElementById("inflow");
+        if (inflowEl) {
+          inflowEl.textContent = `₦${inflow.toLocaleString()}`;
+          inflowEl.style.color = inflow > 0 ? "green" : "inherit";
+        }
+
+        const outflowEl = document.getElementById("outflow");
+        if (outflowEl) {
+          outflowEl.textContent = `-₦${outflow.toLocaleString()}`;
+          outflowEl.style.color = outflow > 0 ? "red" : "inherit";
+        }
+      }
+
+      // Save account numbers globally for modal use
+      window.accountNumbers = {
+        current: data.currentAccountNumber || "N/A",
+        savings: data.savingsAccountNumber || "N/A"
+      };
+
     } catch (err) {
-      console.error("Upload error:", err);
-      alert("Profile picture upload failed");
+      console.error("Error loading dashboard:", err);
     }
-  });
-}
-// Initialize dashboard
-// document.addEventListener("DOMContentLoaded", () => {
-//   loadUserDashboard();
-//   setupProfilePictureUpload();
+  }
 
-// Buttons
-  // const BACKEND_URL = "https://your-backend-url.com"; // <-- update this
+  // Profile picture upload
+  function setupProfilePictureUpload() {
+    const profilePicEl = document.getElementById("profilePic");
+    if (!profilePicEl) return;
 
+    const uploadInput = document.createElement("input");
+    uploadInput.type = "file";
+    uploadInput.accept = "image/*";
+    uploadInput.style.display = "none";
+    document.body.appendChild(uploadInput);
+
+    profilePicEl.addEventListener("click", () => uploadInput.click());
+
+    uploadInput.addEventListener("change", async () => {
+      const file = uploadInput.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("profilePic", file);
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/users/profile-picture`, {
+          method: "PUT",
+          headers: { "Authorization": "Bearer " + localStorage.getItem("token") },
+          body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          profilePicEl.src = data.profilePic
+            ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}?t=${Date.now()}`
+            : "https://i.pravatar.cc/50";
+        } else {
+          alert(data.message || "Profile picture upload failed");
+        }
+      } catch (err) {
+        console.error("Upload error:", err);
+        alert("Profile picture upload failed");
+      }
+    });
+  }
+
+  // Buttons & Modals
   const btnDetails = document.getElementById("btnDetails");
   const btnAccount = document.getElementById("btnAccount");
 
   const detailsModal = document.getElementById("detailsModal");
   const accountModal = document.getElementById("accountModal");
 
-  // Open Transactions Modal
+  // Transactions Modal
   if (btnDetails && detailsModal) {
     btnDetails.addEventListener("click", async () => {
       detailsModal.style.display = "block";
@@ -631,36 +623,39 @@ function setupProfilePictureUpload() {
     });
   }
 
-  // Open Account Details Modal
+  // Account Details Modal
   if (btnAccount && accountModal) {
     btnAccount.addEventListener("click", () => {
       accountModal.style.display = "block";
 
-      // Fill account details dynamically
-      document.getElementById("accountNumber").textContent = "1234567890"; // Replace with real value
-      document.getElementById("accCurrentBalance").textContent = document.getElementById("onlyCurrentBalance")?.textContent || "₦0";
-      document.getElementById("accSavingsBalance").textContent = document.getElementById("savingsBalance")?.textContent || "₦0";
-      document.getElementById("accLoanBalance").textContent = document.getElementById("loanBalance")?.textContent || "₦0";
+      document.getElementById("currentAccountNumber").textContent =
+        window.accountNumbers?.current || "N/A";
+
+      document.getElementById("savingsAccountNumber").textContent =
+        window.accountNumbers?.savings || "N/A";
+
+      document.getElementById("accCurrentBalance").textContent =
+        document.getElementById("onlyCurrentBalance")?.textContent || "₦0";
+
+      document.getElementById("accSavingsBalance").textContent =
+        document.getElementById("savingsBalance")?.textContent || "₦0";
+
+      document.getElementById("accLoanBalance").textContent =
+        document.getElementById("loanBalance")?.textContent || "₦0";
     });
   }
 
-  // Close modals when clicking the "x"
+  // Close modals
   document.querySelectorAll(".modal .close").forEach(closeBtn => {
     closeBtn.addEventListener("click", (e) => {
       const modalId = e.target.getAttribute("data-close");
-      if (modalId) {
-        document.getElementById(modalId).style.display = "none";
-      }
+      if (modalId) document.getElementById(modalId).style.display = "none";
     });
   });
 
-  // Close modals when clicking outside
   window.addEventListener("click", (e) => {
-    if (e.target.classList.contains("modal")) {
-      e.target.style.display = "none";
-    }
+    if (e.target.classList.contains("modal")) e.target.style.display = "none";
   });
-
 
 });
 
