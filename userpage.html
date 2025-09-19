@@ -96,33 +96,63 @@
     </div>
 
 
-    <div class="balance">$1,250,000.00</div>
+ <div class="balance" id="currentBalance">$0.00</div>
 
-    <div class="flow-boxes">
-      <div class="flow inflow">
-        <h4>Inflow</h4>
-        <p>$1,250,000.00</p>
-      </div>
-      <div class="flow outflow">
-        <h4>Outflow</h4>
-        <p>$0.00</p>
-      </div>
-    </div>
+
+<div class="flow-boxes">
+  <div class="flow inflow">
+    <h4>Inflow</h4>
+    <p id="inflow">$0.00</p>
+  </div>
+  <div class="flow outflow">
+    <h4>Outflow</h4>
+    <p id="outflow">$0.00</p>
+  </div>
+</div>
 
     <div class="extra-info">
-      <p>Loan Balance: <span>$1.00</span></p>
-      <p>Savings Balance: <span>$250,000.00</span></p>
-      <p>Current Balance: <span>$1,000,000.00</span></p>
+       <p>Loan Balance: <span id="loanBalance">$0.00</span></p>
+      <p>Savings Balance: <span id="savingsBalance">$0.00</span></p>
+      <p>Current Balance: <span id="onlyCurrentBalance">$0.00</span></p>
       <p>Last Login IP: <span style="color: red;">105.113.117.11</span></p>
       <p>Last Login Date: <span style="color: red;">2025-03-20 10:42:01</span></p>
     </div>
 
     <div class="actions">
-      <button class="btn-details">View Details</button>
-      <button class="btn-account">Account Details</button>
+      <button id="btnDetails" class="btn-details">View Details</button>
+      <button id="btnAccount" class="btn-account">Account Details</button>
     </div>
+
   </div>
   <!-- account diplay section end -->
+
+
+
+     <!-- View Details Modal -->
+<div id="detailsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="detailsModal">&times;</span>
+    <h2>Transaction Details</h2>
+    <div id="transactionList">
+      <!-- Transactions will load here -->
+    </div>
+  </div>
+</div>
+
+<!-- Account Details Modal -->
+<div id="accountModal" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="accountModal">&times;</span>
+    <h2>Account Details</h2>
+    <p><strong>Account Number:</strong> <span id="accountNumber">Loading...</span></p>
+    <p><strong>Current Balance:</strong> <span id="accCurrentBalance">$0.00</span></p>
+    <p><strong>Savings Balance:</strong> <span id="accSavingsBalance">$0.00</span></p>
+    <p><strong>Loan Balance:</strong> <span id="accLoanBalance">$0.00</span></p>
+  </div>
+</div>
+
+
+
 
         <!-- Hero Section-->
          

@@ -468,7 +468,9 @@
 //     }
 // });
 // // card creation end 
-
+document.addEventListener("DOMContentLoaded", () => {
+  loadUserDashboard();
+  setupProfilePictureUpload();
 
 
 // profilepicture/name display
@@ -506,23 +508,35 @@ if (profilePicEl) {
 
     // Update balances if elements exist
     if (data.balances) {
-      const { savings, current, loan, inflow, outflow } = data.balances;
+  const { savings, current, loan, inflow, outflow } = data.balances;
 
-      const savingsEl = document.getElementById("savingsBalance");
-      if (savingsEl) savingsEl.textContent = `$${savings.toLocaleString()}`;
+  // Top balance (Total balance = current + savings)
+  const totalEl = document.getElementById("currentBalance");
+  if (totalEl) totalEl.textContent = `$${(current + savings).toLocaleString()}`;
 
-      const currentEl = document.getElementById("currentBalance");
-      if (currentEl) currentEl.textContent = `$${current.toLocaleString()}`;
+  // Individual balances
+  const savingsEl = document.getElementById("savingsBalance");
+  if (savingsEl) savingsEl.textContent = `$${savings.toLocaleString()}`;
 
-      const loanEl = document.getElementById("loanBalance");
-      if (loanEl) loanEl.textContent = `$${loan.toLocaleString()}`;
+  const currentEl = document.getElementById("onlyCurrentBalance"); // <-- needs its own span
+  if (currentEl) currentEl.textContent = `$${current.toLocaleString()}`;
 
-      const inflowEl = document.getElementById("inflow");
-      if (inflowEl) inflowEl.textContent = `$${inflow.toLocaleString()}`;
+  const loanEl = document.getElementById("loanBalance");
+  if (loanEl) loanEl.textContent = `$${loan.toLocaleString()}`;
 
-      const outflowEl = document.getElementById("outflow");
-      if (outflowEl) outflowEl.textContent = `$${outflow.toLocaleString()}`;
-    }
+  const inflowEl = document.getElementById("inflow");
+if (inflowEl) {
+  inflowEl.textContent = `$${inflow.toLocaleString()}`;
+  inflowEl.style.color = inflow > 0 ? "green" : "inherit";
+}
+  const outflowEl = document.getElementById("outflow");
+if (outflowEl) {
+  outflowEl.textContent = `-$${outflow.toLocaleString()}`;
+  outflowEl.style.color = outflow > 0 ? "red" : "inherit"; // red if money went out
+}
+
+}
+
 
   } catch (err) {
     console.error("Error loading dashboard:", err);
@@ -573,11 +587,81 @@ function setupProfilePictureUpload() {
     }
   });
 }
-
 // Initialize dashboard
-document.addEventListener("DOMContentLoaded", () => {
-  loadUserDashboard();
-  setupProfilePictureUpload();
+// document.addEventListener("DOMContentLoaded", () => {
+//   loadUserDashboard();
+//   setupProfilePictureUpload();
+
+// Buttons
+  // const BACKEND_URL = "https://your-backend-url.com"; // <-- update this
+
+  const btnDetails = document.getElementById("btnDetails");
+  const btnAccount = document.getElementById("btnAccount");
+
+  const detailsModal = document.getElementById("detailsModal");
+  const accountModal = document.getElementById("accountModal");
+
+  // Open Transactions Modal
+  if (btnDetails && detailsModal) {
+    btnDetails.addEventListener("click", async () => {
+      detailsModal.style.display = "block";
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/users/transactions`, {
+          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+        });
+
+        const data = await res.json();
+        const listEl = document.getElementById("transactionList");
+
+        if (Array.isArray(data) && data.length > 0) {
+          listEl.innerHTML = data.map(tx => `
+            <p>
+              <strong>${new Date(tx.date).toLocaleDateString()}</strong>: 
+              ${tx.type} - ₦${tx.amount}
+            </p>
+          `).join("");
+        } else {
+          listEl.innerHTML = "<p>No transactions yet.</p>";
+        }
+      } catch (err) {
+        console.error("Error loading transactions:", err);
+        document.getElementById("transactionList").innerHTML = "<p>Error loading transactions.</p>";
+      }
+    });
+  }
+
+  // Open Account Details Modal
+  if (btnAccount && accountModal) {
+    btnAccount.addEventListener("click", () => {
+      accountModal.style.display = "block";
+
+      // Fill account details dynamically
+      document.getElementById("accountNumber").textContent = "1234567890"; // Replace with real value
+      document.getElementById("accCurrentBalance").textContent = document.getElementById("onlyCurrentBalance")?.textContent || "₦0";
+      document.getElementById("accSavingsBalance").textContent = document.getElementById("savingsBalance")?.textContent || "₦0";
+      document.getElementById("accLoanBalance").textContent = document.getElementById("loanBalance")?.textContent || "₦0";
+    });
+  }
+
+  // Close modals when clicking the "x"
+  document.querySelectorAll(".modal .close").forEach(closeBtn => {
+    closeBtn.addEventListener("click", (e) => {
+      const modalId = e.target.getAttribute("data-close");
+      if (modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+    });
+  });
+
+  // Close modals when clicking outside
+  window.addEventListener("click", (e) => {
+    if (e.target.classList.contains("modal")) {
+      e.target.style.display = "none";
+    }
+  });
+
+
 });
 
 
