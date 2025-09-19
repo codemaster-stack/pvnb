@@ -666,86 +666,86 @@
 // }
 
 // // ========== Create User ==========
-// async function createUser(event) {
-//   event.preventDefault();
+async function createUser(event) {
+  event.preventDefault();
 
-//   const name = document.getElementById("newUserName")?.value.trim();
-//   const email = document.getElementById("newUserEmail")?.value.trim();
-//   const phone = document.getElementById("newUserPhone")?.value.trim();
-//   const password = document.getElementById("newUserPassword")?.value.trim();
+  const name = document.getElementById("newUserName")?.value.trim();
+  const email = document.getElementById("newUserEmail")?.value.trim();
+  const phone = document.getElementById("newUserPhone")?.value.trim();
+  const password = document.getElementById("newUserPassword")?.value.trim();
 
-//   if (!name || !email || !phone || !password) {
-//     alert("Please fill in all required fields.");
-//     return;
-//   }
+  if (!name || !email || !phone || !password) {
+    alert("Please fill in all required fields.");
+    return;
+  }
 
-//   // Show loading state
-//   const submitBtn = event.target.querySelector('button[type="submit"]');
-//   const originalText = submitBtn?.textContent;
-//   if (submitBtn) {
-//     submitBtn.textContent = "Creating User...";
-//     submitBtn.disabled = true;
-//   }
+  // Show loading state
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn?.textContent;
+  if (submitBtn) {
+    submitBtn.textContent = "Creating User...";
+    submitBtn.disabled = true;
+  }
 
-//   try {
-//     // Make API call to register user
-//     const response = await fetch("https://api.pvbonline.online/api/auth/register", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         name: name,
-//         email: email,
-//         phone: phone,
-//         password: password
-//       })
-//     });
+  try {
+    // Make API call to register user
+    const response = await fetch("https://api.pvbonline.online/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        password: password
+      })
+    });
 
-//     const data = await response.json();
+    const data = await response.json();
 
-//     if (response.ok) {
-//       // Success - add user to the manage users table
-//       const table = document.getElementById("manageUsersTable");
-//       if (table) {
-//         const row = table.insertRow();
+    if (response.ok) {
+      // Success - add user to the manage users table
+      const table = document.getElementById("manageUsersTable");
+      if (table) {
+        const row = table.insertRow();
         
-//         row.innerHTML = `
-//           <td><input type="checkbox" class="userCheckbox" data-id="${data.user?.id || 'unknown'}"></td>
-//           <td>${table.rows.length}</td>
-//           <td>${name}</td>
-//           <td>${email}</td>
-//           <td>${phone}</td>
-//           <td class="status">Active</td>
-//           <td>
-//             <button onclick="toggleUserStatus(this)">Deactivate</button>
-//           </td>
-//         `;
-//       }
+        row.innerHTML = `
+          <td><input type="checkbox" class="userCheckbox" data-id="${data.user?.id || 'unknown'}"></td>
+          <td>${table.rows.length}</td>
+          <td>${name}</td>
+          <td>${email}</td>
+          <td>${phone}</td>
+          <td class="status">Active</td>
+          <td>
+            <button onclick="toggleUserStatus(this)">Deactivate</button>
+          </td>
+        `;
+      }
 
-//       alert(`User "${name}" created successfully!`);
+      alert(`User "${name}" created successfully!`);
       
-//       // Reset form
-//       const form = document.getElementById("createUserForm");
-//       if (form) form.reset();
+      // Reset form
+      const form = document.getElementById("createUserForm");
+      if (form) form.reset();
 
-//     } else {
-//       // Handle API errors
-//       const errorMessage = data.message || data.error || "Failed to create user";
-//       alert(`Error: ${errorMessage}`);
-//     }
+    } else {
+      // Handle API errors
+      const errorMessage = data.message || data.error || "Failed to create user";
+      alert(`Error: ${errorMessage}`);
+    }
 
-//   } catch (error) {
-//     console.error("Error creating user:", error);
-//     alert("Network error. Please check your connection and try again.");
-//   } finally {
-//     // Reset button state
-//     if (submitBtn) {
-//       submitBtn.textContent = originalText || "Create User";
-//       submitBtn.disabled = false;
-//     }
-//   }
-// }
+  } catch (error) {
+    console.error("Error creating user:", error);
+    alert("Network error. Please check your connection and try again.");
+  } finally {
+    // Reset button state
+    if (submitBtn) {
+      submitBtn.textContent = originalText || "Create User";
+      submitBtn.disabled = false;
+    }
+  }
+}
 
 // // ========== Update User Profile ==========
 // function updateUserProfile(event) {
@@ -827,13 +827,361 @@
 // }, 100);
 
 
+// side bar tuggle
 
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebarLinks = document.querySelectorAll(".sidebar ul li a");
+  const sections = document.querySelectorAll(".section");
+
+  // Hide all sections except dashboard
+  sections.forEach(sec => {
+    if(sec.id !== "dashboard") sec.style.display = "none";
+  });
+
+  // Function to remove active class from all links
+  function clearActiveLinks() {
+    sidebarLinks.forEach(link => link.classList.remove("active"));
+  }
+
+  // Toggle logic with active highlighting
+  sidebarLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetId = link.dataset.target;
+
+      // Show only target section
+      sections.forEach(sec => {
+        sec.style.display = (sec.id === targetId) ? "block" : "none";
+      });
+
+      // Update active link
+      clearActiveLinks();
+      link.classList.add("active");
+    });
+  });
+});
+
+// side bar tuggle end
+
+
+
+
+// render user display in table
+
+const token = localStorage.getItem("token"); // admin token
+const manageUsersTable = document.getElementById("manageUsersTable");
+
+// Pagination and search state
+let currentPage = 1;
+const pageSize = 10;
+let totalPages = 1;
+let searchQuery = "";
+
+// Fetch users from backend
+async function fetchUsers(page = 1, search = "") {
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/admin/users?page=${page}&limit=${pageSize}&search=${search}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+
+    // Render table rows
+    manageUsersTable.innerHTML = "";
+    data.users.forEach((user, index) => {
+      const balance = user.balances.savings + user.balances.current;
+      manageUsersTable.innerHTML += `
+        <tr>
+          <td><input type="checkbox" data-id="${user._id}"></td>
+          <td>${(page-1)*pageSize + index + 1}</td>
+          <td>${user.fullname}</td>
+          <td>${user.email}</td>
+          <td>
+            Savings: ₦${user.balances.savings}<br>
+            Current: ₦${user.balances.current}<br>
+            Total: ₦${balance}
+          </td>
+          <td>${user.status}</td>
+          <td>
+            <button onclick="editUser('${user._id}')">Edit</button>
+            <button onclick="resetPin('${user._id}')">Reset PIN</button>
+            <button onclick="deleteUser('${user._id}')">Delete</button>
+            <button onclick="fundUser('${user._id}')">Fund</button>
+          </td>
+        </tr>
+      `;
+    });
+
+    // Update total pages
+    totalPages = data.totalPages;
+    renderPagination();
+  } catch (err) {
+    console.error("Error fetching users:", err);
+  }
+}
+
+// Search input
+document.getElementById("searchUserInput").addEventListener("input", (e) => {
+  searchQuery = e.target.value;
+  fetchUsers(1, searchQuery);
+});
+
+// Pagination controls
+function renderPagination() {
+  const paginationContainer = document.getElementById("pagination");
+  paginationContainer.innerHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.disabled = i === currentPage;
+    btn.addEventListener("click", () => {
+      currentPage = i;
+      fetchUsers(currentPage, searchQuery);
+    });
+    paginationContainer.appendChild(btn);
+  }
+}
+
+// Initial fetch
+fetchUsers();
+
+
+
+
+
+function handleSearch() {
+  const search = document.getElementById("searchUsers").value;
+  currentSearch = search;
+  fetchUsers(1, currentSearch, currentSort, currentOrder);
+}
+
+function handleSort() {
+  currentSort = document.getElementById("sortUsers").value;
+  currentOrder = document.getElementById("sortOrder").value;
+  fetchUsers(currentPage, currentSearch, currentSort, currentOrder);
+}
+
+function changePage(page) {
+  if (page < 1 || page > totalPages) return;
+  fetchUsers(page, currentSearch, currentSort, currentOrder);
+}
+// =====================
+// Action Functions
+// =====================
+
+function editUser(userId) {
+  // open modal or form to edit profile pic, name, email, phone, status
+  console.log("Edit user:", userId);
+}
+
+function resetPin(userId) {
+  // open modal or confirm reset
+  console.log("Reset PIN for:", userId);
+}
+
+function deleteUser(userId) {
+  // confirm then delete
+  console.log("Delete user:", userId);
+}
+
+function fundUser(userId) {
+  // open modal to choose account (savings/current), amount, description
+  console.log("Fund user:", userId);
+}
+// render user display in table
+
+async function editUser(userId) {
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/admin/users/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const user = await res.json();
+
+    document.getElementById("editUserId").value = user._id;
+    document.getElementById("editFullName").value = user.fullname;
+    document.getElementById("editEmail").value = user.email;
+    document.getElementById("editPhone").value = user.phone;
+    document.getElementById("editStatus").value = user.status;
+
+    openModal("editUserModal");
+  } catch (err) {
+    console.error("Failed to fetch user:", err);
+    alert("Failed to load user data");
+  }
+}
+
+// Handle update form submission
+document.getElementById("editUserForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const userId = document.getElementById("editUserId").value;
+  const formData = new FormData();
+  const profilePic = document.getElementById("editProfilePic").files[0];
+  if (profilePic) formData.append("photo", profilePic);
+  formData.append("fullname", document.getElementById("editFullName").value);
+  formData.append("email", document.getElementById("editEmail").value);
+  formData.append("phone", document.getElementById("editPhone").value);
+  formData.append("status", document.getElementById("editStatus").value);
+
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/admin/users/${userId}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ User updated successfully");
+      closeModal("editUserModal");
+      fetchUsers(currentPage, searchQuery); // refresh table
+    } else {
+      alert(data.message || "Failed to update user");
+    }
+  } catch (err) {
+    console.error("Update failed:", err);
+    alert("Error updating user");
+  }
+});
+// edit/update user end
+
+
+// resetPin
+function resetPin(userId) {
+  document.getElementById("resetUserId").value = userId;
+  document.getElementById("newUserPin").value = "";
+  document.getElementById("confirmUserPin").value = "";
+  openModal("resetPinModal");
+}
+
+document.getElementById("resetPinForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const userId = document.getElementById("resetUserId").value;
+  const newPin = document.getElementById("newUserPin").value;
+  const confirmPin = document.getElementById("confirmUserPin").value;
+
+  if (newPin !== confirmPin) {
+    alert("❌ PINs do not match!");
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/admin/users/${userId}/reset-pin`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ pin: newPin })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ User PIN reset successfully");
+      closeModal("resetPinModal");
+    } else {
+      alert(data.message || "Failed to reset PIN");
+    }
+  } catch (err) {
+    console.error("Reset PIN failed:", err);
+    alert("Error resetting user PIN");
+  }
+});
+
+// reset pin end
+
+// fund user
+function fundUser(userId) {
+  document.getElementById("fundUserId").value = userId;
+  document.getElementById("fundAmount").value = "";
+  document.getElementById("fundDate").value = new Date().toISOString().split("T")[0]; // default to today
+  document.getElementById("fundDescription").value = "";
+  document.getElementById("fundAccountType").value = "";
+  openModal("fundUserModal");
+}
+
+document.getElementById("fundUserForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const userId = document.getElementById("fundUserId").value;
+  const accountType = document.getElementById("fundAccountType").value;
+  const amount = parseFloat(document.getElementById("fundAmount").value);
+  const date = document.getElementById("fundDate").value;
+  const description = document.getElementById("fundDescription").value;
+
+  if (!accountType) {
+    alert("Please select an account type");
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/admin/users/${userId}/fund`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ accountType, amount, date, description })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ Account funded successfully");
+      closeModal("fundUserModal");
+      loadUsers(); // refresh user table to show updated balance
+    } else {
+      alert(data.message || "Failed to fund user");
+    }
+  } catch (err) {
+    console.error("Fund user failed:", err);
+    alert("Error funding user");
+  }
+});
+// fund user end
+
+
+
+// delete user
+function deleteUser(userId) {
+  document.getElementById("deleteUserId").value = userId;
+  openModal("deleteUserModal");
+}
+
+async function confirmDeleteUser() {
+  const userId = document.getElementById("deleteUserId").value;
+
+  if (!userId) return;
+
+  try {
+    const res = await fetch(`https://api.pvbonline.online/api/admin/users/${userId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ User deleted successfully");
+      closeModal("deleteUserModal");
+      loadUsers(); // refresh the user table
+    } else {
+      alert(data.message || "Failed to delete user");
+    }
+  } catch (err) {
+    console.error("Delete user failed:", err);
+    alert("Error deleting user");
+  }
+}
+// delete user end
 
 
 
 // chart
-
-
     // Make sure this runs after DOM is fully loaded
   document.addEventListener("DOMContentLoaded", () => {
     const socket = io("https://api.pvbonline.online"); // backend URL

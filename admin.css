@@ -299,3 +299,12 @@
   background: #c9302c;
 }
  /* end logout button */
+
+
+
+
+ .sidebar ul li a.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}

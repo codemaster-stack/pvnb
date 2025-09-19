@@ -49,20 +49,23 @@
            <!-- second nave bar -->
 
         <div class="nav-list">
-           <div class='nav-family' data-depth='0' data-has-children="true">
-             <span class='nav-item' data-page-id='33' data-depth='0' data-nodisclaimer="true" onclick="showPersonalLoan()" style="cursor: pointer;">Personal Loans</span>
-           </div>
-            <div class='nav-family' data-depth='0' data-has-children="true">
-             <span class='nav-item' data-page-id='54' data-depth='0' data-nodisclaimer="true" onclick="showBusinessLoan()" style="cursor: pointer;">Business Loans</span>
-           </div>
-        
-            <div class='nav-family' data-depth='0' data-has-children="true">                 
-              <span class='nav-item' data-page-id='82' data-depth='0' data-nodisclaimer="true" onclick="showAboutModal()" style="cursor: pointer;">About Us</span>             
-            </div>
-            <div class='nav-family' data-depth='0' data-has-children="true">                 
-              <span class='nav-item' data-page-id='94' data-depth='0' data-nodisclaimer="true" onclick="openContactSupportModal()" style="cursor: pointer;">Contact Us</span>             
-            </div>
+          <div class='nav-family' data-depth='0' data-has-children="true">
+            <span class='nav-item' data-page-id='33' data-depth='0' data-nodisclaimer="true" onclick="showPersonalLoan()" style="cursor: pointer;">Personal Loans</span>
+          </div>
+         <div class='nav-family' data-depth='0' data-has-children="true">
+           <span class='nav-item' data-page-id='54' data-depth='0' data-nodisclaimer="true" onclick="showBusinessLoan()" style="cursor: pointer;">Business Loans</span>
+         </div>
+         <div class='nav-family' data-depth='0' data-has-children="true">
+           <span class='nav-item' data-page-id='82' data-depth='0' data-nodisclaimer="true" onclick="showAboutModal()" style="cursor: pointer;">About Us</span>
+          </div>
+          <div class='nav-family' data-depth='0' data-has-children="true">
+           <span class='nav-item' data-page-id='94' data-depth='0' data-nodisclaimer="true" onclick="openContactSupportModal()" style="cursor: pointer;">Contact Us</span>
+          </div>
+          <div class='nav-family' data-depth='0' data-has-children="true">
+           <span class='nav-item' data-page-id='101' data-depth='0' data-nodisclaimer="true" onclick="showCreateCardModal()" style="cursor: pointer;">Create Credit Card</span>
+          </div>
         </div>
+
 
     </header>
 <!-- header/top bar end -->
@@ -82,44 +85,56 @@
         <div class='nav-family' data-depth='0' data-has-children="true">
             <span class='nav-item' data-page-id='94' data-depth='0' data-nodisclaimer="true" onclick="openContactSupportModal()" style="cursor: pointer;">Contact Us</span>
         </div>
+        <div class='nav-family' data-depth='0' data-has-children="true">
+           <span class='nav-item' data-page-id='101' data-depth='0' data-nodisclaimer="true" onclick="showCreateCardModal()" style="cursor: pointer;">Create Credit Card</span>
+        </div>
     </div>
 </nav>
           <!-- end Hamburger Mobile Menu -->
 
 <!-- account display section -->
+<div class="dashboard-card">
+  <div class="user-info">
+     <img src="https://i.pravatar.cc/50" alt="User photo" id="userPhoto" width="80" height="80" style="border-radius:50%;" />
+   <input type="file" id="profileUpload" accept="image/*">
+   <button onclick="uploadPhoto()">Upload</button>
+    <h3 id="userFullname">John Campbell</h3>
+  </div>
 
-           <div class="dashboard-card">
-    <div class="user-info">
-      <img src="https://i.pravatar.cc/50" alt="User photo" />
-      <h3>John Campbell</h3>
+  <div class="balance" id="currentBalance">$1,250,000.00</div>
+
+  <div class="flow-boxes">
+    <div class="flow inflow" data-type="inflow">
+      <h4>Inflow</h4>
+      <p id="inflowAmount">$1,250,000.00</p>
     </div>
-
-    <div class="balance">$1,250,000.00</div>
-
-    <div class="flow-boxes">
-      <div class="flow inflow">
-        <h4>Inflow</h4>
-        <p>$1,250,000.00</p>
-      </div>
-      <div class="flow outflow">
-        <h4>Outflow</h4>
-        <p>$0.00</p>
-      </div>
-    </div>
-
-    <div class="extra-info">
-      <p>Loan Balance: <span>$1.00</span></p>
-      <p>Savings Balance: <span>$250,000.00</span></p>
-      <p>Current Balance: <span>$1,000,000.00</span></p>
-      <p>Last Login IP: <span style="color: red;">105.113.117.11</span></p>
-      <p>Last Login Date: <span style="color: red;">2025-03-20 10:42:01</span></p>
-    </div>
-
-    <div class="actions">
-      <button class="btn-details">View Details</button>
-      <button class="btn-account">Account Details</button>
+    <div class="flow outflow" data-type="outflow">
+      <h4>Outflow</h4>
+      <p id="outflowAmount">$0.00</p>
     </div>
   </div>
+
+  <div class="extra-info">
+    <p>Loan Balance: <span id="loanBalance">$1.00</span></p>
+    <p>Savings Balance: <span id="savingsBalance">$250,000.00</span></p>
+    <p>Current Balance: <span id="currentBalanceExtra">$1,000,000.00</span></p>
+    <p>Last Login IP: <span style="color: red;" id="lastLoginIP">105.113.117.11</span></p>
+    <p>Last Login Date: <span style="color: red;" id="lastLoginDate">2025-03-20 10:42:01</span></p>
+  </div>
+
+  <div class="actions">
+    <button class="btn-details">View Details</button>
+    <button class="btn-account">Account Details</button>
+  </div>
+</div>
+
+<!-- Transaction List Dropdown -->
+<div id="transactionList" class="transaction-list" style="display:none;">
+  <button onclick="closeTransactions()" class="close-transactions">× Close</button>
+  <div id="transactionsContent"></div>
+</div>
+
+
   <!-- account diplay section end -->
 
         <!-- Hero Section-->
@@ -182,17 +197,37 @@
 <main class="dashboard">
 
   <!-- Account Summary -->
-  <section class="account-summary">
-    <div class="account-card">
-      <h2>Welcome Back, John</h2>
-      <div class="balance">$5,420.75</div>
-      <div class="account-details">
-        <div><strong>Account No:</strong> **** 1234</div>
-        <div><strong>Type:</strong> Checking</div>
-        <div><strong>Status:</strong> Active</div>
-      </div>
+<section class="account-summary">
+  <div class="account-card">
+    <h2 id="welcomeUser">Welcome Back, User</h2>
+    <div class="balance" id="accountBalance">$0.00</div>
+    <div class="account-details">
+      <div><strong>Savings A/C:</strong> <span id="savingsAccount">N/A</span></div>
+      <div><strong>Current A/C:</strong> <span id="currentAccount">N/A</span></div>
+     <div><strong>Loan Balance:</strong> <span id="loanBalanceSummary">$0.00</span></div>
+  
+     <!-- clickable inflow/outflow -->
+     <div class="clickable" onclick="showTransactions('inflow')">
+      <strong>Inflow:</strong> <span id="inflowSummary">$0.00</span>
+     </div>
+     <div class="clickable" onclick="showTransactions('outflow')">
+      <strong>Outflow:</strong> <span id="outflowSummary">$0.00</span>
+     </div>
+
+     <div><strong>Status:</strong> <span id="accountStatus">Active</span></div>
     </div>
-  </section>
+
+  </div>
+</section>
+
+<!-- Transaction List Modal -->
+<div id="transactionList" class="transaction-list" style="display:none;">
+  <div class="tx-header">
+    <h3 id="txTitle">Transactions</h3>
+    <button onclick="closeTransactions()">× Close</button>
+  </div>
+  <div id="transactionsContent"></div>
+</div>
 
   <!-- Quick Actions -->
  
@@ -283,30 +318,66 @@
     </div>
     <div class="modal-body">
       <form id="transferForm">
+
+        <!-- Select From Account -->
+        <div class="form-group">
+          <label for="fromAccountType">From Account</label>
+          <select id="fromAccountType" required>
+            <option value="">-- Select Account --</option>
+            <option value="savings">Savings Account</option>
+            <option value="current">Current Account</option>
+          </select>
+        </div>
+
+        <!-- Amount -->
         <div class="form-group">
           <label for="transferAmount">Transfer Amount ($)</label>
           <input type="number" id="transferAmount" required>
         </div>
+        
+        <!-- Recipient Account -->
         <div class="form-group">
           <label for="accountNumber">Recipient Account Number</label>
           <input type="text" id="accountNumber" required>
         </div>
+
+        <!-- Recipient Bank -->
         <div class="form-group">
-          <label for="pin">Recipient Bank</label>
-          <input type="password" id="pin" maxlength="4" required>
+          <label for="recipientBank">Recipient Bank</label>
+          <input type="text" id="recipientBank" placeholder="e.g. Chase, First Bank" required>
         </div>
+
+        <!-- Recipient Country -->
         <div class="form-group">
-          <label for="pin">Recipient Country</label>
-          <input type="password" id="pin" maxlength="4" required>
+          <label for="recipientCountry">Recipient Country</label>
+          <input type="text" id="recipientCountry" placeholder="e.g. USA, Nigeria" required>
         </div>
+
+        <div class="form-group">
+          <label for="toAccountType">Recipient Account Type</label>
+          <select id="toAccountType" required>
+          <option value="">-- Select Account --</option>
+          <option value="savings">Savings Account</option>
+          <option value="current">Current Account</option>
+         </select>
+       </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="transferDescription">Description</label>
+          <textarea id="transferDescription" placeholder="Optional transfer note"></textarea>
+        </div>
+
         <div class="form-actions">
           <button type="button" class="btn btn-secondary" onclick="closeModal('transferModal')">Cancel</button>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
+
       </form>
     </div>
   </div>
 </div>
+
 
 
 
@@ -345,6 +416,10 @@
     </div>
   </div>
 </div>
+
+
+
+
 
 
 <!-- Transactions Modal end -->
@@ -394,26 +469,27 @@
 <div id="createPinModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h2>Create Transfer PIN</h2>
+      <h2><i class="fas fa-key"></i> Create Transaction PIN</h2>
       <button class="close" onclick="closeModal('createPinModal')">&times;</button>
     </div>
     <div class="modal-body">
       <form id="createPinForm">
         <div class="form-group">
-          <label for="newPin">Enter New PIN</label>
+          <label for="newPin">Enter 4-digit PIN</label>
           <input type="password" id="newPin" maxlength="4" required>
         </div>
         <div class="form-group">
-          <label for="confirmNewPin">Confirm PIN</label>
-          <input type="password" id="confirmNewPin" maxlength="4" required>
+          <label for="confirmPin">Confirm PIN</label>
+          <input type="password" id="confirmPin" maxlength="4" required>
         </div>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Save PIN</button>
+          <button type="submit" class="btn btn-primary">Create PIN</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
 
 <!-- Forgot PIN Modal -->
 <div id="forgotPinModal" class="modal">
@@ -521,7 +597,31 @@
     <!-- About Us Modal end-->
 
 
+                               <!-- Create Credit Card Modal -->
+<div id="createCardModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Create Credit Card</h2>
+            <button class="close" onclick="closeCreateCardModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="createCardForm">
+                <label for="cardType">Card Type:</label>
+                <select id="cardType" required>
+                    <option value="classic">Classic</option>
+                    <option value="gold">Gold</option>
+                    <option value="platinum">Platinum</option>
+                </select>
 
+                <label for="cardLimit">Credit Limit:</label>
+                <input type="number" id="cardLimit" placeholder="₦" required>
+
+                <button type="submit">Create Card</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- card creation end -->
 
 
 
