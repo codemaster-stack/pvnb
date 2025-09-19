@@ -66,6 +66,206 @@
       </div>
     </div>
     <!-- Top bar end/notification -->
+
+
+
+    <div id="manage-users" class="section" style="display:none;">
+  <h3>Manage Users</h3>
+
+  <!-- Bulk Actions -->
+  <div style="margin-bottom:10px;">
+    <button onclick="bulkFund()">Bulk Fund</button>
+    <button onclick="bulkEmail()">Bulk Email</button>
+    <button onclick="bulkPinReset()">Bulk Reset PIN</button>
+    <button onclick="bulkDelete()">Bulk Delete</button>
+  </div>
+
+  <!-- Search and Sort -->
+  <div style="margin-bottom:10px;">
+    <input type="text" id="searchUsers" placeholder="Search by name or email" onkeyup="handleSearch()">
+    <select id="sortUsers" onchange="handleSort()">
+      <option value="fullname">Name</option>
+      <option value="email">Email</option>
+      <option value="balances.savings">Savings Balance</option>
+      <option value="balances.current">Current Balance</option>
+      <option value="status">Status</option>
+    </select>
+    <select id="sortOrder" onchange="handleSort()">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
+
+  <!-- Users Table -->
+  <table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="selectAll" onclick="toggleAllUsers(this)"></th>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Savings</th>
+        <th>Current</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="manageUsersTable">
+      <!-- JS will render rows here -->
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  <div id="usersPagination" style="margin-top:10px;">
+    <button onclick="changePage(currentPage - 1)">Prev</button>
+    <span id="pageInfo">Page 1 of 1</span>
+    <button onclick="changePage(currentPage + 1)">Next</button>
+  </div>
+</div>
+
+
+ <!-- Manage Users Section end-->
+
+
+    <!-- create user -->
+
+    <div id="create-user" class="section" style="display:none;">
+  <h3>Create User</h3>
+
+  <form id="createUserForm" onsubmit="createUser(event)">
+    <label for="newUserName">Full Name</label>
+    <input type="text" id="newUserName" placeholder="Enter full name" required>
+
+    <label for="newUserEmail">Email</label>
+    <input type="email" id="newUserEmail" placeholder="user@example.com" required>
+
+    <label for="newUserPhone">Phone</label>
+    <input type="tel" id="newUserPhone" placeholder="08012345678" required>
+
+    <label for="newUserPassword">Password</label>
+    <input type="password" id="newUserPassword" placeholder="Enter password" required>
+
+    <button type="submit">Create User</button>
+  </form>
+</div>
+<!-- 
+end creat user -->
+
+
+<!-- Edit User Modal -->
+<div id="editUserModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Edit User</h3>
+      <button onclick="closeModal('editUserModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="editUserForm">
+        <input type="hidden" id="editUserId">
+
+        <label>Profile Picture</label>
+        <input type="file" id="editProfilePic" accept="image/*">
+
+        <label>Full Name</label>
+        <input type="text" id="editFullName">
+
+        <label>Email</label>
+        <input type="email" id="editEmail">
+
+        <label>Phone</label>
+        <input type="tel" id="editPhone">
+
+        <label>Status</label>
+        <select id="editStatus">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+
+        <button type="submit">Update User</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="pagination" style="margin-top:10px;"></div> 
+
+<!-- update user profile end-->
+
+<!-- Reset User PIN Modal -->
+<div id="resetPinModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Reset User Transaction PIN</h3>
+      <button onclick="closeModal('resetPinModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="resetPinForm">
+        <input type="hidden" id="resetUserId">
+
+        <label>New PIN</label>
+        <input type="password" id="newUserPin" maxlength="4" placeholder="Enter 4-digit PIN" required>
+
+        <label>Confirm PIN</label>
+        <input type="password" id="confirmUserPin" maxlength="4" placeholder="Confirm PIN" required>
+
+        <button type="submit">Reset PIN</button>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- reset pin end -->
+
+
+<!-- Fund User Modal -->
+<div id="fundUserModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Fund User Account</h3>
+      <button onclick="closeModal('fundUserModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="fundUserForm">
+        <input type="hidden" id="fundUserId">
+
+        <label>Account Type</label>
+        <select id="fundAccountType" required>
+          <option value="">Select Account</option>
+          <option value="savings">Savings</option>
+          <option value="current">Current</option>
+        </select>
+
+        <label>Amount</label>
+        <input type="number" id="fundAmount" placeholder="Enter amount" required>
+
+        <label>Date</label>
+        <input type="date" id="fundDate" required>
+
+        <label>Description</label>
+        <textarea id="fundDescription" placeholder="Enter description" required></textarea>
+
+        <button type="submit">Fund Account</button>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- fund user end -->
+
+<!-- Delete User Modal -->
+<div id="deleteUserModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Delete User</h3>
+      <button onclick="closeModal('deleteUserModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+      <input type="hidden" id="deleteUserId">
+      <button onclick="confirmDeleteUser()" class="btn btn-danger">Yes, Delete</button>
+      <button onclick="closeModal('deleteUserModal')" class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- deleteuser end -->
  
     <!-- Dashboard Section --> 
     <!-- <div id="dashboard" class="section">
@@ -482,87 +682,6 @@
 </div> -->
 
 
-<div id="manage-users" class="section" style="display:none;">
-  <h3>Manage Users</h3>
-
-  <!-- Bulk Actions -->
-  <div style="margin-bottom:10px;">
-    <button onclick="bulkFund()">Bulk Fund</button>
-    <button onclick="bulkEmail()">Bulk Email</button>
-    <button onclick="bulkPinReset()">Bulk Reset PIN</button>
-    <button onclick="bulkDelete()">Bulk Delete</button>
-  </div>
-
-  <!-- Search and Sort -->
-  <div style="margin-bottom:10px;">
-    <input type="text" id="searchUsers" placeholder="Search by name or email" onkeyup="handleSearch()">
-    <select id="sortUsers" onchange="handleSort()">
-      <option value="fullname">Name</option>
-      <option value="email">Email</option>
-      <option value="balances.savings">Savings Balance</option>
-      <option value="balances.current">Current Balance</option>
-      <option value="status">Status</option>
-    </select>
-    <select id="sortOrder" onchange="handleSort()">
-      <option value="asc">Ascending</option>
-      <option value="desc">Descending</option>
-    </select>
-  </div>
-
-  <!-- Users Table -->
-  <table border="1" cellpadding="8" cellspacing="0" width="100%">
-    <thead>
-      <tr>
-        <th><input type="checkbox" id="selectAll" onclick="toggleAllUsers(this)"></th>
-        <th>#</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Savings</th>
-        <th>Current</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="manageUsersTable">
-      <!-- JS will render rows here -->
-    </tbody>
-  </table>
-
-  <!-- Pagination -->
-  <div id="usersPagination" style="margin-top:10px;">
-    <button onclick="changePage(currentPage - 1)">Prev</button>
-    <span id="pageInfo">Page 1 of 1</span>
-    <button onclick="changePage(currentPage + 1)">Next</button>
-  </div>
-</div>
-
-
- <!-- Manage Users Section end-->
-
-
-    <!-- create user -->
-
-    <div id="create-user" class="section" style="display:none;">
-  <h3>Create User</h3>
-
-  <form id="createUserForm" onsubmit="createUser(event)">
-    <label for="newUserName">Full Name</label>
-    <input type="text" id="newUserName" placeholder="Enter full name" required>
-
-    <label for="newUserEmail">Email</label>
-    <input type="email" id="newUserEmail" placeholder="user@example.com" required>
-
-    <label for="newUserPhone">Phone</label>
-    <input type="tel" id="newUserPhone" placeholder="08012345678" required>
-
-    <label for="newUserPassword">Password</label>
-    <input type="password" id="newUserPassword" placeholder="Enter password" required>
-
-    <button type="submit">Create User</button>
-  </form>
-</div>
-<!-- 
-end creat user -->
 
   
 
@@ -608,120 +727,7 @@ end creat user -->
 </div> -->
 
 
-<!-- Edit User Modal -->
-<div id="editUserModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Edit User</h3>
-      <button onclick="closeModal('editUserModal')">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="editUserForm">
-        <input type="hidden" id="editUserId">
 
-        <label>Profile Picture</label>
-        <input type="file" id="editProfilePic" accept="image/*">
-
-        <label>Full Name</label>
-        <input type="text" id="editFullName">
-
-        <label>Email</label>
-        <input type="email" id="editEmail">
-
-        <label>Phone</label>
-        <input type="tel" id="editPhone">
-
-        <label>Status</label>
-        <select id="editStatus">
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-
-        <button type="submit">Update User</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div id="pagination" style="margin-top:10px;"></div> 
-
-<!-- update user profile end-->
-
-<!-- Reset User PIN Modal -->
-<div id="resetPinModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Reset User Transaction PIN</h3>
-      <button onclick="closeModal('resetPinModal')">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="resetPinForm">
-        <input type="hidden" id="resetUserId">
-
-        <label>New PIN</label>
-        <input type="password" id="newUserPin" maxlength="4" placeholder="Enter 4-digit PIN" required>
-
-        <label>Confirm PIN</label>
-        <input type="password" id="confirmUserPin" maxlength="4" placeholder="Confirm PIN" required>
-
-        <button type="submit">Reset PIN</button>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- reset pin end -->
-
-
-<!-- Fund User Modal -->
-<div id="fundUserModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Fund User Account</h3>
-      <button onclick="closeModal('fundUserModal')">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="fundUserForm">
-        <input type="hidden" id="fundUserId">
-
-        <label>Account Type</label>
-        <select id="fundAccountType" required>
-          <option value="">Select Account</option>
-          <option value="savings">Savings</option>
-          <option value="current">Current</option>
-        </select>
-
-        <label>Amount</label>
-        <input type="number" id="fundAmount" placeholder="Enter amount" required>
-
-        <label>Date</label>
-        <input type="date" id="fundDate" required>
-
-        <label>Description</label>
-        <textarea id="fundDescription" placeholder="Enter description" required></textarea>
-
-        <button type="submit">Fund Account</button>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- fund user end -->
-
-<!-- Delete User Modal -->
-<div id="deleteUserModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Delete User</h3>
-      <button onclick="closeModal('deleteUserModal')">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p>Are you sure you want to delete this user? This action cannot be undone.</p>
-      <input type="hidden" id="deleteUserId">
-      <button onclick="confirmDeleteUser()" class="btn btn-danger">Yes, Delete</button>
-      <button onclick="closeModal('deleteUserModal')" class="btn btn-secondary">Cancel</button>
-    </div>
-  </div>
-</div>
-<!-- deleteuser end -->
 
 
     <!-- Settings Section -->
