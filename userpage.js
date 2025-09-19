@@ -472,50 +472,111 @@
 
 
 // profilepicture/name display
-async function loadUserDashboard() {
-  const res = await fetch("https://api.pvbonline.online/api/users/me", {
-    headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
-  });
-  const data = await res.json();
+// Backend URL
+const BACKEND_URL = "https://api.pvbonline.online";
 
-  if (res.ok) {
-    document.getElementById("userName").textContent = data.name;
-    document.getElementById("profilePic").src = data.profilePic || "https://i.pravatar.cc/50";
-  } else {
-    console.error("Failed to load user info");
+// Load user dashboard info
+async function loadUserDashboard() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/user/me`, {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Failed to load user info", data);
+      return;
+    }
+
+    // Update user name
+    const userNameEl = document.getElementById("userName");
+    if (userNameEl) userNameEl.textContent = data.fullname;
+
+    // Update profile picture
+    const profilePicEl = document.getElementById("profilePic");
+    if (profilePicEl) {
+      profilePicEl.src = data.profilePic
+        ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}`
+        : "https://i.pravatar.cc/50";
+    }
+
+    // Update balances if elements exist
+    if (data.balances) {
+      const { savings, current, loan, inflow, outflow } = data.balances;
+
+      const savingsEl = document.getElementById("savingsBalance");
+      if (savingsEl) savingsEl.textContent = `$${savings.toLocaleString()}`;
+
+      const currentEl = document.getElementById("currentBalance");
+      if (currentEl) currentEl.textContent = `$${current.toLocaleString()}`;
+
+      const loanEl = document.getElementById("loanBalance");
+      if (loanEl) loanEl.textContent = `$${loan.toLocaleString()}`;
+
+      const inflowEl = document.getElementById("inflow");
+      if (inflowEl) inflowEl.textContent = `$${inflow.toLocaleString()}`;
+
+      const outflowEl = document.getElementById("outflow");
+      if (outflowEl) outflowEl.textContent = `$${outflow.toLocaleString()}`;
+    }
+
+  } catch (err) {
+    console.error("Error loading dashboard:", err);
   }
 }
 
-loadUserDashboard();
+// Profile picture upload
+function setupProfilePictureUpload() {
+  const profilePicEl = document.getElementById("profilePic");
+  if (!profilePicEl) return;
 
-// Profile picture update
-const profilePic = document.getElementById("profilePic");
-const uploadInput = document.createElement("input");
-uploadInput.type = "file";
-uploadInput.style.display = "none";
-document.body.appendChild(uploadInput);
+  const uploadInput = document.createElement("input");
+  uploadInput.type = "file";
+  uploadInput.accept = "image/*";
+  uploadInput.style.display = "none";
+  document.body.appendChild(uploadInput);
 
-profilePic.addEventListener("click", () => uploadInput.click());
+  profilePicEl.addEventListener("click", () => uploadInput.click());
 
-uploadInput.addEventListener("change", async () => {
-  const file = uploadInput.files[0];
-  if (!file) return;
+  uploadInput.addEventListener("change", async () => {
+    const file = uploadInput.files[0];
+    if (!file) return;
 
-  const formData = new FormData();
-  formData.append("profilePic", file);
+    const formData = new FormData();
+    formData.append("profilePic", file);
 
-  const res = await fetch("https://api.pvbonline.online/api/users/profile-picture", {
-    method: "PUT",
-    headers: { "Authorization": "Bearer " + localStorage.getItem("token") },
-    body: formData
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/user/profile-picture`, {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        profilePicEl.src = data.profilePic
+          ? `${BACKEND_URL}/${data.profilePic.replace(/ /g, "%20")}`
+          : "https://i.pravatar.cc/50";
+      } else {
+        alert(data.message || "Profile picture upload failed");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Profile picture upload failed");
+    }
   });
-  const data = await res.json();
+}
 
-  if (res.ok) {
-    profilePic.src = data.profilePic; // Update dashboard
-  } else {
-    alert(data.message || "Upload failed");
-  }
+// Initialize dashboard
+document.addEventListener("DOMContentLoaded", () => {
+  loadUserDashboard();
+  setupProfilePictureUpload();
 });
 
 
