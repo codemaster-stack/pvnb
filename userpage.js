@@ -508,27 +508,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Top balance (current + savings)
         const totalEl = document.getElementById("currentBalance");
-        if (totalEl) totalEl.textContent = `₦${(current + savings).toLocaleString()}`;
+        if (totalEl) totalEl.textContent = `$${(current + savings).toLocaleString()}`;
 
         // Individual balances
         const savingsEl = document.getElementById("savingsBalance");
-        if (savingsEl) savingsEl.textContent = `₦${savings.toLocaleString()}`;
+        if (savingsEl) savingsEl.textContent = `$${savings.toLocaleString()}`;
 
         const currentEl = document.getElementById("onlyCurrentBalance");
-        if (currentEl) currentEl.textContent = `₦${current.toLocaleString()}`;
+        if (currentEl) currentEl.textContent = `$${current.toLocaleString()}`;
 
         const loanEl = document.getElementById("loanBalance");
-        if (loanEl) loanEl.textContent = `₦${loan.toLocaleString()}`;
+        if (loanEl) loanEl.textContent = `$${loan.toLocaleString()}`;
 
         const inflowEl = document.getElementById("inflow");
         if (inflowEl) {
-          inflowEl.textContent = `₦${inflow.toLocaleString()}`;
+          inflowEl.textContent = `$${inflow.toLocaleString()}`;
           inflowEl.style.color = inflow > 0 ? "green" : "inherit";
         }
 
         const outflowEl = document.getElementById("outflow");
         if (outflowEl) {
-          outflowEl.textContent = `-₦${outflow.toLocaleString()}`;
+          outflowEl.textContent = `-$${outflow.toLocaleString()}`;
           outflowEl.style.color = outflow > 0 ? "red" : "inherit";
         }
       }
@@ -610,7 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
           listEl.innerHTML = data.map(tx => `
             <p>
               <strong>${new Date(tx.date).toLocaleDateString()}</strong>: 
-              ${tx.type} - ₦${tx.amount}
+              ${tx.type} - $${tx.amount}
             </p>
           `).join("");
         } else {
@@ -635,13 +635,13 @@ document.addEventListener("DOMContentLoaded", () => {
         window.accountNumbers?.savings || "N/A";
 
       document.getElementById("accCurrentBalance").textContent =
-        document.getElementById("onlyCurrentBalance")?.textContent || "₦0";
+        document.getElementById("onlyCurrentBalance")?.textContent || "$0";
 
       document.getElementById("accSavingsBalance").textContent =
-        document.getElementById("savingsBalance")?.textContent || "₦0";
+        document.getElementById("savingsBalance")?.textContent || "$0";
 
       document.getElementById("accLoanBalance").textContent =
-        document.getElementById("loanBalance")?.textContent || "₦0";
+        document.getElementById("loanBalance")?.textContent || "$0";
     });
   }
 
