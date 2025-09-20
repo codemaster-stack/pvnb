@@ -660,4 +660,30 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+
+async function loadAccountSummary() {
+    try {
+      const token = localStorage.getItem("token"); // stored after login
+      const res = await fetch("https://yourapi.com/api/users/dashboard", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error("Failed to load account details");
+      const data = await res.json();
+
+      // Example response: { name, balance, accountNumber, accountType, status }
+      document.getElementById("welcomeText").innerText = `Welcome Back, ${data.name}`;
+      document.getElementById("accountBalance").innerText = `$${data.balance.toFixed(2)}`;
+      document.getElementById("accountNumber").innerText = data.accountNumber;
+      document.getElementById("accountType").innerText = data.accountType;
+      document.getElementById("accountStatus").innerText = data.status;
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // Load summary on page load
+  document.addEventListener("DOMContentLoaded", loadAccountSummary);
+
 //  profile picture/name display end
