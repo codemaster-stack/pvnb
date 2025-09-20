@@ -662,28 +662,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 async function loadAccountSummary() {
-    try {
-      const token = localStorage.getItem("token"); // stored after login
-      const res = await fetch("https://api.pvbonline.online/api/users/dashboard", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+  try {
+    const token = localStorage.getItem("token"); 
+    const res = await fetch("https://api.pvbonline.online/api/users/me", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-      if (!res.ok) throw new Error("Failed to load account details");
-      const data = await res.json();
+    if (!res.ok) throw new Error("Failed to load account details");
+    const data = await res.json();
 
-      // Example response: { name, balance, accountNumber, accountType, status }
-      document.getElementById("welcomeText").innerText = `Welcome Back, ${data.name}`;
-      document.getElementById("accountBalance").innerText = `$${data.balance.toFixed(2)}`;
-      document.getElementById("accountNumber").innerText = data.accountNumber;
-      document.getElementById("accountType").innerText = data.accountType;
-      document.getElementById("accountStatus").innerText = data.status;
+    // ✅ Welcome text
+    document.getElementById("welcomeText").innerText =
+      `Welcome Back, ${data.fullname || "User"}`;
 
-    } catch (err) {
-      console.error(err);
-    }
+    // ✅ Balance (current + savings)
+    const totalBalance = (data.balances?.current || 0) + (data.balances?.savings || 0);
+    document.getElementById("accountBalance").innerText =
+      `$${totalBalance.toFixed(2)}`;
+
+    // ✅ Current account number
+    document.getElementById("accountNumber").innerText =
+      data.currentAccountNumber || "N/A";
+
+    // ✅ Account type (hard-coded since API doesn’t send type)
+    document.getElementById("accountType").innerText = "Current & Savings";
+
+    // ✅ Status (hard-coded since API doesn’t send status)
+    document.getElementById("accountStatus").innerText = "Active";
+
+  } catch (err) {
+    console.error("Error loading account summary:", err);
   }
+}
 
-  // Load summary on page load
-  document.addEventListener("DOMContentLoaded", loadAccountSummary);
+document.addEventListener("DOMContentLoaded", loadAccountSummary);
+
 
 //  profile picture/name display end
