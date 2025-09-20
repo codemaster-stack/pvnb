@@ -698,4 +698,42 @@ async function loadAccountSummary() {
 document.addEventListener("DOMContentLoaded", loadAccountSummary);
 
 
+
+
+async function loadAccountSummary() {
+  try {
+    const token = localStorage.getItem("token"); 
+    const res = await fetch("https://api.pvbonline.online/api/users/dashboard", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!res.ok) throw new Error("Failed to load account details");
+    const data = await res.json();
+
+    // Welcome text
+    document.getElementById("welcomeText").innerText = `Welcome Back, ${data.fullname}`;
+
+    // Balance (current + savings)
+    const totalBalance = (data.balances.current || 0) + (data.balances.savings || 0);
+    document.getElementById("accountBalance").innerText = `$${totalBalance.toFixed(2)}`;
+
+    // Account number
+    document.getElementById("accountNumber").innerText = data.currentAccountNumber || "N/A";
+
+    // Type & Status
+    document.getElementById("accountType").innerText = "Current"; 
+    document.getElementById("accountStatus").innerText = "Active";
+
+    // Last login details
+    document.getElementById("lastLoginIP").innerText = data.lastLoginIP || "N/A";
+    document.getElementById("lastLoginDate").innerText = data.lastLoginDate || "N/A";
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadAccountSummary);
+
+
 //  profile picture/name display end
