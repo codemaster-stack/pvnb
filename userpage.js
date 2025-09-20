@@ -737,6 +737,24 @@ document.addEventListener("DOMContentLoaded", loadAccountSummary);
 
 
 
+// Open modal by ID
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = "block";
+}
+
+// Close modal by ID
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = "none";
+}
+
+// Optional: close modal when clicking outside
+window.addEventListener("click", (e) => {
+  if (e.target.classList.contains("modal")) {
+    e.target.style.display = "none";
+  }
+});
 
 
 
