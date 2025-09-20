@@ -664,7 +664,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadAccountSummary() {
     try {
       const token = localStorage.getItem("token"); // stored after login
-      const res = await fetch("https://yourapi.com/api/users/dashboard", {
+      const res = await fetch("https://api.pvbonline.online/api/users/dashboard", {
         headers: { Authorization: `Bearer ${token}` }
       });
 
