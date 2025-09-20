@@ -736,4 +736,55 @@ async function loadAccountSummary() {
 document.addEventListener("DOMContentLoaded", loadAccountSummary);
 
 
+
+
+
+
+document.getElementById("enterPinForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const pin = document.getElementById("transferPin").value;
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch("https://api.pvbonline.online/api/transaction/transfer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        amount: transferData.amount,
+        accountNumber: transferData.accountNumber,
+        recipientBank: transferData.bank,
+        recipientCountry: transferData.country,
+        fromAccountType: transferData.fromAccountType, // e.g. "savings"
+        toAccountType: transferData.toAccountType,     // e.g. "current"
+        pin
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // ✅ Backend approved → still show fail notice
+      const acct = transferData.accountNumber;
+      alert(
+        `Acct: ${acct.slice(0,4)}****${acct.slice(-2)} your transfer cannot be completed at the moment, please contact admin via live chat/email.`
+      );
+      closeModal("enterPinModal");
+    } else {
+      // ❌ Backend rejected → show their error
+      alert(data.message || "Transfer failed. Please try again.");
+      openModal("enterPinModal");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong. Please try again.");
+    openModal("enterPinModal");
+  }
+});
+
+
 //  profile picture/name display end
