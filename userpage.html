@@ -251,11 +251,12 @@
   <div class="actions-grid">
 
     <!-- Transfer Money -->
-   <div class="action-btn">
+   <div class="action-btn" onclick="openTransferModal()">
       <div class="action-icon"><i class="fas fa-exchange-alt"></i></div>
-      <button id="transferBtn">Transfer</button>
+       <div class="action-title">Transfer</div>
       <div class="action-desc">Between accounts or to others</div>
    </div>
+
 
 
     <!-- View Statements -->
@@ -343,13 +344,14 @@
           <input type="text" id="accountNumber" required>
         </div>
         <div class="form-group">
-          <label for="pin">Recipient Bank</label>
-          <input type="password" id="pin" maxlength="4" required>
+         <label for="recipientBank">Recipient Bank</label>
+         <input type="text" id="recipientBank" required>
         </div>
         <div class="form-group">
-          <label for="pin">Recipient Country</label>
-          <input type="password" id="pin" maxlength="4" required>
+          <label for="recipientCountry">Recipient Country</label>
+          <input type="text" id="recipientCountry" required>
         </div>
+
         <div class="form-actions">
           <button type="button" class="btn btn-secondary" onclick="closeModal('transferModal')">Cancel</button>
           <button type="submit" class="btn btn-primary">Submit</button>

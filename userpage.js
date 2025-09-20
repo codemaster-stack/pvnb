@@ -738,12 +738,12 @@ document.addEventListener("DOMContentLoaded", loadAccountSummary);
 
 
 // Open modal by ID
+// ---------- Modal helpers ----------
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) modal.style.display = "block";
 }
 
-// Close modal by ID
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) modal.style.display = "none";
@@ -756,25 +756,20 @@ window.addEventListener("click", (e) => {
   }
 });
 
-
-
-let transferData = {}; // global object to hold current transfer info
-
-// Open Transfer Modal when button clicked
-const transferBtn = document.getElementById("transferBtn");
-if (transferBtn) {
-  transferBtn.addEventListener("click", () => {
-    openModal("transferModal");
-  });
+// ---------- Open Transfer Modal ----------
+function openTransferModal() {
+  openModal("transferModal");
 }
 
-// Handle transfer form submission (amount, account, etc.)
+// ---------- Transfer flow ----------
+let transferData = {}; // store current transfer info globally
+
+// Handle transfer form submission (amount, recipient, etc.)
 const transferForm = document.getElementById("transferForm");
 if (transferForm) {
   transferForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Save data globally
     transferData = {
       amount: parseFloat(document.getElementById("transferAmount").value),
       accountNumber: document.getElementById("accountNumber").value,
@@ -784,45 +779,47 @@ if (transferForm) {
       toAccountType: document.getElementById("toAccountType")?.value || "current"
     };
 
-    // Close transfer modal, open Enter PIN modal
     closeModal("transferModal");
     openModal("enterPinModal");
   });
 }
 
-// Enter PIN submission listener (you already have this)
-document.getElementById("enterPinForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+// ---------- Enter PIN submission ----------
+const enterPinForm = document.getElementById("enterPinForm");
+if (enterPinForm) {
+  enterPinForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const pin = document.getElementById("transferPin").value;
-  const token = localStorage.getItem("token");
+    const pin = document.getElementById("transferPin").value;
+    const token = localStorage.getItem("token");
 
-  try {
-    const res = await fetch("https://api.pvbonline.online/api/transaction/transfer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ ...transferData, pin })
-    });
+    try {
+      const res = await fetch("https://api.pvbonline.online/api/transaction/transfer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ ...transferData, pin })
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      const acct = transferData.accountNumber;
-      alert(`Acct: ${acct.slice(0,4)}****${acct.slice(-2)} your transfer cannot be completed at the moment, please contact admin via live chat/email.`);
-      closeModal("enterPinModal");
-    } else {
-      alert(data.message || "Transfer failed. Please try again.");
+      if (res.ok) {
+        const acct = transferData.accountNumber;
+        alert(`Acct: ${acct.slice(0,4)}****${acct.slice(-2)} your transfer cannot be completed at the moment, please contact admin via live chat/email.`);
+        closeModal("enterPinModal");
+      } else {
+        alert(data.message || "Transfer failed. Please try again.");
+        openModal("enterPinModal");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
       openModal("enterPinModal");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong. Please try again.");
-    openModal("enterPinModal");
-  }
-});
+  });
+}
 
 
 //  profile picture/name display end
